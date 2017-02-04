@@ -3,6 +3,7 @@ package tests;
 import org.junit.*;
 
 import exceptions.InvalidNameException;
+import exceptions.InvalidUsernameException;
 import exceptions.InvalidUserDataException;
 import model.User;
 
@@ -19,7 +20,16 @@ public class UserTests {
 	private String invalidNameWithGraphicAccentuation;
 	private String validName;
 
-	private String validUsername;
+	private String validUsernameWithOnlyLetters;
+	private String validUsernameMixLettersAndNumbers;
+	private String validUsernameWithUnderscore;
+	private String validUsernameMixLettersNumbersSeparators;
+	private String invalidUsernameWithOnlyNumbers;
+	private String invalidUsernameWithSpace;
+	private String invalidUsernameWithOnlySpecialChars;
+	private String invalidUsernameWithOnlySpaces;
+	private String invalidUsernameWithGraphicAccentuation;
+	
 	private String validMail;
 	private String validPassword;
 	private String validAddress ;
@@ -27,13 +37,19 @@ public class UserTests {
 	private String validCEP;
 	private String validState;
 	
-	private User userWithInvalidName;
+	private User userInvalid;
 	private User userWithValidName;
+	
 	
 	@Before
 	public void setUpValidUserData(){
 		validName = "Jobson Lucas";
-		validUsername = "lucaspk";
+		
+		validUsernameWithOnlyLetters = "lucaspk";
+		validUsernameMixLettersAndNumbers = "lucaspk96";
+		validUsernameWithUnderscore = "lucas_pk";
+		validUsernameMixLettersNumbersSeparators = "lucaspk-96";
+		
 		validMail = "lucas@gmail.com";
 		validPassword = "6xablau9";
 		validAddress = "Rua das mulatas saradas";
@@ -53,13 +69,18 @@ public class UserTests {
 		invalidNameMixingLettersAndOnlyOneNumber = "Jobson Lucas2";
 		invalidNameMixingLettersAndSpecialChars = "Job$@# ¬u¢@! !@#sdf#WER@xcv$%$¨¨¨&**/-*";
 		invalidNameMixingLettersAndNumbersAndSpecialChars = "J156651o51b$@# 156156¬u¢@!asdqwe2 !@#sdf#WER@xcv$%$¨¨¨&**/-*";
-				
+		
+		invalidUsernameWithOnlyNumbers = "3151231531513135153531";
+		invalidUsernameWithOnlySpaces = "               ";
+		invalidUsernameWithOnlySpecialChars = "!@#$#%#$%&%&&*(*)--==++==*/-/+++";
+		invalidUsernameWithSpace = "jobson Lucas";
+		invalidUsernameWithGraphicAccentuation = "João";
 	}
 	
 	@Test
-	public void testShouldPassCreatingUserValidName(){
+	public void testCreatingUserWithSpecialCharsAndNumbersInUsername(){
 		try {
-			userWithValidName = new User(validName, validUsername, validMail, validPassword,
+			userWithValidName = new User(validName, validUsernameMixLettersNumbersSeparators, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -68,9 +89,101 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserWithGraphAccentuationInName(){
+	public void testCreatingUserWithSpecialCharsInUsername(){
 		try {
-			userWithInvalidName = new User(invalidNameWithGraphicAccentuation, validUsername, validMail, validPassword,
+			userWithValidName = new User(validName, validUsernameWithUnderscore, validMail, validPassword,
+					validAddress, validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testCreatingUserWithNumbersInUsername(){
+		try {
+			userWithValidName = new User(validName, validUsernameMixLettersAndNumbers, validMail, validPassword,
+					validAddress, validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testCreatingUserWithGraphAccentuationInUsername(){
+		try {
+			userInvalid = new User(validName, invalidUsernameWithGraphicAccentuation, validMail, validPassword,
+					validAddress, validHouseNumber, validCEP, validState);
+			
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testCreatingUserWithSpaceInUsername(){
+		try {
+			userInvalid = new User(validName, invalidUsernameWithSpace, validMail, validPassword,
+					validAddress, validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidUsernameException().getClass(), e.getClass());
+			
+		}
+		
+	}
+	
+	@Test
+	public void testCreatingUserWithOnlySpacesAsUsername(){
+		try {
+			userInvalid = new User(validName, invalidUsernameWithOnlySpaces, validMail, validPassword,
+					validAddress, validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testCreatingUserWithOnlyNumbersAsUsername(){
+		try {
+			userInvalid = new User(validName, invalidUsernameWithOnlyNumbers, validMail, validPassword,
+					validAddress, validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testCreatingUserWithOnlySpecialCharsAsUsername() throws InvalidUserDataException{
+		try {
+			userInvalid = new User(validName, invalidUsernameWithOnlySpecialChars, validMail, validPassword,
+					validAddress, validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidUsernameException().getClass(), e.getClass());
+		}
+		
+	}
+	
+	
+	@Test
+	public void testCreatingUserValidData(){
+		try {
+			userWithValidName = new User(validName, validUsernameWithOnlyLetters, validMail, validPassword,
+					validAddress, validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	
+	@Test
+	public void testCreatingUserWithGraphAccentuationInName(){
+		try {
+			userInvalid = new User(invalidNameWithGraphicAccentuation, validUsernameWithOnlyLetters, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -79,9 +192,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserWithOnlyLettersInName(){
+	public void testCreatingUserWithOnlyLettersInName(){
 		try {
-			userWithInvalidName = new User(invalidNameWithOnlyLetters, validUsername, validMail, validPassword,
+			userInvalid = new User(invalidNameWithOnlyLetters, validUsernameWithOnlyLetters, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -90,9 +203,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserWithOnlyNumbersAsName(){
+	public void testCreatingUserWithOnlyNumbersAsName(){
 		try {
-			userWithInvalidName = new User(invalidNameWithOnlyNumbers, validUsername, validMail, validPassword,
+			userInvalid = new User(invalidNameWithOnlyNumbers, validUsernameWithOnlyLetters, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -101,9 +214,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserWithOnlySpacesAsName(){
+	public void testCreatingUserWithOnlySpacesAsName(){
 		try {
-			userWithInvalidName = new User(invalidNameWithOnlySpaces, validUsername, validMail, validPassword,
+			userInvalid = new User(invalidNameWithOnlySpaces, validUsernameWithOnlyLetters, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -112,9 +225,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserWithOnlySpecialCharAsName(){
+	public void testCreatingUserWithOnlySpecialCharAsName(){
 		try {
-			userWithInvalidName = new User(invalidNameWithOnlySpecialChars, validUsername, validMail, validPassword,
+			userInvalid = new User(invalidNameWithOnlySpecialChars, validUsernameWithOnlyLetters, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -124,9 +237,9 @@ public class UserTests {
 	
 	
 	@Test
-	public void testShouldFailCreatingUserWithSpecialCharAndNumberInName(){
+	public void testCreatingUserWithSpecialCharAndNumberInName(){
 		try {
-			userWithInvalidName = new User(invalidNameMixingLettersAndNumbersAndSpecialChars, validUsername, validMail, validPassword,
+			userInvalid = new User(invalidNameMixingLettersAndNumbersAndSpecialChars, validUsernameWithOnlyLetters, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -135,9 +248,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserWithSpecialCharInName(){
+	public void testCreatingUserWithSpecialCharInName(){
 		try {
-			userWithInvalidName = new User(invalidNameMixingLettersAndSpecialChars, validUsername, validMail, validPassword,
+			userInvalid = new User(invalidNameMixingLettersAndSpecialChars, validUsernameWithOnlyLetters, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -146,9 +259,9 @@ public class UserTests {
 	}
 			
 	@Test
-	public void testShouldFailCreatingUserWithSingleNumberInName(){
+	public void testCreatingUserWithSingleNumberInName(){
 		try {
-			userWithInvalidName = new User(invalidNameMixingLettersAndOnlyOneNumber, validUsername, validMail, validPassword,
+			userInvalid = new User(invalidNameMixingLettersAndOnlyOneNumber, validUsernameWithOnlyLetters, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -157,9 +270,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserWithSeveralNumbersInName(){
+	public void testCreatingUserWithSeveralNumbersInName(){
 		try {
-			userWithInvalidName = new User(invalidNameMixingLettersAndSeveralNumbers, validUsername, validMail, validPassword,
+			userInvalid = new User(invalidNameMixingLettersAndSeveralNumbers, validUsernameWithOnlyLetters, validMail, validPassword,
 					validAddress, validHouseNumber, validCEP, validState);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());

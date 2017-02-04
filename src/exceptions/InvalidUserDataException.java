@@ -3,7 +3,7 @@ package exceptions;
 public class InvalidUserDataException extends Exception{
 	
 	public InvalidUserDataException() {
-		super("The name is invalid.");
+		super("The user data is invalid.");
 	}
 	
 	public InvalidUserDataException(final String message) {

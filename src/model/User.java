@@ -20,6 +20,11 @@ public class User {
 		if(!Validate.isValidName(name)){
 			throw new InvalidNameException();
 		}
+		
+		if(!Validate.isValidUsername(username)){
+			throw new InvalidUsernameException();
+		}
+		
 		this.name = name;
 		this.username = username;
 		this.email = email;
@@ -85,5 +90,5 @@ public class User {
 	public String getUsername() {
 		return username;
 	}
-	
+		
 }
