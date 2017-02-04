@@ -1,4 +1,4 @@
-# IFarma - seus medicamentos a poucos cliques de distâncias
+# IFarma - seus medicamentos a poucos cliques de distância.
 
 ### Projeto para disciplina de Laboratório de Engenharia de Software.
  * Professor: Dr. Gustavo Soares
