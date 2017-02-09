@@ -5,7 +5,7 @@ public final class Validate {
 	private final static String LETTERS_AND_SPACE_ONLY_REGEX = "[a-z A-Z]";
 	private final static String lOWERCASE_LETTERS_REGEX = "[a-z0-9_-]+";
 	private final static String ONLY_NUMBERS_REGEX = "[0-9]+";
-	private final static String ONLY_UNDERSCORES_AND_HIFEN_REGEX = "[0-9]+";
+	private final static String ONLY_UNDERSCORES_AND_HIFEN_REGEX = "[_-]+";
 	private Validate(){}
 		
 	public static boolean isValidName(final String name) {
@@ -27,7 +27,15 @@ public final class Validate {
 		}	
 		return isValid;
 	}
-	
-	
-	
+
+	public static boolean isValidPassword(final String password) {
+		boolean isValid = true;
+		final boolean passwordIsEmpty = password.trim().isEmpty();
+		if(passwordIsEmpty || password.matches(ONLY_NUMBERS_REGEX) 
+				|| password.length() < 8){
+			isValid = false;
+		}	
+		return isValid;
+	}
+		
 }

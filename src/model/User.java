@@ -25,6 +25,10 @@ public class User {
 			throw new InvalidUsernameException();
 		}
 		
+		if(!Validate.isValidPassword(password)){
+			throw new InvalidPasswordException();
+		}
+		
 		this.name = name;
 		this.username = username;
 		this.email = email;
