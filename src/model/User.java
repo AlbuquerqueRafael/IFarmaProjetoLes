@@ -25,6 +25,10 @@ public class User {
 			throw new InvalidUsernameException();
 		}
 		
+		if(!Validate.isValidEmail(email)){
+			throw new InvalidEmailException();
+		}
+		
 		if(!Validate.isValidPassword(password)){
 			throw new InvalidPasswordException();
 		}
