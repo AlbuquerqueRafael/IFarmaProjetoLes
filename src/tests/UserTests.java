@@ -2,6 +2,7 @@ package tests;
 
 import org.junit.*;
 
+import exceptions.InvalidAddressException;
 import exceptions.InvalidEmailException;
 import exceptions.InvalidNameException;
 import exceptions.InvalidNameException;
@@ -11,6 +12,8 @@ import exceptions.InvalidUserDataException;
 import model.User;
 
 public class UserTests {
+		// os itens que são comuns, como por exemplo, onlyNumbers e onlySpaces podem ser apenas
+		// uma variável, para evitar duplicação de código, mas isso fica para depois(para o refactoring dos testes)
 		// criar uma lista de siglas de estados do BR na classe de validação. Se for lista não contém, é inválido o estado.
 	private String invalidNameWithOnlyLetters;
 	private String invalidNameMixingLettersAndSeveralNumbers;
@@ -60,13 +63,18 @@ public class UserTests {
 	private String invalidMailWithInvalidSpecialCharsBeforeAtSymbol;
 	
 	private String validAddress ;
+	private String invalidAddressWithOnlySpaces;
+	private String invalidAddressWithoutSpaces;
+	private String invalidAddressWithOnlyNumbers;
+	private String invalidAddressWithSpecialSymbols;
+	private String invalidAddressWithoutLetterAsFirstChar;
+	
 	private String validHouseNumber;
 	private String validCEP;
 	private String validState;
 	
 	private User userInvalid;
 	private User userValid;
-	
 	
 	
 	@Before
@@ -89,7 +97,7 @@ public class UserTests {
 		validPasswordLettersAndSpecialChars = "lucas%&*";
 		validPasswordWithLettersAndSpecialCharsAndNumbers = "lucas%9621&";
 		
-		validAddress = "Rua das mulatas saradas";
+		validAddress = "R. das mulatas saradas-loucas";
 		
 		validHouseNumber = "150";
 		
@@ -131,7 +139,86 @@ public class UserTests {
 		invalidPasswordOnlyNumbers = "46644684";
 		invalidPasswordLengthInferiorToEight = "luc96$%";
 		invalidPasswordWithOnlySpaces = "               ";
+		
+		invalidAddressWithOnlySpaces = "                   ";
+		invalidAddressWithoutSpaces = "ruadasmulatassaradas";
+		invalidAddressWithOnlyNumbers = "515646845123";
+		invalidAddressWithSpecialSymbols = "ru@ d@$ mu|@!@$ s*r+d%&";
+		invalidAddressWithoutLetterAsFirstChar = "8 rua das muladas saradas";
 	}
+	
+	@Test
+	public void testShouldFailCreatingUserAddressWithoutLetterAsFirstChar(){
+		try {
+			userInvalid = new User(validName, validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					invalidAddressWithoutLetterAsFirstChar, 
+					validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserAddressWithOnlySpaces(){
+		try {
+			userInvalid = new User(validName, validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					invalidAddressWithOnlySpaces, 
+					validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	
+	@Test
+	public void testShouldFailCreatingUserAddressWithoutSpaces(){
+		try {
+			userInvalid = new User(validName, validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					invalidAddressWithoutSpaces, 
+					validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	
+	@Test
+	public void testShouldFailCreatingUserAddressWithOnlyNumbers(){
+		try {
+			userInvalid = new User(validName, validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					invalidAddressWithOnlyNumbers, 
+					validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserAddressWithSpecialSymbols(){
+		try {
+			userInvalid = new User(validName, validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					invalidAddressWithSpecialSymbols, 
+					validHouseNumber, validCEP, validState);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
 	
 	@Test
 	public void testShouldCreateUserEmailWithAtLeastOneLetterBeforeAtSymbol(){

@@ -2,20 +2,23 @@ package util;
 
 public final class Validate {
 
-	private final static String LETTERS_AND_SPACE_ONLY_REGEX = "[a-z A-Z]";
-	private final static String LOWERCASE_LETTERS_REGEX = "[a-z0-9_-]+";
-	private final static String ONLY_NUMBERS_REGEX = "[0-9]+";
-	private final static String ONLY_UNDERSCORES_AND_HIFEN_REGEX = "[_-]+";
-	private final static String EXCEPT_LETTERS_REGEX = "[^a-zA-Z]+";
-	private final static String FIRST_PART_EMAIL_REGEX = "[0-9a-zA-Z-._]+";
+	private final static String NAME_REGEX = "[a-z A-Z]";
+	private final static String USERNAME_REGEX = "[a-z0-9_-]+";
+	private final static String ONLY_NUM_REGEX = "[0-9]+";
+	private final static String ONLY_UNDERSCORES_AND_HIFEN = "[_-]+";
+	private final static String VALID_CHARS_BEFORE_AT = "[0-9a-zA-Z-._]+";
+	private final static String ONLY_LETTERS = "[a-zA-Z]+";
+	private final static String ADDRESS_REGEX = "[a-z A-Z-.]+";
 	private final static String AT_SYMBOL = "@";
+	private final static String SPACE_STRING = " ";
 	
 	private Validate(){}
 		
 	public static boolean isValidName(final String name) {
 		boolean isValid = true;
-		final boolean nameIsEmpty = name.trim().isEmpty();
-		if(nameIsEmpty && !name.matches(LETTERS_AND_SPACE_ONLY_REGEX)){
+		final String firstCharOfName = getFirstCharAsStringOf(name);
+		if(!firstCharOfName.matches(ONLY_LETTERS) 
+				&& !name.matches(NAME_REGEX)){
 			isValid = false;
 		}	
 		return isValid;
@@ -23,10 +26,11 @@ public final class Validate {
 
 	public static boolean isValidUsername(final String username) {
 		boolean isValid = true;
-		final boolean usernameIsEmpty = username.trim().isEmpty();
-		if(usernameIsEmpty || username.matches(ONLY_NUMBERS_REGEX) 
-				|| username.matches(ONLY_UNDERSCORES_AND_HIFEN_REGEX)
-				|| !username.matches(LOWERCASE_LETTERS_REGEX)){
+		final String usrnamefirstChar = getFirstCharAsStringOf(username);
+		if(!usrnamefirstChar.matches(ONLY_LETTERS) 
+				|| username.matches(ONLY_NUM_REGEX) 
+				|| username.matches(ONLY_UNDERSCORES_AND_HIFEN)
+				|| !username.matches(USERNAME_REGEX)){
 			isValid = false;
 		}	
 		return isValid;
@@ -34,9 +38,11 @@ public final class Validate {
 
 	public static boolean isValidPassword(final String password) {
 		boolean isValid = true;
-		final boolean passwordIsEmpty = password.trim().isEmpty();
-		if(passwordIsEmpty || password.matches(ONLY_NUMBERS_REGEX) 
-				|| password.length() < 8){
+		final String passwdfirstChar = getFirstCharAsStringOf(password);
+		if(passwdfirstChar.matches("") 
+				|| password.length() < 8
+				|| password.matches(ONLY_NUM_REGEX) 
+				|| passwdfirstChar.matches(" ")){
 			isValid = false;
 		}	
 		return isValid;
@@ -53,19 +59,22 @@ public final class Validate {
 	
 	public static boolean isValidEmail(final String email) {
 		final String firstCharOfEmail = getFirstCharAsStringOf(email);
-		boolean isValid = true;
-		if(!email.contains(AT_SYMBOL) 
-				|| firstCharOfEmail.matches(EXCEPT_LETTERS_REGEX)){
-			isValid = false;
-		}
-		else{
+		boolean isValid = email.contains(AT_SYMBOL) && firstCharOfEmail.matches(ONLY_LETTERS);
+		if(isValid == true){
 			final String firstPartOfEmail = getPartBeforeAtSymbol(email);
-			if(firstPartOfEmail.matches(FIRST_PART_EMAIL_REGEX)){
-				isValid = true;
-			}
-			else{
-				isValid = false;
-			}
+			isValid = firstPartOfEmail.matches(VALID_CHARS_BEFORE_AT);
+		}
+		return isValid;
+	}
+
+	public static boolean isValidAddress(final String address) {
+		boolean isValid = true;
+		final String addressFirstChar = getFirstCharAsStringOf(address);
+		if(address.matches(ONLY_NUM_REGEX) || 
+				!addressFirstChar.matches(ONLY_LETTERS) ||
+				!address.contains(SPACE_STRING) ||
+				!address.matches(ADDRESS_REGEX)){
+			isValid = false;
 		}
 		return isValid;
 	}
