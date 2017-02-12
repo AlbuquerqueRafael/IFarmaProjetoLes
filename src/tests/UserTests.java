@@ -3,8 +3,8 @@ package tests;
 import org.junit.*;
 
 import exceptions.InvalidAddressException;
+import exceptions.InvalidCEPException;
 import exceptions.InvalidEmailException;
-import exceptions.InvalidNameException;
 import exceptions.InvalidNameException;
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUsernameException;
@@ -14,7 +14,8 @@ import model.User;
 public class UserTests {
 		// os itens que são comuns, como por exemplo, onlyNumbers e onlySpaces podem ser apenas
 		// uma variável, para evitar duplicação de código, mas isso fica para depois(para o refactoring dos testes)
-		// criar uma lista de siglas de estados do BR na classe de validação. Se for lista não contém, é inválido o estado.
+		
+		// Retirar atributo state, já que a cidade é campina Grande, então será, por default, PB
 	private String invalidNameWithOnlyLetters;
 	private String invalidNameMixingLettersAndSeveralNumbers;
 	private String invalidNameMixingLettersAndOnlyOneNumber;
@@ -70,11 +71,20 @@ public class UserTests {
 	private String invalidAddressWithoutLetterAsFirstChar;
 	
 	private String validHouseNumber;
-	private String validCEP;
+	
+	private String validCEPOfCampinaGrande;
+	private String invalidCEPWithLetters;
+	private String invalidCEPWithSpecialChar;
+	private String invalidCEPWithLengthInferiorToEight;
+	private String invalidCEPWithLengthSuperiorToEight;
+	private String invalidCEPforCampinaGrande;
+
+	
 	private String validState;
 	
 	private User userInvalid;
 	private User userValid;
+	
 	
 	
 	@Before
@@ -101,9 +111,8 @@ public class UserTests {
 		
 		validHouseNumber = "150";
 		
-		validCEP = "58410538";
+		validCEPOfCampinaGrande = "58410538";
 		
-		validState = "PB";
 	}
 	
 	@Before
@@ -145,7 +154,110 @@ public class UserTests {
 		invalidAddressWithOnlyNumbers = "515646845123";
 		invalidAddressWithSpecialSymbols = "ru@ d@$ mu|@!@$ s*r+d%&";
 		invalidAddressWithoutLetterAsFirstChar = "8 rua das muladas saradas";
+		
+		invalidCEPWithLetters = "584a5282";
+		invalidCEPWithSpecialChar = "5$410583";
+		invalidCEPWithLengthInferiorToEight = "5841053";
+		invalidCEPWithLengthSuperiorToEight = "584105338";
+		invalidCEPforCampinaGrande = "50875-090";
 	}
+	
+	@Test
+	public void testShouldCreateUserCEPOfCampinaGrande(){
+		try {
+			userValid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					validHouseNumber, 
+					validCEPOfCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserCEPFromNotCampinaGrande(){
+		try {
+			userInvalid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					validHouseNumber, 
+					invalidCEPforCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidCEPException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserCEPLengthSuperiorToEight(){
+		try {
+			userInvalid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					validHouseNumber, 
+					invalidCEPWithLengthSuperiorToEight);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidCEPException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserCEPLengthInferiorToEight(){
+		try {
+			userInvalid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					validHouseNumber, 
+					invalidCEPWithLengthInferiorToEight);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidCEPException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserCEPWithSpecialChars(){
+		try {
+			userInvalid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					validHouseNumber, 
+					invalidCEPWithSpecialChar);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidCEPException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserCEPWithLetter(){
+		try {
+			userInvalid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					validHouseNumber, 
+					invalidCEPWithLetters);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidCEPException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
 	
 	@Test
 	public void testShouldFailCreatingUserAddressWithoutLetterAsFirstChar(){
@@ -154,7 +266,7 @@ public class UserTests {
 					validMailWithAtLeastOneLetterBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
 					invalidAddressWithoutLetterAsFirstChar, 
-					validHouseNumber, validCEP, validState);
+					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
 		}
@@ -168,7 +280,7 @@ public class UserTests {
 					validMailWithAtLeastOneLetterBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
 					invalidAddressWithOnlySpaces, 
-					validHouseNumber, validCEP, validState);
+					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
 		}
@@ -183,7 +295,7 @@ public class UserTests {
 					validMailWithAtLeastOneLetterBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
 					invalidAddressWithoutSpaces, 
-					validHouseNumber, validCEP, validState);
+					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
 		}
@@ -198,7 +310,7 @@ public class UserTests {
 					validMailWithAtLeastOneLetterBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
 					invalidAddressWithOnlyNumbers, 
-					validHouseNumber, validCEP, validState);
+					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
 		}
@@ -212,7 +324,7 @@ public class UserTests {
 					validMailWithAtLeastOneLetterBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
 					invalidAddressWithSpecialSymbols, 
-					validHouseNumber, validCEP, validState);
+					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidAddressException().getMessage(), e.getMessage());
 		}
@@ -226,7 +338,7 @@ public class UserTests {
 			userValid = new User(validName, validUsernameWithOnlyLetters,
 					validMailWithAtLeastOneLetterBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -239,7 +351,7 @@ public class UserTests {
 			userValid = new User(validName, validUsernameWithOnlyLetters,
 					validMailWithHyphenBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -252,7 +364,7 @@ public class UserTests {
 			userValid = new User(validName, validUsernameWithOnlyLetters,
 					validMailWithDotBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -265,7 +377,7 @@ public class UserTests {
 			userValid = new User(validName, validUsernameWithOnlyLetters,
 					validMailWithUnderscoreBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -278,7 +390,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailWithSpace, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -291,7 +403,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailWithInvalidSpecialCharsBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -304,7 +416,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailWithOnlySpaces, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -317,7 +429,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailWithOnlySpacesBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -330,7 +442,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailWithOnlySpecialCharsBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -343,7 +455,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailWithOnlyNumbersBeforeAtSymbol, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -356,7 +468,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailStartingWithHyphen, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -370,7 +482,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailStartingWithUnderscore, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -384,7 +496,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailStartingWithDot, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -398,7 +510,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailWithoutAtSymbol, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -411,7 +523,7 @@ public class UserTests {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters,
 					invalidMailStartingWithNumber, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
 		}
@@ -424,7 +536,7 @@ public class UserTests {
 		try {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters, validMail, 
 					invalidPasswordOnlyNumbers,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
 		}
@@ -436,7 +548,7 @@ public class UserTests {
 		try {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters, validMail, 
 					invalidPasswordWithOnlySpaces,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
 		}
@@ -448,7 +560,7 @@ public class UserTests {
 		try {
 			userInvalid = new User(validName, validUsernameWithOnlyLetters, validMail, 
 					invalidPasswordLengthInferiorToEight,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
 		}
@@ -461,7 +573,7 @@ public class UserTests {
 		try {
 			userValid = new User(validName, validUsernameWithOnlyLetters, validMail, 
 					validPasswordWithLettersAndSpecialCharsAndNumbers,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
 		}
@@ -474,7 +586,7 @@ public class UserTests {
 		try {
 			userValid = new User(validName, validUsernameWithOnlyLetters, validMail, 
 					validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
 		}
@@ -486,7 +598,7 @@ public class UserTests {
 		try {
 			userValid = new User(validName, validUsernameWithOnlyLetters, validMail, 
 					validPasswordLettersAndSpecialChars,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
 		}
@@ -498,7 +610,7 @@ public class UserTests {
 		try {
 			userValid = new User(validName, validUsernameWithOnlyLetters, validMail, 
 					validPasswordNumbersAndSpecialChars,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
 		}
@@ -509,7 +621,7 @@ public class UserTests {
 	public void testCreatingUserWithSpecialCharsAndNumbersInUsername(){
 		try {
 			userValid = new User(validName, validUsernameMixLettersNumbersSeparators, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -520,7 +632,7 @@ public class UserTests {
 	public void testCreatingUserWithSpecialCharsInUsername(){
 		try {
 			userValid = new User(validName, validUsernameWithUnderscore, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
 		}
@@ -531,7 +643,7 @@ public class UserTests {
 	public void testCreatingUserWithNumbersInUsername(){
 		try {
 			userValid = new User(validName, validUsernameMixLettersAndNumbers, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
 		}
@@ -542,7 +654,7 @@ public class UserTests {
 	public void testCreatingUserWithGraphAccentuationInUsername(){
 		try {
 			userInvalid = new User(validName, invalidUsernameWithGraphicAccentuation, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 			
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
@@ -554,7 +666,7 @@ public class UserTests {
 	public void testCreatingUserWithSpaceInUsername(){
 		try {
 			userInvalid = new User(validName, invalidUsernameWithSpace, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidUsernameException().getClass(), e.getClass());
 			
@@ -566,7 +678,7 @@ public class UserTests {
 	public void testCreatingUserWithOnlySpacesAsUsername(){
 		try {
 			userInvalid = new User(validName, invalidUsernameWithOnlySpaces, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
 		}
@@ -577,7 +689,7 @@ public class UserTests {
 	public void testCreatingUserWithOnlyNumbersAsUsername(){
 		try {
 			userInvalid = new User(validName, invalidUsernameWithOnlyNumbers, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidUsernameException().getMessage(), e.getMessage());
 		}
@@ -588,7 +700,7 @@ public class UserTests {
 	public void testCreatingUserWithOnlySpecialCharsAsUsername() throws InvalidUserDataException{
 		try {
 			userInvalid = new User(validName, invalidUsernameWithOnlySpecialChars, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidUsernameException().getClass(), e.getClass());
 		}
@@ -600,7 +712,7 @@ public class UserTests {
 	public void testCreatingUserValidData(){
 		try {
 			userValid = new User(validName, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -612,7 +724,7 @@ public class UserTests {
 	public void testCreatingUserWithGraphAccentuationInName(){
 		try {
 			userInvalid = new User(invalidNameWithGraphicAccentuation, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -623,7 +735,7 @@ public class UserTests {
 	public void testCreatingUserWithOnlyLettersInName(){
 		try {
 			userInvalid = new User(invalidNameWithOnlyLetters, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -634,7 +746,7 @@ public class UserTests {
 	public void testCreatingUserWithOnlyNumbersAsName(){
 		try {
 			userInvalid = new User(invalidNameWithOnlyNumbers, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -645,7 +757,7 @@ public class UserTests {
 	public void testCreatingUserWithOnlySpacesAsName(){
 		try {
 			userInvalid = new User(invalidNameWithOnlySpaces, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -656,7 +768,7 @@ public class UserTests {
 	public void testCreatingUserWithOnlySpecialCharAsName(){
 		try {
 			userInvalid = new User(invalidNameWithOnlySpecialChars, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -668,7 +780,7 @@ public class UserTests {
 	public void testCreatingUserWithSpecialCharAndNumberInName(){
 		try {
 			userInvalid = new User(invalidNameMixingLettersAndNumbersAndSpecialChars, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -679,7 +791,7 @@ public class UserTests {
 	public void testCreatingUserWithSpecialCharInName(){
 		try {
 			userInvalid = new User(invalidNameMixingLettersAndSpecialChars, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -690,7 +802,7 @@ public class UserTests {
 	public void testCreatingUserWithSingleNumberInName(){
 		try {
 			userInvalid = new User(invalidNameMixingLettersAndOnlyOneNumber, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}
@@ -701,7 +813,7 @@ public class UserTests {
 	public void testCreatingUserWithSeveralNumbersInName(){
 		try {
 			userInvalid = new User(invalidNameMixingLettersAndSeveralNumbers, validUsernameWithOnlyLetters, validMail, validPasswordNumbersAndLetters,
-					validAddress, validHouseNumber, validCEP, validState);
+					validAddress, validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
 		}

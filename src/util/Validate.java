@@ -2,6 +2,8 @@ package util;
 
 public final class Validate {
 
+	private static final int CG_CEP_END = 58449999;
+	private static final int CG_CEP_BEGIN = 58400000;
 	private final static String NAME_REGEX = "[a-z A-Z]";
 	private final static String USERNAME_REGEX = "[a-z0-9_-]+";
 	private final static String ONLY_NUM_REGEX = "[0-9]+";
@@ -13,7 +15,9 @@ public final class Validate {
 	private final static String SPACE_STRING = " ";
 	
 	private Validate(){}
-		
+	
+	/**Name is valid if not contains number or special chars,
+	 * except for space.*/
 	public static boolean isValidName(final String name) {
 		boolean isValid = true;
 		final String firstCharOfName = getFirstCharAsStringOf(name);
@@ -24,6 +28,10 @@ public final class Validate {
 		return isValid;
 	}
 
+	/**Username is valid if not contains only numbers or contains special chars, 
+	 * except for hyphen and underscore, because they are used as separator; 
+	 * start with a letter or mix letters, numbers, underscores and hyphen. 
+	 * */
 	public static boolean isValidUsername(final String username) {
 		boolean isValid = true;
 		final String usrnamefirstChar = getFirstCharAsStringOf(username);
@@ -35,7 +43,10 @@ public final class Validate {
 		}	
 		return isValid;
 	}
-
+	
+	/** Password is valid if has, at least, 8 chars; 
+	 * has not space char and has not only numbers.
+	 *  */
 	public static boolean isValidPassword(final String password) {
 		boolean isValid = true;
 		final String passwdfirstChar = getFirstCharAsStringOf(password);
@@ -57,6 +68,10 @@ public final class Validate {
 		return emailSplitted[0];
 	}
 	
+	/** Email is valid if has at(@) symbol, 
+	 * start with a letter and has not special symbols,
+	 * except for underscore, dot and hyphen, because 
+	 * they are used as separator.*/
 	public static boolean isValidEmail(final String email) {
 		final String firstCharOfEmail = getFirstCharAsStringOf(email);
 		boolean isValid = email.contains(AT_SYMBOL) && firstCharOfEmail.matches(ONLY_LETTERS);
@@ -67,6 +82,10 @@ public final class Validate {
 		return isValid;
 	}
 
+	/** Address is valid if starts with a letter, 
+	 * has space because of street's name and 
+	 * has not special chars, except for hyphen and dot.
+	 * */
 	public static boolean isValidAddress(final String address) {
 		boolean isValid = true;
 		final String addressFirstChar = getFirstCharAsStringOf(address);
@@ -75,6 +94,18 @@ public final class Validate {
 				!address.contains(SPACE_STRING) ||
 				!address.matches(ADDRESS_REGEX)){
 			isValid = false;
+		}
+		return isValid;
+	}
+	
+	/** CEP is valid if it's from Campina Grande city. */
+	public static boolean isValidCEP(final String cep) {
+		boolean isValid = false;
+		if(cep.matches(ONLY_NUM_REGEX) && cep.length() == 8){
+			final int cepAsNumber = Integer.parseInt(cep);
+			if(cepAsNumber >= CG_CEP_BEGIN && cepAsNumber <= CG_CEP_END){
+				isValid = true;
+			}
 		}
 		return isValid;
 	}

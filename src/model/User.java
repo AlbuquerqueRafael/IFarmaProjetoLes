@@ -11,11 +11,10 @@ public class User {
 	private String password;
 	private String address; 
 	private String houseNumber; 
-	private String cep; 
-	private String state;
+	private String cep;
 	
 	public User(final String name, final String username, final String email, final String password,
-			final String address, final String houseNumber, final String cep, final String state) throws InvalidUserDataException {
+			final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
 		
 		if(!Validate.isValidName(name)){
 			throw new InvalidNameException();
@@ -29,13 +28,18 @@ public class User {
 			throw new InvalidEmailException();
 		}
 		
+		if(!Validate.isValidPassword(password)){
+			throw new InvalidPasswordException();
+		}
+		
 		if(!Validate.isValidAddress(address)){
 			throw new InvalidAddressException();
 		}
 		
-		if(!Validate.isValidPassword(password)){
-			throw new InvalidPasswordException();
+		if(!Validate.isValidCEP(cep)){
+			throw new InvalidCEPException();
 		}
+		
 		
 		this.name = name;
 		this.username = username;
@@ -44,7 +48,6 @@ public class User {
 		this.address = address;
 		this.houseNumber = houseNumber;
 		this.cep = cep;
-		this.state = state;
 	}
 
 	public String getName() {
@@ -87,14 +90,6 @@ public class User {
 		this.cep = cep;
 	}
 
-	public String getState() {
-		return state;
-	}
-
-	public void setState(final String state) {
-		this.state = state;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -102,5 +97,4 @@ public class User {
 	public String getUsername() {
 		return username;
 	}
-		
 }
