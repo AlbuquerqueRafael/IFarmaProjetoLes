@@ -7,6 +7,7 @@ public final class Validate {
 	private final static String NAME_REGEX = "[a-z A-Z]";
 	private final static String USERNAME_REGEX = "[a-z0-9_-]+";
 	private final static String ONLY_NUM_REGEX = "[0-9]+";
+	private final static String HOUSE_NUM_REGEX = "[a-z0-9A-Z-]+";
 	private final static String ONLY_UNDERSCORES_AND_HIFEN = "[_-]+";
 	private final static String VALID_CHARS_BEFORE_AT = "[0-9a-zA-Z-._]+";
 	private final static String ONLY_LETTERS = "[a-zA-Z]+";
@@ -75,7 +76,7 @@ public final class Validate {
 	public static boolean isValidEmail(final String email) {
 		final String firstCharOfEmail = getFirstCharAsStringOf(email);
 		boolean isValid = email.contains(AT_SYMBOL) && firstCharOfEmail.matches(ONLY_LETTERS);
-		if(isValid == true){
+		if(isValid){
 			final String firstPartOfEmail = getPartBeforeAtSymbol(email);
 			isValid = firstPartOfEmail.matches(VALID_CHARS_BEFORE_AT);
 		}
@@ -109,4 +110,16 @@ public final class Validate {
 		}
 		return isValid;
 	}
+
+	public static boolean isValidHouseNumber(final String houseNumber) {
+		boolean isValid = true;
+		final String houseNumFirstChar = getFirstCharAsStringOf(houseNumber);
+		if(!houseNumFirstChar.matches(ONLY_NUM_REGEX) ||
+				!houseNumber.matches(HOUSE_NUM_REGEX)){
+			isValid = false;
+		}
+		return isValid;
+	}
+	
+
 }

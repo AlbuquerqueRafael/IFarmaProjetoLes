@@ -36,6 +36,10 @@ public class User {
 			throw new InvalidAddressException();
 		}
 		
+		if(!Validate.isValidHouseNumber(houseNumber)){
+			throw new InvalidHouseNumberException();
+		}
+		
 		if(!Validate.isValidCEP(cep)){
 			throw new InvalidCEPException();
 		}

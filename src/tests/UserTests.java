@@ -5,6 +5,7 @@ import org.junit.*;
 import exceptions.InvalidAddressException;
 import exceptions.InvalidCEPException;
 import exceptions.InvalidEmailException;
+import exceptions.InvalidHouseNumberException;
 import exceptions.InvalidNameException;
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUsernameException;
@@ -71,6 +72,11 @@ public class UserTests {
 	private String invalidAddressWithoutLetterAsFirstChar;
 	
 	private String validHouseNumber;
+	private String validHouseNumberWithContainsHyphen;
+	private String invalidHouseNumberFirstCharIsNotNumber;
+	private String invalidHouseNumberWithOnlyLetters;
+	private String invalidHouseNumberWithOnlySpaces;
+	private String invalidHouseNumberWithSpecialChars;
 	
 	private String validCEPOfCampinaGrande;
 	private String invalidCEPWithLetters;
@@ -78,12 +84,11 @@ public class UserTests {
 	private String invalidCEPWithLengthInferiorToEight;
 	private String invalidCEPWithLengthSuperiorToEight;
 	private String invalidCEPforCampinaGrande;
-
-	
-	private String validState;
 	
 	private User userInvalid;
 	private User userValid;
+	
+	
 	
 	
 	
@@ -110,6 +115,7 @@ public class UserTests {
 		validAddress = "R. das mulatas saradas-loucas";
 		
 		validHouseNumber = "150";
+		validHouseNumberWithContainsHyphen = "150-A";
 		
 		validCEPOfCampinaGrande = "58410538";
 		
@@ -160,6 +166,91 @@ public class UserTests {
 		invalidCEPWithLengthInferiorToEight = "5841053";
 		invalidCEPWithLengthSuperiorToEight = "584105338";
 		invalidCEPforCampinaGrande = "50875-090";
+		
+		invalidHouseNumberFirstCharIsNotNumber = "A152";
+		invalidHouseNumberWithOnlyLetters = "abcde";
+		invalidHouseNumberWithOnlySpaces = "           ";
+		invalidHouseNumberWithSpecialChars = "150@#$%%$-*-*/]&%";
+	}
+	
+	@Test
+	public void testShouldCreateUserHouseNumberContainsHyphen(){
+		try {
+			userValid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					validHouseNumberWithContainsHyphen, 
+					validCEPOfCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserHouseNumberWithSpecialChars(){
+		try {
+			userInvalid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					invalidHouseNumberWithSpecialChars, 
+					validCEPOfCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidHouseNumberException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserHouseNumberWithOnlySpaces(){
+		try {
+			userInvalid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					invalidHouseNumberWithOnlySpaces, 
+					validCEPOfCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidHouseNumberException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserHouseNumberWithOnlyLetters(){
+		try {
+			userInvalid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					invalidHouseNumberWithOnlyLetters, 
+					validCEPOfCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidHouseNumberException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingUserHouseNumberWithFirstCharNotNumerical(){
+		try {
+			userInvalid = new User(validName, 
+					validUsernameWithOnlyLetters,
+					validMailWithAtLeastOneLetterBeforeAtSymbol, 
+					validPasswordNumbersAndLetters,
+					validAddress, 
+					invalidHouseNumberFirstCharIsNotNumber, 
+					validCEPOfCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidHouseNumberException().getMessage(), e.getMessage());
+		}
+		
 	}
 	
 	@Test
