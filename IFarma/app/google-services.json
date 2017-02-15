@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1053742103077",
+    "firebase_url": "https://ifarma-5d2e6.firebaseio.com",
+    "project_id": "ifarma-5d2e6",
+    "storage_bucket": "ifarma-5d2e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053742103077:android:1fc59388b053cded",
+        "android_client_info": {
+          "package_name": "com.ifarma.ifarma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053742103077-bf0pavv5ihaamed356tammt0jmg9a19d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ifarma.ifarma",
+            "certificate_hash": "4A5E6FF679CEB8B6BFF166CA3947EE48779597B2"
+          }
+        },
+        {
+          "client_id": "1053742103077-hrl75abs72naisu4149mkbd5elvqjocl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGbRfh3PvlEMxNkWoTvtrVwXH_8muSNxU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053742103077-hrl75abs72naisu4149mkbd5elvqjocl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
