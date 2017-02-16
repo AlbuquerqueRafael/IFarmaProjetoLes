@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.fragments.AccountFragment;
+import com.ifarma.ifarma.fragments.AddProductFragment;
 import com.ifarma.ifarma.fragments.CartFragment;
 import com.ifarma.ifarma.fragments.SearchFragment;
 
@@ -48,7 +49,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new CartFragment();
             case 2:
-                return new AccountFragment();
+                return new AddProductFragment();
             default:
                 return new SearchFragment();
         }
