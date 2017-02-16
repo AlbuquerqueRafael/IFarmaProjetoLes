@@ -7,6 +7,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="StyledTilEditTextTheme">
+        <item name="colorControlNormal">@color/editTextColor</item> // Cor padrão da linha
+        <item name="colorControlActivated">@color/colorAccent</item> // Cor linha e texto quando recebe foco
+    </style>
+
+    <style name="StyledTilEditText">
+        <item name="android:theme">@style/StyledTilEditTextTheme</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:textColorHint">@color/editTextColor</item> // Cor texto(hint) sem foco
     </style>
 
 </resources>

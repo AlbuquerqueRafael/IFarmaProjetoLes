@@ -19,24 +19,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_LOGGED = "isLogged";
-    public static final String USERNAME = "username";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (isAuthenticated()) {
-            initUI();
-        } else {
-            startLogin();
-        }
-    }
-
-    private void startLogin(){
-        finish();
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        initUI();
     }
 
     private boolean isAuthenticated(){
@@ -55,30 +44,28 @@ public class MainActivity extends AppCompatActivity {
         models.add(
                 new NavigationTabBar.Model.Builder(
                         ContextCompat.getDrawable(this, R.drawable.ic_search_white_24dp),
-                        Color.parseColor("#D32F2F"))
+                        Color.parseColor("#00897B"))
                         .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_search_white_24dp))
                         .title("Buscar")
-                        .badgeTitle("Search")
                         .build()
         );
 
         models.add(
                 new NavigationTabBar.Model.Builder(
                         ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp),
-                        Color.parseColor("#D32F2F"))
+                        Color.parseColor("#00897B"))
                         .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp))
                         .title("Carrinho")
-                        .badgeTitle("Car")
                         .build()
         );
 
         models.add(
                 new NavigationTabBar.Model.Builder(
                         ContextCompat.getDrawable(this, R.drawable.ic_account_circle_white_24dp),
-                        Color.parseColor("#D32F2F"))
+                        Color.parseColor("#00897B"))
                         .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_account_circle_white_24dp))
                         .title("Eu")
-                        .badgeTitle("Me")
+                        .badgeTitle("Deslogado")
                         .build()
         );
 
@@ -91,11 +78,30 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {}
 
             @Override
-            public void onPageSelected(final int position) {}
+            public void onPageSelected(final int position) {
+                navigationTabBar.getModels().get(position).hideBadge();
+            }
 
             @Override
             public void onPageScrollStateChanged(final int state) {}
         });
+
+        navigationTabBar.setBadgeBgColor(Color.parseColor("#691A99"));
+        navigationTabBar.setBadgeTitleColor(Color.WHITE);
+
+        navigationTabBar.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final NavigationTabBar.Model model = navigationTabBar.getModels().get(2);
+                navigationTabBar.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isAuthenticated())
+                            model.showBadge();
+                    }
+                }, 100);
+            }
+        }, 500);
 
     }
 

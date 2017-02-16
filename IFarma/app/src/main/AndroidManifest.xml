@@ -16,12 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.LoginActivity"
-            android:label="Entrar"></activity>
-        <activity
-            android:name=".activities.RegisterActivity"
-            android:label="Entrar"></activity>
     </application>
 
 </manifest>

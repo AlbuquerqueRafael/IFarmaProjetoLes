@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#D32F2F</color>
-    <color name="colorPrimaryDark">#D50000</color>
-    <color name="colorAccent">#FFF3E0</color>
+    <color name="colorPrimary">#26A69A</color>
+    <color name="colorPrimaryDark">#00897B</color>
+    <color name="colorAccent">#691A99</color>
+    <color name="editTextColor">#6f2c97</color>
+
     <color name="white">#FFFFFF</color>
-    <color name="loginColor">#e43535</color>
 
 </resources>
