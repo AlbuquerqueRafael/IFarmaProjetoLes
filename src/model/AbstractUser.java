@@ -3,7 +3,7 @@ package model;
 import exceptions.*;
 import util.*;
 
-public class User {
+public abstract class AbstractUser{
 
 	private String name;
 	private String email; 
@@ -12,7 +12,9 @@ public class User {
 	private String houseNumber; 
 	private String cep;
 	
-	public User(final String name, final String email, final String password, 
+	public AbstractUser() {}
+	
+	public AbstractUser(final String name, final String email, final String password, 
 			final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
 		
 		if(!Validate.isValidName(name)){
@@ -39,7 +41,6 @@ public class User {
 			throw new InvalidCEPException();
 		}
 		
-		
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -52,7 +53,10 @@ public class User {
 		return name;
 	}
 
-	public void setName(final String name) {
+	public void setName(final String name) throws InvalidNameException {
+		if(!Validate.isValidName(name)){
+			throw new InvalidNameException();
+		}
 		this.name = name;
 	}
 
@@ -60,7 +64,10 @@ public class User {
 		return password;
 	}
 
-	public void setPassword(final String password) {
+	public void setPassword(final String password) throws InvalidPasswordException {
+		if(!Validate.isValidPassword(password)){
+			throw new InvalidPasswordException();
+		}
 		this.password = password;
 	}
 
@@ -68,7 +75,10 @@ public class User {
 		return address;
 	}
 
-	public void setAddress(final String address) {
+	public void setAddress(final String address) throws InvalidAddressException {
+		if(!Validate.isValidAddress(address)){
+			throw new InvalidAddressException();
+		}
 		this.address = address;
 	}
 
@@ -76,7 +86,10 @@ public class User {
 		return houseNumber;
 	}
 
-	public void setHouseNumber(final String houseNumber) {
+	public void setHouseNumber(final String houseNumber) throws InvalidHouseNumberException {
+		if(!Validate.isValidHouseNumber(houseNumber)){
+			throw new InvalidHouseNumberException();
+		}
 		this.houseNumber = houseNumber;
 	}
 
@@ -84,7 +97,10 @@ public class User {
 		return cep;
 	}
 
-	public void setCep(final String cep) {
+	public void setCep(final String cep) throws InvalidCEPException {
+		if(!Validate.isValidCEP(cep)){
+			throw new InvalidCEPException();
+		}
 		this.cep = cep;
 	}
 
@@ -92,8 +108,11 @@ public class User {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) throws InvalidEmailException {
+		if(!Validate.isValidEmail(email)){
+			throw new InvalidEmailException();
+		}
 		this.email = email;
 	}
-	
+		
 }

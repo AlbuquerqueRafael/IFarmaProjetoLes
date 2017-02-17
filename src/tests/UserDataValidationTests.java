@@ -4,18 +4,17 @@ import org.junit.*;
 
 import exceptions.InvalidAddressException;
 import exceptions.InvalidCEPException;
+import exceptions.InvalidCPFException;
 import exceptions.InvalidEmailException;
 import exceptions.InvalidHouseNumberException;
 import exceptions.InvalidNameException;
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUserDataException;
-import model.User;
+import model.Customer;
+import model.AbstractUser;
 
-public class UserTests {
-		// os itens que são comuns, como por exemplo, onlyNumbers e onlySpaces podem ser apenas
-		// uma variável, para evitar duplicação de código, mas isso fica para depois(para o refactoring dos testes)
+public class UserDataValidationTests {
 		
-		// Retirar atributo state, já que a cidade é campina Grande, então será, por default, PB
 	private String invalidNameWithOnlyLetters;
 	private String invalidNameMixingLettersAndSeveralNumbers;
 	private String invalidNameMixingLettersAndOnlyOneNumber;
@@ -73,17 +72,13 @@ public class UserTests {
 	private String invalidCEPWithLengthSuperiorToEight;
 	private String invalidCEPforCampinaGrande;
 	
-	private User userInvalid;
-	private User userValid;
-	
-	
-	
-	
-	
+	private Customer userInvalid;
+	private Customer userValid;
+		
 	@Before
-	public void setUpValidUserData(){
-		validName = "Jobson Lucas";
-				
+	public void setUpValidUserData() throws InvalidUserDataException{
+		validName = "Jobson Lucas";		
+		
 		validMail = "lucas@gmail.com";
 		validMailWithUnderscoreBeforeAtSymbol = "lucas_dias@gmail.com";
 		validMailWithDotBeforeAtSymbol = "lucas.dias@gmail.com";
@@ -100,8 +95,7 @@ public class UserTests {
 		validHouseNumber = "150";
 		validHouseNumberWithContainsHyphen = "150-A";
 		
-		validCEPOfCampinaGrande = "58410538";
-		
+		validCEPOfCampinaGrande = "58410538";		
 	}
 	
 	@Before
@@ -148,12 +142,13 @@ public class UserTests {
 		invalidHouseNumberWithOnlyLetters = "abcde";
 		invalidHouseNumberWithOnlySpaces = "           ";
 		invalidHouseNumberWithSpecialChars = "150@#$%%$-*-*/]&%";
+		
 	}
-	
+		
 	@Test
-	public void testShouldCreateUserHouseNumberContainsHyphen(){
+	public void testShouldCreateCustomerHouseNumberContainsHyphen(){
 		try {
-			userValid = new User(validName, 
+			userValid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -166,9 +161,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserHouseNumberWithSpecialChars(){
+	public void testShouldFailCreatingCustomerHouseNumberWithSpecialChars(){
 		try {
-			userInvalid = new User(validName, 
+			userInvalid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -181,9 +176,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserHouseNumberWithOnlySpaces(){
+	public void testShouldFailCreatingCustomerHouseNumberWithOnlySpaces(){
 		try {
-			userInvalid = new User(validName, 
+			userInvalid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -196,9 +191,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserHouseNumberWithOnlyLetters(){
+	public void testShouldFailCreatingCustomerHouseNumberWithOnlyLetters(){
 		try {
-			userInvalid = new User(validName, 
+			userInvalid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -211,9 +206,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserHouseNumberWithFirstCharNotNumerical(){
+	public void testShouldFailCreatingCustomerHouseNumberWithFirstCharNotNumerical(){
 		try {
-			userInvalid = new User(validName, 
+			userInvalid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -226,9 +221,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldCreateUserCEPOfCampinaGrande(){
+	public void testShouldCreateCustomerCEPOfCampinaGrande(){
 		try {
-			userValid = new User(validName, 
+			userValid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -241,9 +236,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserCEPFromNotCampinaGrande(){
+	public void testShouldFailCreatingCustomerCEPFromNotCampinaGrande(){
 		try {
-			userInvalid = new User(validName, 
+			userInvalid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -256,9 +251,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserCEPLengthSuperiorToEight(){
+	public void testShouldFailCreatingCustomerCEPLengthSuperiorToEight(){
 		try {
-			userInvalid = new User(validName, 
+			userInvalid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -271,9 +266,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserCEPLengthInferiorToEight(){
+	public void testShouldFailCreatingCustomerCEPLengthInferiorToEight(){
 		try {
-			userInvalid = new User(validName, 
+			userInvalid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -286,9 +281,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserCEPWithSpecialChars(){
+	public void testShouldFailCreatingCustomerCEPWithSpecialChars(){
 		try {
-			userInvalid = new User(validName, 
+			userInvalid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -301,9 +296,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserCEPWithLetter(){
+	public void testShouldFailCreatingCustomerCEPWithLetter(){
 		try {
-			userInvalid = new User(validName, 
+			userInvalid = new Customer(validName, 
 					validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
@@ -317,9 +312,9 @@ public class UserTests {
 	
 	
 	@Test
-	public void testShouldFailCreatingUserAddressWithoutLetterAsFirstChar(){
+	public void testShouldFailCreatingCustomerAddressWithoutLetterAsFirstChar(){
 		try {
-			userInvalid = new User(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
+			userInvalid = new Customer(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					invalidAddressWithoutLetterAsFirstChar,
 					validHouseNumber, 
@@ -331,9 +326,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserAddressWithOnlySpaces(){
+	public void testShouldFailCreatingCustomerAddressWithOnlySpaces(){
 		try {
-			userInvalid = new User(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
+			userInvalid = new Customer(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					invalidAddressWithOnlySpaces,
 					validHouseNumber, 
@@ -346,9 +341,9 @@ public class UserTests {
 	
 	
 	@Test
-	public void testShouldFailCreatingUserAddressWithoutSpaces(){
+	public void testShouldFailCreatingCustomerAddressWithoutSpaces(){
 		try {
-			userInvalid = new User(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
+			userInvalid = new Customer(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					invalidAddressWithoutSpaces,
 					validHouseNumber, 
@@ -361,9 +356,9 @@ public class UserTests {
 	
 	
 	@Test
-	public void testShouldFailCreatingUserAddressWithOnlyNumbers(){
+	public void testShouldFailCreatingCustomerAddressWithOnlyNumbers(){
 		try {
-			userInvalid = new User(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
+			userInvalid = new Customer(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					invalidAddressWithOnlyNumbers,
 					validHouseNumber, 
@@ -375,9 +370,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserAddressWithSpecialSymbols(){
+	public void testShouldFailCreatingCustomerAddressWithSpecialSymbols(){
 		try {
-			userInvalid = new User(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
+			userInvalid = new Customer(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					invalidAddressWithSpecialSymbols,
 					validHouseNumber, 
@@ -390,9 +385,9 @@ public class UserTests {
 	
 	
 	@Test
-	public void testShouldCreateUserEmailWithAtLeastOneLetterBeforeAtSymbol(){
+	public void testShouldCreateCustomerEmailWithAtLeastOneLetterBeforeAtSymbol(){
 		try {
-			userValid = new User(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
+			userValid = new Customer(validName, validMailWithAtLeastOneLetterBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -403,9 +398,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldCreateUserEmailWithHyphenBeforeAtSymbol(){
+	public void testShouldCreateCustomerEmailWithHyphenBeforeAtSymbol(){
 		try {
-			userValid = new User(validName, validMailWithHyphenBeforeAtSymbol,
+			userValid = new Customer(validName, validMailWithHyphenBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -416,9 +411,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldCreateUserEmailWithDotBeforeAtSymbol(){
+	public void testShouldCreateCustomerEmailWithDotBeforeAtSymbol(){
 		try {
-			userValid = new User(validName, validMailWithDotBeforeAtSymbol,
+			userValid = new Customer(validName, validMailWithDotBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -429,9 +424,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldCreateUserEmailWithUnderscoreBeforeAtSymbol(){
+	public void testShouldCreateCustomerEmailWithUnderscoreBeforeAtSymbol(){
 		try {
-			userValid = new User(validName, validMailWithUnderscoreBeforeAtSymbol,
+			userValid = new Customer(validName, validMailWithUnderscoreBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -442,9 +437,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserEmailWithSpaceBeforeAtSymbol(){
+	public void testShouldFailCreatingCustomerEmailWithSpaceBeforeAtSymbol(){
 		try {
-			userInvalid = new User(validName, invalidMailWithSpace,
+			userInvalid = new Customer(validName, invalidMailWithSpace,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -455,9 +450,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserEmailWithSpecialCharsBeforeAtSymbol(){
+	public void testShouldFailCreatingCustomerEmailWithSpecialCharsBeforeAtSymbol(){
 		try {
-			userInvalid = new User(validName, invalidMailWithInvalidSpecialCharsBeforeAtSymbol,
+			userInvalid = new Customer(validName, invalidMailWithInvalidSpecialCharsBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -468,9 +463,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserEmailWithOnlySpaces(){
+	public void testShouldFailCreatingCustomerEmailWithOnlySpaces(){
 		try {
-			userInvalid = new User(validName, invalidMailWithOnlySpaces,
+			userInvalid = new Customer(validName, invalidMailWithOnlySpaces,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -481,9 +476,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserEmailWithOnlySpacesBeforeAtSymbol(){
+	public void testShouldFailCreatingCustomerEmailWithOnlySpacesBeforeAtSymbol(){
 		try {
-			userInvalid = new User(validName, invalidMailWithOnlySpacesBeforeAtSymbol,
+			userInvalid = new Customer(validName, invalidMailWithOnlySpacesBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -494,9 +489,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserEmailWithOnlySpecialCharsBeforeAtSymbol(){
+	public void testShouldFailCreatingCustomerEmailWithOnlySpecialCharsBeforeAtSymbol(){
 		try {
-			userInvalid = new User(validName, invalidMailWithOnlySpecialCharsBeforeAtSymbol,
+			userInvalid = new Customer(validName, invalidMailWithOnlySpecialCharsBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -507,9 +502,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserEmailWithOnlyNumbersBeforeAtSymbol(){
+	public void testShouldFailCreatingCustomerEmailWithOnlyNumbersBeforeAtSymbol(){
 		try {
-			userInvalid = new User(validName, invalidMailWithOnlyNumbersBeforeAtSymbol,
+			userInvalid = new Customer(validName, invalidMailWithOnlyNumbersBeforeAtSymbol,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -520,23 +515,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testShouldFailCreatingUserEmailWithHyphenAsFirstChar(){
+	public void testShouldFailCreatingCustomerEmailWithHyphenAsFirstChar(){
 		try {
-			userInvalid = new User(validName, invalidMailStartingWithHyphen,
-					validPasswordNumbersAndLetters, 
-					validAddress,
-					validHouseNumber, validCEPOfCampinaGrande);
-		} catch (InvalidUserDataException e) {
-			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
-		}
-		
-	}
-	
-	
-	@Test
-	public void testShouldFailCreatingUserEmailWithUnderscoreAsFirstChar(){
-		try {
-			userInvalid = new User(validName, invalidMailStartingWithUnderscore,
+			userInvalid = new Customer(validName, invalidMailStartingWithHyphen,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -548,9 +529,9 @@ public class UserTests {
 	
 	
 	@Test
-	public void testShouldFailCreatingUserEmailWithDotAsFirstChar(){
+	public void testShouldFailCreatingCustomerEmailWithUnderscoreAsFirstChar(){
 		try {
-			userInvalid = new User(validName, invalidMailStartingWithDot,
+			userInvalid = new Customer(validName, invalidMailStartingWithUnderscore,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -562,22 +543,9 @@ public class UserTests {
 	
 	
 	@Test
-	public void testShouldFailCreatingUserEmailWithoutAtSymbol(){
+	public void testShouldFailCreatingCustomerEmailWithDotAsFirstChar(){
 		try {
-			userInvalid = new User(validName, invalidMailWithoutAtSymbol,
-					validPasswordNumbersAndLetters, 
-					validAddress,
-					validHouseNumber, validCEPOfCampinaGrande);
-		} catch (InvalidUserDataException e) {
-			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
-		}
-		
-	}
-	
-	@Test
-	public void testShouldFailCreatingUserEmailWithNumberAsFirstChar(){
-		try {
-			userInvalid = new User(validName, invalidMailStartingWithNumber,
+			userInvalid = new Customer(validName, invalidMailStartingWithDot,
 					validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
@@ -589,9 +557,36 @@ public class UserTests {
 	
 	
 	@Test
-	public void testCreatingUserWithOnlyNumbersAsPassword(){
+	public void testShouldFailCreatingCustomerEmailWithoutAtSymbol(){
 		try {
-			userInvalid = new User(validName, validMail, invalidPasswordOnlyNumbers, 
+			userInvalid = new Customer(validName, invalidMailWithoutAtSymbol,
+					validPasswordNumbersAndLetters, 
+					validAddress,
+					validHouseNumber, validCEPOfCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	@Test
+	public void testShouldFailCreatingCustomerEmailWithNumberAsFirstChar(){
+		try {
+			userInvalid = new Customer(validName, invalidMailStartingWithNumber,
+					validPasswordNumbersAndLetters, 
+					validAddress,
+					validHouseNumber, validCEPOfCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	
+	@Test
+	public void testShouldFailCreatingCustomerWithOnlyNumbersAsPassword(){
+		try {
+			userInvalid = new Customer(validName, validMail, invalidPasswordOnlyNumbers, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
@@ -601,9 +596,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithPasswordWithOnlySpaces(){
+	public void testShouldFailCreatingCustomerWithPasswordWithOnlySpaces(){
 		try {
-			userInvalid = new User(validName, validMail, invalidPasswordWithOnlySpaces, 
+			userInvalid = new Customer(validName, validMail, invalidPasswordWithOnlySpaces, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
@@ -613,22 +608,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithPasswordLengthInferiorToEight(){
+	public void testShouldFailCreatingCustomerWithPasswordLengthInferiorToEight(){
 		try {
-			userInvalid = new User(validName, validMail, invalidPasswordLengthInferiorToEight, 
-					validAddress,
-					validHouseNumber, validCEPOfCampinaGrande);
-		} catch (InvalidUserDataException e) {
-			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
-		}
-		
-	}
-	
-	
-	@Test
-	public void testCreatingUserWithNumbersAndLettersAndSpecialCharsAsPassword(){
-		try {
-			userValid = new User(validName, validMail, validPasswordWithLettersAndSpecialCharsAndNumbers, 
+			userInvalid = new Customer(validName, validMail, invalidPasswordLengthInferiorToEight, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
@@ -639,9 +621,22 @@ public class UserTests {
 	
 	
 	@Test
-	public void testCreatingUserWithNumbersAndLettersAsPassword(){
+	public void testCreatingCustomerWithNumbersAndLettersAndSpecialCharsAsPassword(){
 		try {
-			userValid = new User(validName, validMail, validPasswordNumbersAndLetters, 
+			userValid = new Customer(validName, validMail, validPasswordWithLettersAndSpecialCharsAndNumbers, 
+					validAddress,
+					validHouseNumber, validCEPOfCampinaGrande);
+		} catch (InvalidUserDataException e) {
+			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
+		}
+		
+	}
+	
+	
+	@Test
+	public void testCreatingCustomerWithNumbersAndLettersAsPassword(){
+		try {
+			userValid = new Customer(validName, validMail, validPasswordNumbersAndLetters, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
@@ -651,9 +646,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithSpecialCharsAndLettersAsPassword(){
+	public void testCreatingCustomerWithSpecialCharsAndLettersAsPassword(){
 		try {
-			userValid = new User(validName, validMail, validPasswordLettersAndSpecialChars, 
+			userValid = new Customer(validName, validMail, validPasswordLettersAndSpecialChars, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
@@ -663,9 +658,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithSpecialCharsAndNumbersAsPassword(){
+	public void testCreatingCustomerWithSpecialCharsAndNumbersAsPassword(){
 		try {
-			userValid = new User(validName, validMail, validPasswordNumbersAndSpecialChars, 
+			userValid = new Customer(validName, validMail, validPasswordNumbersAndSpecialChars, 
 					validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
@@ -675,9 +670,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserValidData(){
+	public void testCreatingCustomerValidData(){
 		try {
-			userValid = new User(validName, validMail, validPasswordNumbersAndLetters, validAddress,
+			userValid = new Customer(validName, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -687,9 +682,9 @@ public class UserTests {
 	
 	
 	@Test
-	public void testCreatingUserWithGraphAccentuationInName(){
+	public void testShouldFailCreatingCustomerWithGraphAccentuationInName(){
 		try {
-			userInvalid = new User(invalidNameWithGraphicAccentuation, validMail, validPasswordNumbersAndLetters, validAddress,
+			userInvalid = new Customer(invalidNameWithGraphicAccentuation, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -698,9 +693,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithOnlyLettersInName(){
+	public void testShouldFailCreatingCustomerWithOnlyLettersInName(){
 		try {
-			userInvalid = new User(invalidNameWithOnlyLetters, validMail, validPasswordNumbersAndLetters, validAddress,
+			userInvalid = new Customer(invalidNameWithOnlyLetters, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -709,9 +704,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithOnlyNumbersAsName(){
+	public void testShouldFailCreatingCustomerWithOnlyNumbersAsName(){
 		try {
-			userInvalid = new User(invalidNameWithOnlyNumbers, validMail, validPasswordNumbersAndLetters, validAddress,
+			userInvalid = new Customer(invalidNameWithOnlyNumbers, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -720,9 +715,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithOnlySpacesAsName(){
+	public void testShouldFailCreatingCustomerWithOnlySpacesAsName(){
 		try {
-			userInvalid = new User(invalidNameWithOnlySpaces, validMail, validPasswordNumbersAndLetters, validAddress,
+			userInvalid = new Customer(invalidNameWithOnlySpaces, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -731,9 +726,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithOnlySpecialCharAsName(){
+	public void testShouldFailCreatingCustomerWithOnlySpecialCharAsName(){
 		try {
-			userInvalid = new User(invalidNameWithOnlySpecialChars, validMail, validPasswordNumbersAndLetters, validAddress,
+			userInvalid = new Customer(invalidNameWithOnlySpecialChars, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -743,9 +738,9 @@ public class UserTests {
 	
 	
 	@Test
-	public void testCreatingUserWithSpecialCharAndNumberInName(){
+	public void testShouldFailCreatingCustomerWithSpecialCharAndNumberInName(){
 		try {
-			userInvalid = new User(invalidNameMixingLettersAndNumbersAndSpecialChars, validMail, validPasswordNumbersAndLetters, validAddress,
+			userInvalid = new Customer(invalidNameMixingLettersAndNumbersAndSpecialChars, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -754,9 +749,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithSpecialCharInName(){
+	public void testShouldFailCreatingCustomerWithSpecialCharInName(){
 		try {
-			userInvalid = new User(invalidNameMixingLettersAndSpecialChars, validMail, validPasswordNumbersAndLetters, validAddress,
+			userInvalid = new Customer(invalidNameMixingLettersAndSpecialChars, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -765,9 +760,9 @@ public class UserTests {
 	}
 			
 	@Test
-	public void testCreatingUserWithSingleNumberInName(){
+	public void testShouldFailCreatingCustomerWithSingleNumberInName(){
 		try {
-			userInvalid = new User(invalidNameMixingLettersAndOnlyOneNumber, validMail, validPasswordNumbersAndLetters, validAddress,
+			userInvalid = new Customer(invalidNameMixingLettersAndOnlyOneNumber, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
@@ -776,9 +771,9 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testCreatingUserWithSeveralNumbersInName(){
+	public void testShouldFailCreatingCustomerWithSeveralNumbersInName(){
 		try {
-			userInvalid = new User(invalidNameMixingLettersAndSeveralNumbers, validMail, validPasswordNumbersAndLetters, validAddress,
+			userInvalid = new Customer(invalidNameMixingLettersAndSeveralNumbers, validMail, validPasswordNumbersAndLetters, validAddress,
 					validHouseNumber, validCEPOfCampinaGrande);
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());
