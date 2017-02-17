@@ -6,24 +6,19 @@ import util.*;
 public class User {
 
 	private String name;
-	private final String username; 
-	private final String email; 
+	private String email; 
 	private String password;
 	private String address; 
 	private String houseNumber; 
 	private String cep;
 	
-	public User(final String name, final String username, final String email, final String password,
+	public User(final String name, final String email, final String password, 
 			final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
 		
 		if(!Validate.isValidName(name)){
 			throw new InvalidNameException();
 		}
-		
-		if(!Validate.isValidUsername(username)){
-			throw new InvalidUsernameException();
-		}
-		
+				
 		if(!Validate.isValidEmail(email)){
 			throw new InvalidEmailException();
 		}
@@ -46,7 +41,6 @@ public class User {
 		
 		
 		this.name = name;
-		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.address = address;
@@ -97,8 +91,9 @@ public class User {
 	public String getEmail() {
 		return email;
 	}
-	
-	public String getUsername() {
-		return username;
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
+	
 }
