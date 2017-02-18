@@ -21,6 +21,8 @@ public class Product {
         this.generic = generic;
     }
 
+    public Product(){}
+    
     public String getNameProduct(){
         return name;
     }
