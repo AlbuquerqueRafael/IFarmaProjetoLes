@@ -10,13 +10,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.ifarma.ifarma.exceptions.InvalidNameException;
-import com.ifarma.ifarma.exceptions.InvalidUserDataException;
-import com.ifarma.ifarma.model.Customer;
-import com.ifarma.ifarma.model.Pharma;
+import com.ifarma.ifarma.exceptions.*;
+import com.ifarma.ifarma.model.*;
 import com.google.firebase.*;
-import com.ifarma.ifarma.util.Utils;
-import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.util.*;
+
 
 /**
  * Created by Mafra on 17/02/2017.
@@ -81,7 +79,7 @@ public class FirebaseController {
 
     }
 
-    public static void saveProduct(String name, double price, String lab, String description, boolean generic){
+    public static void saveProduct(String name, double price, String lab, String description, boolean generic) {
 
         Firebase firebaseRef = getFirebase();
         Firebase productsReference = firebaseRef.child(PRODUCTS);
@@ -89,12 +87,15 @@ public class FirebaseController {
         System.out.println("SAVING PRODUCT");
 
         Product product = new Product();
-        product.setNameProduct(name);
-        product.setPrice(price);
-        product.setLab(lab);
-        product.setDescription(description);
-        product.setGeneric(generic);
-
+        try {
+            product.setNameProduct(name);
+            product.setPrice(price);
+            product.setLab(lab);
+            product.setDescription(description);
+            product.setGeneric(generic);
+        } catch (InvalidProductDataException e) {
+            e.printStackTrace();
+        }
         productsReference.child(product.getNameProduct()).setValue(product);
 
     }

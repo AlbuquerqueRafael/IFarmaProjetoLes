@@ -1,11 +1,10 @@
-package model;
+package com.ifarma.ifarma.model;
 
-import exceptions.*;
-import util.*;
-
+import com.ifarma.ifarma.util.*;
+import com.ifarma.ifarma.exceptions.*;
 
 /**
- * Created by Kelvin on 18-Feb-17.
+ * Created by GiloBoy on 18-Feb-17.
  */
 
 public class Product {

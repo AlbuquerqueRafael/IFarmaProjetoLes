@@ -1,18 +1,8 @@
-package tests;
+package com.ifarma.ifarma.model;
 
+import com.ifarma.ifarma.util.*;
+import com.ifarma.ifarma.exceptions.*;
 import org.junit.*;
-
-import exceptions.InvalidAddressException;
-import exceptions.InvalidCEPException;
-import exceptions.InvalidEmailException;
-import exceptions.InvalidHouseNumberException;
-import exceptions.InvalidNameException;
-import exceptions.InvalidPasswordException;
-import exceptions.InvalidProductDataException;
-import exceptions.InvalidUserDataException;
-import model.Customer;
-import model.Product;
-import model.AbstractUser;
 
 public class ProductDataValidateTests {
 				
@@ -30,7 +20,7 @@ public class ProductDataValidateTests {
 	
 	@Before
 	public void setUpProducts() throws InvalidProductDataException{
-		description = "ninguém se importa com essa história de mil meu comi o teu.";
+		description = "ninguï¿½m se importa com essa histï¿½ria de mil meu comi o teu.";
 		labson = "Predador de Calcinhas";
 		
 		anador = new Product("Anador", price, labson, description, isGeneric);

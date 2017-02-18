@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.model.Product;
 import com.ifarma.ifarma.util.Validate;
 

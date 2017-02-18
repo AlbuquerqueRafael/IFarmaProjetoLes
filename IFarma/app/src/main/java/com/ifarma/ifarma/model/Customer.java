@@ -1,7 +1,7 @@
-package model;
+package com.ifarma.ifarma.model;
 
-import exceptions.*;
-import util.*;
+import com.ifarma.ifarma.util.*;
+import com.ifarma.ifarma.exceptions.*;
 
 public class Customer extends AbstractUser {
 	

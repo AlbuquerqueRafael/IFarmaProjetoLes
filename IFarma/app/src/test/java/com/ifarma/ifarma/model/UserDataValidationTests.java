@@ -1,17 +1,8 @@
-package tests;
+package com.ifarma.ifarma.model;
 
+import com.ifarma.ifarma.util.*;
+import com.ifarma.ifarma.exceptions.*;
 import org.junit.*;
-
-import exceptions.InvalidAddressException;
-import exceptions.InvalidCEPException;
-import exceptions.InvalidCPFException;
-import exceptions.InvalidEmailException;
-import exceptions.InvalidHouseNumberException;
-import exceptions.InvalidNameException;
-import exceptions.InvalidPasswordException;
-import exceptions.InvalidUserDataException;
-import model.Customer;
-import model.AbstractUser;
 
 public class UserDataValidationTests {
 		
@@ -101,14 +92,14 @@ public class UserDataValidationTests {
 	@Before
 	public void setUpInvalidUserData(){
 		invalidNameWithOnlyLetters = "JobsonLucasDias";
-		invalidNameWithGraphicAccentuation = "João Victor Mafra Bói";
+		invalidNameWithGraphicAccentuation = "Joï¿½o Victor Mafra Bï¿½i";
 		invalidNameWithOnlyNumbers = "1651561681818616818161516156";
-		invalidNameWithOnlySpecialChars = "!bs@#      ¬¢*$   |)/%£_=+§{}ºª°?/;:<>¹²³";
+		invalidNameWithOnlySpecialChars = "!bs@#      ï¿½ï¿½*$   |)/%ï¿½_=+ï¿½{}ï¿½ï¿½ï¿½?/;:<>ï¿½ï¿½ï¿½";
 		invalidNameWithOnlySpaces = "                           ";
 		invalidNameMixingLettersAndSeveralNumbers = "Jobson54654 Lucas245541561";
 		invalidNameMixingLettersAndOnlyOneNumber = "Jobson Lucas2";
-		invalidNameMixingLettersAndSpecialChars = "Job$@# ¬u¢@! !@#sdf#WER@xcv$%$¨¨¨&**/-*";
-		invalidNameMixingLettersAndNumbersAndSpecialChars = "J156651o51b$@# 156156¬u¢@!asdqwe2 !@#sdf#WER@xcv$%$¨¨¨&**/-*";
+		invalidNameMixingLettersAndSpecialChars = "Job$@# ï¿½uï¿½@! !@#sdf#WER@xcv$%$ï¿½ï¿½ï¿½&**/-*";
+		invalidNameMixingLettersAndNumbersAndSpecialChars = "J156651o51b$@# 156156ï¿½uï¿½@!asdqwe2 !@#sdf#WER@xcv$%$ï¿½ï¿½ï¿½&**/-*";
 				
 		invalidMailStartingWithNumber = "9sdfsdf99@gmail.com";
 		invalidMailStartingWithDot = ".999@gmail.com";

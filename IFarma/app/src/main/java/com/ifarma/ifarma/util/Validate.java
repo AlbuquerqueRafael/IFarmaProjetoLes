@@ -48,7 +48,11 @@ public final class Validate {
 	}
 
 	private static String getFirstCharAsStringOf(final String data){
-		return data.substring(0,1);
+		String answer = "";
+		if(!data.isEmpty()) {
+			answer = data.substring(0, 1);
+		}
+		return answer;
 	}
 	
 	private static String getPartBeforeAtSymbol(final String email){
@@ -150,36 +154,33 @@ public final class Validate {
 
 		boolean valid = true;
 		String name = _nameProductInput.getText().toString();
-		String firstCharOfName = name.substring(0,1);
 		String price = _priceProductInput.getText().toString();
 		String lab = _labProductInput.getText().toString();
-		String firstCharOfLab = lab.substring(0,1);
 		String description = _descriptionProductInput.getText().toString();
-		String firstCharOfDescrip = description.substring(0,1);
 
-		if (name.isEmpty() || !firstCharOfName.matches(ONLY_LETTERS)) {
-			_nameProductInput.setError("Nome inválido.");
+		if (!isValidProductName(name)) {
+			_nameProductInput.setError("Nome invÃ¡lido.");
 			valid = false;
 		} else {
 			_nameProductInput.setError(null);
 		}
 
 		if (price.isEmpty()) {
-			_priceProductInput.setError("Preço inválido.");
+			_priceProductInput.setError("PreÃ§o invÃ¡lido.");
 			valid = false;
 		} else {
 			_priceProductInput.setError(null);
 		}
 
-		if (lab.isEmpty() || !firstCharOfLab.matches(ONLY_LETTERS)) {
-			_labProductInput.setError("Laboratório inválido.");
+		if (!isValidProductLab(lab)) {
+			_labProductInput.setError("LaboratÃ³rio invÃ¡lido.");
 			valid = false;
 		} else {
 			_labProductInput.setError(null);
 		}
 
-		if (description.isEmpty() || !firstCharOfDescrip.matches(ONLY_LETTERS)) {
-			_descriptionProductInput.setError("Descrição inválida.");
+		if (!isValidProductDescription(description)) {
+			_descriptionProductInput.setError("DescriÃ§Ã£o invÃ¡lida.");
 			valid = false;
 		} else {
 			_descriptionProductInput.setError(null);
@@ -191,7 +192,9 @@ public final class Validate {
 	public static boolean isValidProductName(final String productName){
 		boolean isValid = true;
 		String firstCharOfProductName = getFirstCharAsStringOf(productName);
-		if(productName.isEmpty() || !firstCharOfProductName.matches(ONLY_LETTERS)){
+		if(productName.isEmpty() ||
+				!firstCharOfProductName.matches(ONLY_LETTERS) ||
+				!productName.matches("[a-z0-9A-Z-._/ ]+")){
 			isValid = false;
 		}
 		return isValid;
@@ -200,7 +203,9 @@ public final class Validate {
 	public static boolean isValidProductDescription(final String newDescription) {
 		boolean isValid = true;
 		String firstCharOfProductDescription = getFirstCharAsStringOf(newDescription);
-		if(newDescription.isEmpty() || !firstCharOfProductDescription.matches(ONLY_LETTERS)){
+		if(newDescription.isEmpty() ||
+				!firstCharOfProductDescription.matches(ONLY_LETTERS)||
+				!newDescription.matches("[a-z0-9A-Z-,;._/ ]+")){
 			isValid = false;
 		}
 		return isValid;
@@ -209,7 +214,9 @@ public final class Validate {
 	public static boolean isValidProductLab(final String newLab) {
 		boolean isValid = true;
 		String firstCharOfProductLab = getFirstCharAsStringOf(newLab);
-		if(newLab.isEmpty() || !firstCharOfProductLab.matches(ONLY_LETTERS)){
+		if(newLab.isEmpty() ||
+				!firstCharOfProductLab.matches(ONLY_LETTERS) ||
+				!newLab.matches("[a-z0-9A-Z-._/& ]+")){
 			isValid = false;
 		}
 		return isValid;
