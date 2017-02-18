@@ -49,7 +49,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new CartFragment();
             case 2:
-                return new AccountFragment();
+                return new AddProductFragment();
             default:
                 return new SearchFragment();
         }

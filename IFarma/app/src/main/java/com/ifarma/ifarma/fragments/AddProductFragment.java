@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.model.Product;
 
 import java.util.ArrayList;
@@ -74,9 +75,11 @@ public class AddProductFragment extends Fragment {
             public void onClick(View view) {
                 Product product = new Product();
                 String name = _nameProductInput.getText().toString();
-                String price = _priceProductInput.getText().toString();
+                Double price = Double.parseDouble(_priceProductInput.getText().toString());
                 String lab = _labProductInput.getText().toString();
                 String description = _descriptionProductInput.getText().toString();
+                boolean generic = true;
+                FirebaseController.saveProduct(name, price, lab, description, generic);
                 
             }
         });

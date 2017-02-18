@@ -86,6 +86,8 @@ public class FirebaseController {
         Firebase firebaseRef = getFirebase();
         Firebase productsReference = firebaseRef.child(PRODUCTS);
 
+        System.out.println("SAVING PRODUCT");
+
         Product product = new Product();
         product.setNameProduct(name);
         product.setPrice(price);
