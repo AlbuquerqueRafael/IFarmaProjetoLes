@@ -11,14 +11,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.controllers.AuthenticationController;
 
 public class RegisterFragment extends Fragment {
 
     private View rootView;
 
+    private AuthenticationController authCtrl;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        authCtrl = new AuthenticationController();
+
+        authCtrl.signIn("gustavo.hqo@gmail.com", "12345678");
 
         rootView = inflater.inflate(R.layout.fragment_register, container, false);
 

@@ -1,11 +1,9 @@
 package com.ifarma.ifarma.exceptions;
 
 public class InvalidUserDataException extends Exception{
-	
-	public InvalidUserDataException() {
-		super("The user data is invalid.");
-	}
-	
+
+	public InvalidUserDataException() { super("The user data is invalid.");	}
+
 	public InvalidUserDataException(final String message) {
 		super(message);
 	}
@@ -17,5 +15,5 @@ public class InvalidUserDataException extends Exception{
 	public InvalidUserDataException(final Throwable cause) {
 		super(cause);
 	}
-		
+
 }
