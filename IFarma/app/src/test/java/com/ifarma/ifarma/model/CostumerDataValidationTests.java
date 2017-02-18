@@ -1,9 +1,17 @@
-package com.ifarma.ifarma.model;
+package tests;
 
 import org.junit.*;
 
-import com.ifarma.ifarma.exceptions.*;
-import com.ifarma.ifarma.model.*;
+import exceptions.InvalidAddressException;
+import exceptions.InvalidCEPException;
+import exceptions.InvalidCPFException;
+import exceptions.InvalidEmailException;
+import exceptions.InvalidHouseNumberException;
+import exceptions.InvalidNameException;
+import exceptions.InvalidPasswordException;
+import exceptions.InvalidUserDataException;
+import model.Customer;
+import model.AbstractUser;
 
 public class CostumerDataValidationTests {
 		
@@ -54,7 +62,7 @@ public class CostumerDataValidationTests {
 	
 	@Before
 	public void setUpInvalidUserData(){
-		invalidNameMixingLettersAndNumbersAndSpecialChars = "J156651o51b$@# 156156ï¿½uï¿½@!asdqwe2 !@#sdf#WER@xcv$%$ï¿½ï¿½ï¿½&**/-*";
+		invalidNameMixingLettersAndNumbersAndSpecialChars = "J156651o51b$@# 156156¬u¢@!asdqwe2 !@#sdf#WER@xcv$%$¨¨¨&**/-*";
 				
 		invalidMailStartingWithNumber = "9sdfsdf99@gmail.com";
 				

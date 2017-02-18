@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.exceptions;
+package exceptions;
 
 public class InvalidHouseNumberException extends InvalidUserDataException {
 

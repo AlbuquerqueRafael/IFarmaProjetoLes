@@ -1,10 +1,7 @@
-package com.ifarma.ifarma.model;
+package model;
 
-import com.ifarma.ifarma.exceptions.InvalidUserDataException;
-import com.ifarma.ifarma.util.Validate;
-
-import com.ifarma.ifarma.exceptions.*;
-import com.ifarma.ifarma.util.*;
+import exceptions.*;
+import util.*;
 
 public abstract class AbstractUser{
 
@@ -15,6 +12,7 @@ public abstract class AbstractUser{
 	private String houseNumber; 
 	private String cep;
 	
+	// This empty constructor make easier the work with Firebase database.
 	public AbstractUser() {}
 	
 	public AbstractUser(final String name, final String email, final String password, 

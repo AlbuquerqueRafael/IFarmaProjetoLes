@@ -1,6 +1,7 @@
-package com.ifarma.ifarma.model;
-import com.ifarma.ifarma.exceptions.*;
-import com.ifarma.ifarma.util.Validate;
+package model;
+
+import exceptions.*;
+import util.*;
 
 public class Pharma extends AbstractUser {
 

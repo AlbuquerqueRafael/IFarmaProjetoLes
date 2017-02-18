@@ -1,10 +1,19 @@
-package com.ifarma.ifarma.model;
-
-import com.ifarma.ifarma.exceptions.*;
+package tests;
 
 import org.junit.*;
 
-import com.ifarma.ifarma.model.*;
+import exceptions.InvalidAddressException;
+import exceptions.InvalidCEPException;
+import exceptions.InvalidCNPJException;
+import exceptions.InvalidCPFException;
+import exceptions.InvalidEmailException;
+import exceptions.InvalidHouseNumberException;
+import exceptions.InvalidNameException;
+import exceptions.InvalidPasswordException;
+import exceptions.InvalidUserDataException;
+import model.Customer;
+import model.Pharma;
+import model.AbstractUser;
 
 public class PharmaDataValidationTests {
 			
@@ -45,7 +54,7 @@ public class PharmaDataValidationTests {
 	public void testShouldFailCreatingInvalidName(){
 		try {
 			pharmaCrt = new Pharma("Gilo boy ph@rm@", "redepharma@hotmail.com", 
-					"5151526w2a", "Rua das Cebolas que nï¿½o fazem chorar", 
+					"5151526w2a", "Rua das Cebolas que não fazem chorar", 
 					"1500", "58410538");
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());

@@ -1,6 +1,4 @@
-package com.ifarma.ifarma.exceptions;
-
-import com.ifarma.ifarma.exceptions.InvalidUserDataException;
+package exceptions;
 
 public class InvalidAddressException extends InvalidUserDataException {
 

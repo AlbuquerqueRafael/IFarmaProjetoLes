@@ -158,28 +158,28 @@ public final class Validate {
 		String firstCharOfDescrip = description.substring(0,1);
 
 		if (name.isEmpty() || !firstCharOfName.matches(ONLY_LETTERS)) {
-			_nameProductInput.setError("Nome invÃ¡lido.");
+			_nameProductInput.setError("Nome inválido.");
 			valid = false;
 		} else {
 			_nameProductInput.setError(null);
 		}
 
 		if (price.isEmpty()) {
-			_priceProductInput.setError("PreÃ§o invÃ¡lido.");
+			_priceProductInput.setError("Preço inválido.");
 			valid = false;
 		} else {
 			_priceProductInput.setError(null);
 		}
 
 		if (lab.isEmpty() || !firstCharOfLab.matches(ONLY_LETTERS)) {
-			_labProductInput.setError("LaboratÃ³rio invÃ¡lido.");
+			_labProductInput.setError("Laboratório inválido.");
 			valid = false;
 		} else {
 			_labProductInput.setError(null);
 		}
 
 		if (description.isEmpty() || !firstCharOfDescrip.matches(ONLY_LETTERS)) {
-			_descriptionProductInput.setError("DescriÃ§Ã£o invÃ¡lida.");
+			_descriptionProductInput.setError("Descrição inválida.");
 			valid = false;
 		} else {
 			_descriptionProductInput.setError(null);
@@ -188,5 +188,31 @@ public final class Validate {
 		return valid;
 	}
 
+	public static boolean isValidProductName(final String productName){
+		boolean isValid = true;
+		String firstCharOfProductName = getFirstCharAsStringOf(productName);
+		if(productName.isEmpty() || !firstCharOfProductName.matches(ONLY_LETTERS)){
+			isValid = false;
+		}
+		return isValid;
+	}
+
+	public static boolean isValidProductDescription(final String newDescription) {
+		boolean isValid = true;
+		String firstCharOfProductDescription = getFirstCharAsStringOf(newDescription);
+		if(newDescription.isEmpty() || !firstCharOfProductDescription.matches(ONLY_LETTERS)){
+			isValid = false;
+		}
+		return isValid;
+	}
+
+	public static boolean isValidProductLab(final String newLab) {
+		boolean isValid = true;
+		String firstCharOfProductLab = getFirstCharAsStringOf(newLab);
+		if(newLab.isEmpty() || !firstCharOfProductLab.matches(ONLY_LETTERS)){
+			isValid = false;
+		}
+		return isValid;
+	}
 
 }

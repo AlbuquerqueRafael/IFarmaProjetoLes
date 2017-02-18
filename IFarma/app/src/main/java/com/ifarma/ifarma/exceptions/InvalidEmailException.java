@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.exceptions;
+package exceptions;
 
 public class InvalidEmailException extends InvalidUserDataException {
 
