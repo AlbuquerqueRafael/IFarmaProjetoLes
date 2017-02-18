@@ -3,7 +3,7 @@ package com.ifarma.ifarma.exceptions;
 public class InvalidCPFException extends InvalidUserDataException {
 
 	public InvalidCPFException() {
-		super("The password is invalid.");
+		super("The CPF is invalid.");
 	}
 	
 	public InvalidCPFException(final String message) {
