@@ -6,6 +6,6 @@
     <string name="me_toolbar">Meu Perfil</string>
     <string name="sign_in">Registrar</string>
     <string name="log_in">Entrar</string>
-    <string name="register_product_toolbar">Novo medicamento</string>
+    <string name="register_product_toolbar">Novo Produto</string>
 
 </resources>
