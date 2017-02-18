@@ -12,6 +12,7 @@ import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.model.Customer;
 import com.ifarma.ifarma.model.Pharma;
 import com.google.firebase.*;
+import com.ifarma.ifarma.model.Product;
 
 /**
  * Created by Mafra on 17/02/2017.
@@ -68,9 +69,23 @@ public class FirebaseController {
         pharma.setEmail(email);
         pharma.setCnpj(cnpj);
 
-
         pharmarciesReference.child(pharma.getName()).setValue(pharma);
 
+    }
+
+    public static void saveProduct(String name, double price, String lab, String description, boolean generic){
+
+        Firebase firebaseRef = getFirebase();
+        Firebase productsReference = firebaseRef.child(PRODUCTS);
+
+        Product product = new Product();
+        product.setNameProduct(name);
+        product.setPrice(price);
+        product.setLab(lab);
+        product.setDescription(description);
+        product.setGeneric(generic);
+
+        productsReference.child(product.getNameProduct()).setValue(product);
 
     }
 
