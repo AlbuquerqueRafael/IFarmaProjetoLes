@@ -12,9 +12,13 @@ import com.firebase.client.Firebase;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.ViewPagerAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.controllers.OnGetDataListener;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
+import com.ifarma.ifarma.model.Pharma;
+import com.ifarma.ifarma.model.Product;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import devlight.io.library.ntb.NavigationTabBar;
 
@@ -29,13 +33,39 @@ public class MainActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
 
-        try {
-            FirebaseController.saveCustomer("Mafra", "jvmafra@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "70175610401");
-        } catch (InvalidUserDataException e) {
-            e.printStackTrace();
-        }
+////        try {
+//            //FirebaseController.savePharmacy("Dias", "dias@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "00000000000000");
+//            Product product = new Product("Dipirona", 2.5, "A", "B", true);
+//            FirebaseController.newProduct("dias@gmaildotcom", product);
+//
+////        } catch (InvalidUserDataException e) {
+////            e.printStackTrace();
+////        }
+
 
         initUI();
+
+        System.out.println("PASSEI AQUI");
+        FirebaseController.retrieveProducts("dias@gmaildotcom", new OnGetDataListener() {
+
+            @Override
+            public void onStart() {
+                System.out.println("ENTREI ON START");
+            }
+
+            @Override
+            public void onSuccess(final List<Product> lista) {
+                System.out.println("ENTREI ON SUCCESS");
+                int i = 0;
+
+                for (Product p : lista){{
+                    System.out.println("PRODUTO #" + i);
+                    System.out.println(p.getNameProduct());
+                    System.out.println(p.getPrice());
+                    System.out.println("------------------------------------------------");
+                }}
+            }
+        });
     }
 
     private boolean isAuthenticated(){

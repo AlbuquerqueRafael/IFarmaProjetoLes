@@ -18,6 +18,9 @@ import com.google.firebase.*;
 import com.ifarma.ifarma.util.Utils;
 import com.ifarma.ifarma.model.Product;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Mafra on 17/02/2017.
  */
@@ -74,11 +77,70 @@ public class FirebaseController {
         pharma.setPassword(password);
         pharma.setEmail(email);
         pharma.setCnpj(cnpj);
+        pharma.initProductsList();
 
         String emailNode = Utils.convertEmail(pharma.getEmail());
 
         pharmarciesReference.child(emailNode).setValue(pharma);
 
+    }
+
+    public static void editPharmacy(Pharma pharma) {
+
+        Firebase firebaseRef = getFirebase();
+        Firebase pharmarciesReference = firebaseRef.child(PHARMACIES);
+
+        String emailNode = Utils.convertEmail(pharma.getEmail());
+
+        pharmarciesReference.child(emailNode).setValue(pharma);
+
+    }
+
+    public static void retrieveProducts(String pharmacyId, final OnGetDataListener listener) {
+        final Firebase productsReference = getFirebase().child(pharmacyId).child(PRODUCTS);
+        final List<Product> lista = new ArrayList<>();
+
+        productsReference.addChildEventListener(new com.firebase.client.ChildEventListener() {
+            @Override
+            public void onChildAdded(com.firebase.client.DataSnapshot dataSnapshot, String prevChildKey) {
+                System.out.println("ENTREI");
+                Product product = dataSnapshot.getValue(Product.class);
+                lista.add(product);
+                listener.onSuccess(lista);
+            }
+
+            @Override
+            public void onChildChanged(com.firebase.client.DataSnapshot dataSnapshot, String prevChildKey) {
+                System.out.println("FILHO MODIFICADO!");
+
+            }
+
+            @Override
+            public void onChildRemoved(com.firebase.client.DataSnapshot dataSnapshot) {
+                System.out.println("onChildRemoved");
+            }
+
+            @Override
+            public void onChildMoved(com.firebase.client.DataSnapshot dataSnapshot, String prevChildKey) {
+                System.out.println("onChildMoved");
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("onCancelled");
+            }
+
+
+        });
+    }
+
+    public static void newProduct(String pharmacyId, Product product){
+
+        Firebase firebaseRef = getFirebase();
+        Firebase productsPharmacyReference = firebaseRef.child(PHARMACIES).child(pharmacyId).child(PRODUCTS);
+        Firebase newProduct = productsPharmacyReference.push();
+
+        newProduct.setValue(product);
     }
 
     public static void saveProduct(String name, double price, String lab, String description, boolean generic){
