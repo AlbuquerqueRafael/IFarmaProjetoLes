@@ -1,6 +1,9 @@
 package com.ifarma.ifarma.controllers;
 
+import android.util.Log;
+
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,6 +15,7 @@ import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.model.Customer;
 import com.ifarma.ifarma.model.Pharma;
 import com.google.firebase.*;
+import com.ifarma.ifarma.util.Utils;
 
 /**
  * Created by Mafra on 17/02/2017.
@@ -50,7 +54,9 @@ public class FirebaseController {
         customer.setHouseNumber(houseNumber);
         customer.setCep(cep);
 
-        customersReference.child(customer.getName()).setValue(customer);
+        String customerNode = Utils.convertEmail(customer.getEmail());
+
+        customersReference.child(customerNode).setValue(customer);
     }
 
     public static void savePharmacy(String name, String email, String password, String address, String houseNumber, String cep,
@@ -68,31 +74,12 @@ public class FirebaseController {
         pharma.setEmail(email);
         pharma.setCnpj(cnpj);
 
+        String emailNode = Utils.convertEmail(pharma.getEmail());
 
-        pharmarciesReference.child(pharma.getName()).setValue(pharma);
+        pharmarciesReference.child(emailNode).setValue(pharma);
 
 
     }
-
-//    public static Customer getCustomer(String email){
-//        DatabaseReference customer = customerReference.child(email);
-//        final Customer[] customerRetrieved = new Customer[1];
-//
-//        customer.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                customerRetrieved[0] = dataSnapshot.getValue(Customer.class);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                System.out.println("ERROR");
-//
-//            }
-//        });
-//
-//        return customerRetrieved[0];
-//    }
 
 
 
