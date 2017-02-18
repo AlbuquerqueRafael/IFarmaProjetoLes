@@ -20,6 +20,7 @@ package com.ifarma.ifarma.adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.fragments.EditAccountFragment;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
 import java.util.HashMap;
@@ -77,6 +79,11 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                             public void run() {
                                 progressDialog.dismiss();
                                 holder._loginButton.setEnabled(true);
+
+                                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                        ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.fragment_container, new EditAccountFragment());
+                                fragmentTransaction.commit();
                             }
                         }, 2000);
 

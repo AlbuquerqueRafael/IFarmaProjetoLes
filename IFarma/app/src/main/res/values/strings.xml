@@ -7,5 +7,6 @@
     <string name="sign_in">Registrar</string>
     <string name="log_in">Entrar</string>
     <string name="register_product_toolbar">Novo medicamento</string>
+    <string name="edit_perfil">Editar Perfil</string>
 
 </resources>
