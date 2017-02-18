@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             FirebaseController.saveCustomer("Mafra", "jvmafra@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "70175610401");
-            FirebaseController.saveProduct("Dipirona", 2.50, "BAYER", "10mg, para dor de cabeça", true);
         } catch (InvalidUserDataException e) {
             e.printStackTrace();
         }
