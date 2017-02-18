@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            FirebaseController.saveCustomer("Joao", "jvmafra@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "70175610401");
+            FirebaseController.saveCustomer("Mafra", "jvmafra@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "70175610401");
         } catch (InvalidUserDataException e) {
             e.printStackTrace();
         }

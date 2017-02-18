@@ -1,5 +1,7 @@
 package com.ifarma.ifarma.util;
 
+import android.widget.EditText;
+
 public final class Validate {
 
 	private static final int CG_CEP_END = 58449999;
@@ -142,6 +144,49 @@ public final class Validate {
 	  }
       return answer;
    }
-		
+
+	public static boolean isValidMedicine(EditText _nameProductInput, EditText _priceProductInput,
+										  EditText _labProductInput, EditText _descriptionProductInput){
+
+		boolean valid = true;
+		String name = _nameProductInput.getText().toString();
+		String firstCharOfName = name.substring(0,1);
+		String price = _priceProductInput.getText().toString();
+		String lab = _labProductInput.getText().toString();
+		String firstCharOfLab = lab.substring(0,1);
+		String description = _descriptionProductInput.getText().toString();
+		String firstCharOfDescrip = description.substring(0,1);
+
+		if (name.isEmpty() || !firstCharOfName.matches(ONLY_LETTERS)) {
+			_nameProductInput.setError("Nome inválido.");
+			valid = false;
+		} else {
+			_nameProductInput.setError(null);
+		}
+
+		if (price.isEmpty()) {
+			_priceProductInput.setError("Preço inválido.");
+			valid = false;
+		} else {
+			_priceProductInput.setError(null);
+		}
+
+		if (lab.isEmpty() || !firstCharOfLab.matches(ONLY_LETTERS)) {
+			_labProductInput.setError("Laboratório inválido.");
+			valid = false;
+		} else {
+			_labProductInput.setError(null);
+		}
+
+		if (description.isEmpty() || !firstCharOfDescrip.matches(ONLY_LETTERS)) {
+			_descriptionProductInput.setError("Descrição inválida.");
+			valid = false;
+		} else {
+			_descriptionProductInput.setError(null);
+		}
+
+		return valid;
+	}
+
 
 }
