@@ -23,4 +23,6 @@
         <item name="android:textColorHint">@color/editTextColor</item> // Cor texto(hint) sem foco
     </style>
 
+
+
 </resources>

@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">iFarma</string>
+
     <string name="register_msg">Cadastre-se ou entre para facilitar a sua compra</string>
     <string name="sign_register_in">Entrar ou Cadastrar</string>
     <string name="me_toolbar">Meu Perfil</string>
     <string name="sign_in">Registrar</string>
     <string name="log_in">Entrar</string>
+    <string name="register_product_toolbar">Novo medicamento</string>
 
 </resources>

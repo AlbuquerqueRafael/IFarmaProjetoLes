@@ -1,5 +1,8 @@
 package com.ifarma.ifarma;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.ifarma.ifarma.controllers.FirebaseController;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,5 +16,10 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void testFirebase() throws Exception{
+
     }
 }

@@ -8,8 +8,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.firebase.client.Firebase;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.ViewPagerAdapter;
+import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 
 import java.util.ArrayList;
 
@@ -23,7 +26,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
+
+        try {
+            FirebaseController.saveCustomer("Joao", "jvmafra@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "70175610401");
+        } catch (InvalidUserDataException e) {
+            e.printStackTrace();
+        }
 
         initUI();
     }
