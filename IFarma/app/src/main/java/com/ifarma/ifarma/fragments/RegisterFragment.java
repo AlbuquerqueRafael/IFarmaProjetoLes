@@ -22,6 +22,8 @@ public class RegisterFragment extends Fragment {
     private RecyclerView loginRecycler;
     private RecyclerView registerRecycler;
 
+    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
