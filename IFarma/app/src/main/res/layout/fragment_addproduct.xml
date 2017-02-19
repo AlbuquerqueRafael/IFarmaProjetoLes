@@ -14,7 +14,7 @@
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/back_btn_cadastro_medicamento"
+            android:id="@+id/back_btn_cadastro_product"
             android:src="@drawable/ic_arrow_back_white_24dp"
             android:layout_gravity="center_vertical"
             app:rippleColor="@color/colorPrimaryDark"
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">
-                    <EditText android:id="@+id/input_nome_produto"
+                    <EditText android:id="@+id/input_name_product"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapWords"
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">
-                    <EditText android:id="@+id/input_preco_produto"
+                    <EditText android:id="@+id/input_price_product"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
@@ -73,35 +73,21 @@
                         android:textSize="16sp"/>
                 </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="1">
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="240dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp">
-                    <EditText android:id="@+id/input_peso_produto"
-                        android:layout_width="171dp"
+                    android:layout_marginBottom="8dp"
+                    android:weightSum="1">
+                    <EditText android:id="@+id/input_lab_product"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:hint="Peso*"
+                        android:inputType="text"
+                        android:hint="Laboratório*"
                         android:textColor="#000"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                 </android.support.design.widget.TextInputLayout>
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/spinner"
-                    android:layout_marginTop="32dp"
-                    android:layout_weight="0.20" />
-            </LinearLayout>
-
-
 
             <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -109,41 +95,13 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:weightSum="1">
-                    <EditText android:id="@+id/input_quantidade_produto"
+                    <EditText android:id="@+id/input_description_product"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:hint="Quantidade*"
+                        android:hint="Descrição*"
                         android:textColor="#000"
                         android:textSize="16sp" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp">
-                    <EditText android:id="@+id/input_indicacoes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textCapWords"
-                        android:hint="Indicações"
-                        android:textColor="#000"
-                        android:textSize="16sp"/>
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp">
-                    <EditText android:id="@+id/input_contra_indicacoes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textCapWords"
-                        android:hint="Contra-indicações"
-                        android:textColor="#000"
-                        android:textSize="16sp"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.v7.widget.AppCompatCheckBox
