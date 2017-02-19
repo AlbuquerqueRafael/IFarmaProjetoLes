@@ -4,19 +4,13 @@ import android.util.Log;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.ifarma.ifarma.exceptions.InvalidNameException;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.model.Customer;
 import com.ifarma.ifarma.model.Pharma;
-import com.google.firebase.*;
 import com.ifarma.ifarma.util.Utils;
 import com.ifarma.ifarma.model.Product;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,31 +91,32 @@ public class FirebaseController {
     }
 
     public static void retrieveProducts(String pharmacyId, final OnGetDataListener listener) {
-        final Firebase productsReference = getFirebase().child(pharmacyId).child(PRODUCTS);
+        final Firebase productsReference = getFirebase().child(PHARMACIES).child(pharmacyId).child(PRODUCTS);
         final List<Product> lista = new ArrayList<>();
 
-        productsReference.addChildEventListener(new com.firebase.client.ChildEventListener() {
+        System.out.println(productsReference.toString());
+
+        productsReference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(com.firebase.client.DataSnapshot dataSnapshot, String prevChildKey) {
-                System.out.println("ENTREI");
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 Product product = dataSnapshot.getValue(Product.class);
                 lista.add(product);
                 listener.onSuccess(lista);
             }
 
             @Override
-            public void onChildChanged(com.firebase.client.DataSnapshot dataSnapshot, String prevChildKey) {
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
                 System.out.println("FILHO MODIFICADO!");
 
             }
 
             @Override
-            public void onChildRemoved(com.firebase.client.DataSnapshot dataSnapshot) {
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
                 System.out.println("onChildRemoved");
             }
 
             @Override
-            public void onChildMoved(com.firebase.client.DataSnapshot dataSnapshot, String prevChildKey) {
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
                 System.out.println("onChildMoved");
             }
 

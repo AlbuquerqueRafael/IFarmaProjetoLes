@@ -44,18 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         initUI();
-
-        System.out.println("PASSEI AQUI");
         FirebaseController.retrieveProducts("dias@gmaildotcom", new OnGetDataListener() {
 
             @Override
             public void onStart() {
-                System.out.println("ENTREI ON START");
             }
 
             @Override
             public void onSuccess(final List<Product> lista) {
-                System.out.println("ENTREI ON SUCCESS");
+                System.out.println(lista.size());
                 int i = 0;
 
                 for (Product p : lista){{
@@ -63,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(p.getNameProduct());
                     System.out.println(p.getPrice());
                     System.out.println("------------------------------------------------");
+                    i++;
                 }}
             }
         });

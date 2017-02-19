@@ -7,6 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.controllers.OnGetDataListener;
+import com.ifarma.ifarma.model.Product;
+
+import java.util.List;
 
 public class CartFragment extends Fragment {
 

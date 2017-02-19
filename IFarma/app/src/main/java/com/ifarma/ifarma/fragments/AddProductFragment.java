@@ -83,7 +83,14 @@ public class AddProductFragment extends Fragment {
                     String lab = _labProductInput.getText().toString();
                     String description = _descriptionProductInput.getText().toString();
                     boolean generic = _genericoCheckbox.isChecked();
-                    FirebaseController.saveProduct(name, price, lab, description, generic);
+                    product.setNameProduct(name);
+                    product.setDescription(description);
+                    product.setPrice(price);
+                    product.setGeneric(generic);
+                    product.setLab(lab);
+
+                    //TODO substituir email farmacia default pela logada atualmente
+                    FirebaseController.newProduct("dias@gmaildotcom", product);
                 }
             }
         });
