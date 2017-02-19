@@ -63,7 +63,15 @@ public class Product {
         this.generic = newGeneric;
     }
 
+    public boolean equals(Object prod){
+        if(!(prod instanceof Product)){
+            return false;
+        }
 
+        Product prod1 = (Product) prod;
+
+        return prod1.getNameProduct().equals(this.getNameProduct());
+    }
 
 
 }
