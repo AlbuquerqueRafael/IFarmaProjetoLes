@@ -19,7 +19,7 @@ import android.widget.TextView;
  * Created by Rafael on 2/19/2017.
  */
 
-public class MedicineSearchAdapter extends BaseAdapter implements Filterable {
+public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> implements Filterable {
 
     private ArrayList<Product> productList;
     private ArrayList<Product> mOriginalValues; // Original Values
@@ -27,6 +27,8 @@ public class MedicineSearchAdapter extends BaseAdapter implements Filterable {
     private LayoutInflater inflater;
     private View view;
     private Context context;
+    private ViewHolder holder;
+
     public MedicineSearchAdapter(Context context, ArrayList<Product> mProductArrayList) {
 
         this.mOriginalValues = mProductArrayList;
@@ -36,14 +38,21 @@ public class MedicineSearchAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public int getCount() {
-        return mDisplayedValues.size();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        view =  LayoutInflater.from(context)
+                .inflate(R.layout.list_item, parent, false);
+        holder = new ViewHolder(view);
+
+        return holder;
     }
 
     @Override
-    public Object getItem(int position) {
-        return position;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.medName.setText(mDisplayedValues.get(position).getNameProduct());
+        holder.medPrice.setText("R$ " + mDisplayedValues.get(position).getPrice() + "");
+        holder.medDescription.setText(mDisplayedValues.get(position).getDescription());
     }
+
 
     @Override
     public long getItemId(int position) {
@@ -51,26 +60,8 @@ public class MedicineSearchAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder = null;
-
-        if (convertView == null) {
-            view =  LayoutInflater.from(context)
-                    .inflate(R.layout.list_item, parent, false);
-            holder = new ViewHolder(view);
-
-        } else {
-            view = convertView;
-            holder = new ViewHolder(view);
-        }
-
-        holder.medName.setText(mDisplayedValues.get(position).getNameProduct());
-        holder.medPrice.setText(mDisplayedValues.get(position).getPrice() +"");
-        holder.medDescription.setText(mDisplayedValues.get(position).getDescription());
-        
-        return view;
-
+    public int getItemCount() {
+        return mDisplayedValues.size();
     }
 
     @Override

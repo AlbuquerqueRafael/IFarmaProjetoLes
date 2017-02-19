@@ -12,13 +12,16 @@ public class Product {
     private String lab;
     private String description;
     private boolean generic;
+    private String pharmacyId;
 
-    public Product(String name, double price, String lab, String description, boolean generic){
+
+    public Product(String name, double price, String lab, String description, boolean generic, String pharmacyId){
         this.name = name;
         this.price = price;
         this.lab = lab;
         this.description = description;
         this.generic = generic;
+        this.pharmacyId = pharmacyId;
     }
 
     public Product(){}
@@ -37,6 +40,10 @@ public class Product {
 
     public String getDescription(){
         return description;
+    }
+
+    public String getPharmacyId(){
+        return pharmacyId;
     }
 
     public boolean isGeneric(){
@@ -61,6 +68,10 @@ public class Product {
 
     public void setGeneric(boolean newGeneric) {
         this.generic = newGeneric;
+    }
+
+    public void setPharmacyId(String pharmacyId){
+        this.pharmacyId = pharmacyId;
     }
 
     public boolean equals(Object prod){

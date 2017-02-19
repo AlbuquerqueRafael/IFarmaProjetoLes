@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         initUI();
-        FirebaseController.retrieveProducts("dias@gmaildotcom", new OnGetDataListener() {
+
+        FirebaseController.retrieveProducts(new OnGetDataListener() {
 
             @Override
             public void onStart() {

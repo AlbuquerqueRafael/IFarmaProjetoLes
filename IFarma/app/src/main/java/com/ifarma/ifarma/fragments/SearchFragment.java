@@ -2,6 +2,8 @@ package com.ifarma.ifarma.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -10,13 +12,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-
+import android.content.Context;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
+import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.controllers.OnGetDataListener;
 import com.ifarma.ifarma.model.Product;
+import android.support.design.widget.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import android.view.inputmethod.InputMethodManager;
 
 public class SearchFragment extends Fragment {
 
@@ -24,21 +32,32 @@ public class SearchFragment extends Fragment {
     private Product[] items;
     private ArrayList<Product> listItems;
     private MedicineSearchAdapter adapter;
-    private ListView listView;
-    private EditText editText;
+    private RecyclerView _listView;
+    private EditText _searchInput;
     private int searchTextSize;
+    private FloatingActionButton _filterButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        _searchInput = (EditText) rootView.findViewById(R.id.txtsearch);
+        _listView = (RecyclerView) rootView.findViewById(R.id.listview);
 
-        listView = (ListView) rootView.findViewById(R.id.listview);
-        editText=(EditText)rootView.findViewById(R.id.txtsearch);
+        _searchInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _searchInput.setFocusableInTouchMode(true);
+                _searchInput.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(_searchInput, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+
         initList();
 
-        editText.addTextChangedListener(new TextWatcher() {
+        _searchInput.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int
@@ -83,13 +102,33 @@ public class SearchFragment extends Fragment {
     public void initList(){
 
         items=new Product[]
-                {new Product("Dorflex", 20, "novaldina", "Para dor de cabeça", true),
-                        new Product("Dipirona", 30, "novaldina", "Para febre", true)};
+                {new Product("Dorflex", 20, "novaldina", "Para dor de cabeça", true, "dias@gmaildotcom"),
+                        new Product("Dipirona", 30, "novaldina", "Para febre", true, "dias@gmaildotcom"),
+                        new Product("Salompas", 40, "ultrafarma", "Para dor nas costas", true, "dias@gmaildotcom")};
 
-        listItems = new ArrayList<Product>(Arrays.asList(items));
-        adapter = new MedicineSearchAdapter(getActivity(), listItems);
+        listItems = new ArrayList<Product>();
 
-        listView.setAdapter(adapter);
+        FirebaseController.retrieveProducts(new OnGetDataListener() {
+
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onSuccess(final List<Product> lista) {
+
+                for (Product p : lista){{
+                    listItems.add(p);
+                }}
+
+                adapter = new MedicineSearchAdapter(getActivity(), listItems);
+
+                _listView.setAdapter(adapter);
+                _listView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                _listView.setHasFixedSize(true);
+
+            }
+        });
 
     }
 }

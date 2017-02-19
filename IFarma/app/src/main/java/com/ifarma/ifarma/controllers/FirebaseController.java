@@ -14,6 +14,7 @@ import com.firebase.client.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Mafra on 17/02/2017.
@@ -90,17 +91,21 @@ public class FirebaseController {
 
     }
 
-    public static void retrieveProducts(String pharmacyId, final OnGetDataListener listener) {
-        final Firebase productsReference = getFirebase().child(PHARMACIES).child(pharmacyId).child(PRODUCTS);
+    public static void retrieveProducts( final OnGetDataListener listener) {
+        final Firebase productsReference = getFirebase().child(PHARMACIES);
         final List<Product> lista = new ArrayList<>();
-
-        System.out.println(productsReference.toString());
 
         productsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                Product product = dataSnapshot.getValue(Product.class);
-                lista.add(product);
+                DataSnapshot productSnapshot = dataSnapshot.child(PRODUCTS);
+                Iterable<DataSnapshot> productChildren = productSnapshot.getChildren();
+
+                for (DataSnapshot prod : productChildren){
+                    Product product = prod.getValue(Product.class);
+                    lista.add(product);
+                }
+
                 listener.onSuccess(lista);
             }
 
@@ -127,6 +132,20 @@ public class FirebaseController {
 
 
         });
+    }
+
+
+    private void collectPhoneNumbers(Map<String,Object> users) {
+
+        ArrayList<Long> phoneNumbers = new ArrayList<>();
+
+        //iterate through each user, ignoring their UID
+        for (Map.Entry<String, Object> entry : users.entrySet()){
+
+            System.out.println(entry.toString());
+        }
+
+        System.out.println(phoneNumbers.toString());
     }
 
     public static void newProduct(String pharmacyId, Product product){
