@@ -21,6 +21,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.controllers.AuthenticationController;
+import com.ifarma.ifarma.fragments.EditAccountFragment;
 import com.ifarma.ifarma.exceptions.SignInException;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
@@ -99,6 +101,11 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                             progressDialog.dismiss();
 
                             holder._loginButton.setEnabled(true);
+
+                                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                        ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.fragment_container, new EditAccountFragment());
+                                fragmentTransaction.commit();
                         }
                     }, 2000);
 
