@@ -20,7 +20,9 @@ package com.ifarma.ifarma.adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.controllers.AuthenticationController;
+import com.ifarma.ifarma.exceptions.SignInException;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
 import java.util.HashMap;
@@ -43,6 +52,8 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
     private static Context mContext;
     private static LayoutInflater inflater;
 
+    private AuthenticationController authCtrl;
+
     public LoginFoldableAdapter(Context context) {
         mContext = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,6 +61,8 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
 
     @Override
     public FolderHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        authCtrl = new AuthenticationController();
+
         return new FolderHolder(new FoldableLayout(parent.getContext()));
     }
 
@@ -72,14 +85,31 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                 progressDialog.setMessage("Autenticando...");
                 progressDialog.show();
 
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                progressDialog.dismiss();
-                                holder._loginButton.setEnabled(true);
-                            }
-                        }, 2000);
+                //TODO tirar os logs.
+                Log.e("InputEmail - ADAPTER", holder._loginEmailInput.getText().toString());
+                Log.e("InputSenha - ADAPTER", holder._loginPasswordInput.getText().toString());
 
+                String email = holder._loginEmailInput.getText().toString();
+                String senha = holder._loginPasswordInput.getText().toString();
+                Task<AuthResult> result = authCtrl.signIn(email, senha);
+
+                new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            progressDialog.dismiss();
+
+                            holder._loginButton.setEnabled(true);
+                        }
+                    }, 2000);
+
+                result.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("sign IN - SERVICE", "signInWithEmail:onFailure:" + e.getMessage());
+                        Toast.makeText(mContext, "Email ou senha inválidos",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
 

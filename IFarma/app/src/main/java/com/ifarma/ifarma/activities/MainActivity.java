@@ -3,12 +3,16 @@ package com.ifarma.ifarma.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.ViewPagerAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            FirebaseController.saveCustomer("Mafra", "jvmafra@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "70175610401");
+            FirebaseController.saveCustomer("Mafra", "jvmafra.at.gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "70175610401");
             FirebaseController.saveProduct("Dipirona", 2.50, "BAYER", "10mg, para dor de cabeça", true);
         } catch (InvalidUserDataException e) {
             e.printStackTrace();
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         initUI();
     }
+
 
     private boolean isAuthenticated(){
         SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);

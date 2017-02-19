@@ -1,9 +1,10 @@
 package com.ifarma.ifarma.controllers;
 
-import android.util.Log;
-
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
 import com.ifarma.ifarma.Services.AuthenticationService;
-import com.ifarma.ifarma.exceptions.SignInException;
+import com.ifarma.ifarma.Services.AuthenticationState;
 
 /**
  * Created by gustavooliveira on 2/18/17.
@@ -15,11 +16,23 @@ public class AuthenticationController {
         authService = AuthenticationService.getInstance();
     }
 
-    public void signIn(String email, String senha){
-        try {
-            authService.signIn(email,senha);
-        } catch (SignInException e) {
-            Log.e("ERRO-SIGNIN",e.getMessage());
-        }
+    public Task<AuthResult> signIn(String email, String senha) {
+           return authService.signIn(email,senha);
+    }
+
+    public void signOut() {
+        authService.signOut();
+    }
+
+    public void setCurrentUser(FirebaseUser user){
+        authService.setUsuarioLogado(user);
+    }
+
+    public AuthenticationState getEstadoAtual(){
+        return authService.getAuthState();
+    }
+
+    public void setAuthState(AuthenticationState state){
+        authService.setAuthState(state);
     }
 }
