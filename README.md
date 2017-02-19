@@ -4,5 +4,5 @@
  * Professor: Dr. Gustavo Soares
  
 ### Integrantes:
- * Gabriel Guimarães, Gileade Kelvin, Gustavo Queiroz, João Victor, Jobson Lucas, Rafael Albuquerque
+ * Gabriel Guimarães, Gileade Kelvin, Gustavo Oliveira, João Victor, Jobson Lucas, Rafael Albuquerque
 
