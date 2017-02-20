@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.fragments;
+package com.ifarma.ifarma.fragments.pharmacy;
 
 import android.content.Context;
 import android.graphics.Color;

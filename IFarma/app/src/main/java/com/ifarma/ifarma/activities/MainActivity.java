@@ -1,20 +1,17 @@
 package com.ifarma.ifarma.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.firebase.client.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.ifarma.ifarma.R;
-import com.ifarma.ifarma.adapters.ViewPagerAdapter;
+import com.ifarma.ifarma.adapters.PharmViewPagerAdapter;
+import com.ifarma.ifarma.adapters.UserViewPagerAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 
@@ -45,10 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean isAuthenticated(){
-        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
-        boolean defaultState = false;
-
-        return sharedPref.getBoolean(FLAG_LOGGED, defaultState);
+        return true;
     }
 
     private void initUI(){
@@ -57,35 +51,71 @@ public class MainActivity extends AppCompatActivity {
 
         final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
 
-        models.add(
-                new NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_search_white_24dp),
-                        Color.parseColor("#00897B"))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_search_white_24dp))
-                        .title("Buscar")
-                        .build()
-        );
+        FragmentPagerAdapter adapter = null;
 
-        models.add(
-                new NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp),
-                        Color.parseColor("#00897B"))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp))
-                        .title("Carrinho")
-                        .build()
-        );
+        if (isPharmacy()){
+            models.add(
+                    new NavigationTabBar.Model.Builder(
+                            ContextCompat.getDrawable(this, R.drawable.ic_store_mall_directory_white_24dp),
+                            Color.parseColor("#00897B"))
+                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_store_mall_directory_white_24dp))
+                            .title("Medicamentos")
+                            .build()
+            );
 
-        models.add(
-                new NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_account_circle_white_24dp),
-                        Color.parseColor("#00897B"))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_account_circle_white_24dp))
-                        .title("Eu")
-                        .badgeTitle("Deslogado")
-                        .build()
-        );
+            models.add(
+                    new NavigationTabBar.Model.Builder(
+                            ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp),
+                            Color.parseColor("#00897B"))
+                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp))
+                            .title("Pedidos")
+                            .build()
+            );
 
-        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), getApplicationContext(), models));
+            models.add(
+                    new NavigationTabBar.Model.Builder(
+                            ContextCompat.getDrawable(this, R.drawable.ic_account_circle_white_24dp),
+                            Color.parseColor("#00897B"))
+                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_account_circle_white_24dp))
+                            .title("Eu")
+                            .build()
+            );
+
+            adapter = new PharmViewPagerAdapter(getSupportFragmentManager(), getApplicationContext(), models);
+        } else {
+            models.add(
+                    new NavigationTabBar.Model.Builder(
+                            ContextCompat.getDrawable(this, R.drawable.ic_search_white_24dp),
+                            Color.parseColor("#00897B"))
+                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_search_white_24dp))
+                            .title("Buscar")
+                            .build()
+            );
+
+            models.add(
+                    new NavigationTabBar.Model.Builder(
+                            ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp),
+                            Color.parseColor("#00897B"))
+                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp))
+                            .title("Carrinho")
+                            .build()
+            );
+
+            models.add(
+                    new NavigationTabBar.Model.Builder(
+                            ContextCompat.getDrawable(this, R.drawable.ic_account_circle_white_24dp),
+                            Color.parseColor("#00897B"))
+                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_account_circle_white_24dp))
+                            .title("Eu")
+                            .badgeTitle("Deslogado")
+                            .build()
+            );
+
+            adapter = new UserViewPagerAdapter(getSupportFragmentManager(), getApplicationContext(), models);
+        }
+
+
+        viewPager.setAdapter(adapter);
 
         navigationTabBar.setModels(models);
         navigationTabBar.setViewPager(viewPager, 0);
@@ -108,17 +138,33 @@ public class MainActivity extends AppCompatActivity {
         navigationTabBar.postDelayed(new Runnable() {
             @Override
             public void run() {
-                final NavigationTabBar.Model model = navigationTabBar.getModels().get(2);
                 navigationTabBar.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (!isAuthenticated())
+                        NavigationTabBar.Model model;
+                        if (!isAuthenticated()) {
+                            model = navigationTabBar.getModels().get(2);
                             model.showBadge();
+                        } else {
+                            if (isPharmacy()) {
+                                model = navigationTabBar.getModels().get(1);
+                                model.setBadgeTitle("+ " + getPharmRequestsCount());
+                                model.showBadge();
+                            }
+                        }
                     }
                 }, 100);
             }
         }, 500);
 
+    }
+
+    private int getPharmRequestsCount(){
+        return 3;
+    }
+
+    private boolean isPharmacy(){
+        return true;
     }
 
 }

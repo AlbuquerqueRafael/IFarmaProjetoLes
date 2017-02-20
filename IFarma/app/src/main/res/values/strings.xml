@@ -8,5 +8,6 @@
     <string name="log_in">Entrar</string>
     <string name="register_product_toolbar">Novo Produto</string>
     <string name="edit_perfil">Editar Perfil</string>
+    <string name="pharm_toolbar">Minha Farmácia</string>
 
 </resources>

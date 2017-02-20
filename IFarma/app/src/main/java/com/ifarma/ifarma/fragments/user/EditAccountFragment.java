@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.fragments;
+package com.ifarma.ifarma.fragments.user;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.fragments.AccountFragment;
 
 public class EditAccountFragment extends Fragment {
 

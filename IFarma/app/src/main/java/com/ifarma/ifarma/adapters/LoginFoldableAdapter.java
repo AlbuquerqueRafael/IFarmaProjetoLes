@@ -34,12 +34,9 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.controllers.AuthenticationController;
-import com.ifarma.ifarma.fragments.EditAccountFragment;
-import com.ifarma.ifarma.exceptions.SignInException;
+import com.ifarma.ifarma.fragments.user.EditAccountFragment;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
 import java.util.HashMap;
