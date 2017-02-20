@@ -55,6 +55,7 @@ public class SearchFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         _searchInput = (EditText) rootView.findViewById(R.id.txtsearch);
         _listView = (RecyclerView) rootView.findViewById(R.id.listview);
+        _listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         _radioGroup = (RadioGroup) rootView.findViewById(R.id.radiogroup);
 
         RadioButton initButton = (RadioButton) rootView.findViewById(R.id.medicineButton);
@@ -152,7 +153,7 @@ public class SearchFragment extends Fragment {
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 _listView.setHasFixedSize(true);
                 _listView.setLayoutManager(mLayoutManager);
-              //  _listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+
 
                 _listView.setAdapter(adapterMed);
             }
@@ -183,7 +184,6 @@ public class SearchFragment extends Fragment {
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 _listView.setHasFixedSize(true);
                 _listView.setLayoutManager(mLayoutManager);
-              //  _listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
                 _listView.setAdapter(adapterPharma);
             }
 
