@@ -3,11 +3,14 @@ import com.ifarma.ifarma.exceptions.*;
 import com.ifarma.ifarma.util.Validate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Pharma extends AbstractUser {
 
-	private List<Product> productsList;
+	private Map<String, Product> products;
+	private List<Product> Product;
 
 	private String cnpj;
 	//private Map<Product, Integer> stock = new Map<Product, Integer>();
@@ -30,16 +33,20 @@ public class Pharma extends AbstractUser {
 		this.cnpj = cnpj;
 	}
 
-	public void initProductsList(){
-		this.productsList = new ArrayList<Product>();
+	public void initProducts(){
+		this.products = new HashMap<String, Product>();
 	}
 
 	public void addProduct(Product product){
-		this.productsList.add(product);
+		this.products.entrySet();
 	}
 
 	public void removeProduct(Product product){
-		this.productsList.remove(product);
+		this.products.remove(product);
+	}
+
+	public Map<String, Product>  getProducts(){
+		return products;
 	}
 	
 }

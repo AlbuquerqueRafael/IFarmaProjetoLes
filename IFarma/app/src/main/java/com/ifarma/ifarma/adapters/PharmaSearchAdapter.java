@@ -5,8 +5,9 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.holders.PharmaHolder;
 import com.ifarma.ifarma.holders.ViewHolder;
-import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.model.Pharma;
 
 import java.util.ArrayList;
 import android.view.LayoutInflater;
@@ -18,17 +19,17 @@ import android.content.Context;
  * Created by Rafael on 2/19/2017.
  */
 
-public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> implements Filterable {
+public class PharmaSearchAdapter extends RecyclerView.Adapter<PharmaHolder> implements Filterable {
 
-    private ArrayList<Product> productList;
-    private ArrayList<Product> mOriginalValues; // Original Values
-    private ArrayList<Product> mDisplayedValues;    // Values to be displayed
+    private ArrayList<Pharma> productList;
+    private ArrayList<Pharma> mOriginalValues; // Original Values
+    private ArrayList<Pharma> mDisplayedValues;    // Values to be displayed
     private LayoutInflater inflater;
     private View view;
     private Context context;
-    private ViewHolder holder;
+    private PharmaHolder holder;
 
-    public MedicineSearchAdapter(Context context, ArrayList<Product> mProductArrayList) {
+    public PharmaSearchAdapter(Context context, ArrayList<Pharma> mProductArrayList) {
 
         this.mOriginalValues = mProductArrayList;
         this.mDisplayedValues = mProductArrayList;
@@ -37,19 +38,17 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PharmaHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         view =  LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
-        holder = new ViewHolder(view);
+                .inflate(R.layout.pharma_list_view, parent, false);
+        holder = new PharmaHolder(view);
 
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.medName.setText(mDisplayedValues.get(position).getNameProduct());
-        holder.medPrice.setText("R$ " + mDisplayedValues.get(position).getPrice() + "");
-        holder.medDescription.setText(mDisplayedValues.get(position).getDescription());
+    public void onBindViewHolder(PharmaHolder holder, int position) {
+        holder.pharmaName.setText(mDisplayedValues.get(position).getName());
     }
 
     @Override
@@ -70,17 +69,17 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                mDisplayedValues = (ArrayList<Product>) results.values; // has the filtered values
+                mDisplayedValues = (ArrayList<Pharma>) results.values; // has the filtered values
                 notifyDataSetChanged();  // notifies the data with new filtered values
             }
 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new Filter.FilterResults();        // Holds the results of a filtering operation in values
-                ArrayList<Product> FilteredArrList = new ArrayList<Product>();
+                ArrayList<Pharma> FilteredArrList = new ArrayList<Pharma>();
 
                 if (mOriginalValues == null) {
-                    mOriginalValues = new ArrayList<Product>(mDisplayedValues); // saves the original data in mOriginalValues
+                    mOriginalValues = new ArrayList<Pharma>(mDisplayedValues); // saves the original data in mOriginalValues
                 }
 
                 /********
@@ -97,7 +96,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                 } else {
                     constraint = constraint.toString().toLowerCase();
                     for (int i = 0; i < mOriginalValues.size(); i++) {
-                        String data = mOriginalValues.get(i).getNameProduct();
+                        String data = mOriginalValues.get(i).getName();
                         if (data.toLowerCase().startsWith(constraint.toString())) {
                             FilteredArrList.add(mOriginalValues.get(i));
                         }
@@ -113,4 +112,3 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
     }
 
 }
-

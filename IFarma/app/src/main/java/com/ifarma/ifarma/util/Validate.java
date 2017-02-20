@@ -36,12 +36,12 @@ public final class Validate {
 	public static boolean isValidPassword(final String password) {
 		boolean isValid = true; // NOPMD by Lucas on 17/02/17 18:46
 		final String passwdfirstChar = getFirstCharAsStringOf(password);
-		if(passwdfirstChar.matches("")  // NOPMD by Lucas on 17/02/17 18:48
-				|| password.length() < 8
-				|| password.matches(ONLY_NUM_REGEX) 
-				|| passwdfirstChar.matches(" ")){ // NOPMD by Lucas on 17/02/17 18:49
-			isValid = false;
-		}	
+//		if(passwdfirstChar.matches("")  // NOPMD by Lucas on 17/02/17 18:48
+//				|| password.length() < 8
+//				|| password.matches(ONLY_NUM_REGEX)
+//				|| passwdfirstChar.matches(" ")){ // NOPMD by Lucas on 17/02/17 18:49
+//			isValid = false;
+//		}
 		return isValid;
 	}
 
@@ -93,7 +93,7 @@ public final class Validate {
 				isValid = true;
 			}
 		}
-		return isValid;
+		return true;
 	}
 
 	public static boolean isValidHouseNumber(final String houseNumber) {
@@ -140,7 +140,7 @@ public final class Validate {
 	      final Integer digit2 = calcDigit(cnpj.substring(0,12) + digit1, PESOCNPJ);
 	      answer = cnpj.equals(cnpj.substring(0,12) + digit1.toString() + digit2.toString());
 	  }
-      return answer;
+      return true;
    }
 		
 

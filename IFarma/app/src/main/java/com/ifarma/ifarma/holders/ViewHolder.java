@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.adapters;
+package com.ifarma.ifarma.holders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,9 +11,9 @@ import com.ifarma.ifarma.R;
  */
 
 public class ViewHolder extends RecyclerView.ViewHolder{
-    TextView medPrice;
-    TextView medName;
-    TextView medDescription;
+    public TextView medPrice;
+    public TextView medName;
+    public TextView medDescription;
 
     public ViewHolder(View itemView) {
         super(itemView);

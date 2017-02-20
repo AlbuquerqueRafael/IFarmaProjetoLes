@@ -12,7 +12,7 @@ import com.firebase.client.Firebase;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.ViewPagerAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
-import com.ifarma.ifarma.controllers.OnGetDataListener;
+import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         initUI();
 
-        FirebaseController.retrieveProducts(new OnGetDataListener() {
+        FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
             @Override
             public void onStart() {

@@ -72,7 +72,7 @@ public class FirebaseController {
         pharma.setPassword(password);
         pharma.setEmail(email);
         pharma.setCnpj(cnpj);
-        pharma.initProductsList();
+        pharma.initProducts();
 
         String emailNode = Utils.convertEmail(pharma.getEmail());
 
@@ -91,7 +91,47 @@ public class FirebaseController {
 
     }
 
-    public static void retrieveProducts( final OnGetDataListener listener) {
+
+    public static void retrievePharmacies(final OnPharmaGetDataListener listener){
+        final Firebase pharmasReference = getFirebase().child(PHARMACIES);
+        final List<Pharma> lista = new ArrayList<>();
+
+        pharmasReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                Pharma pharma = dataSnapshot.getValue(Pharma.class);
+                lista.add(pharma);
+
+                listener.onSuccess(lista);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                System.out.println("FILHO MODIFICADO!");
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                System.out.println("onChildRemoved");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+                System.out.println("onChildMoved");
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("onCancelled");
+            }
+
+
+        });
+    }
+
+
+    public static void retrieveProducts( final OnMedGetDataListener listener) {
         final Firebase productsReference = getFirebase().child(PHARMACIES);
         final List<Product> lista = new ArrayList<>();
 
