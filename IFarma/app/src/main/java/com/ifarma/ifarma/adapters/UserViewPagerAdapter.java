@@ -6,9 +6,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 
+import com.ifarma.ifarma.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.fragments.AccountFragment;
+import com.ifarma.ifarma.fragments.AddProductFragment;
 import com.ifarma.ifarma.fragments.user.CartFragment;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
+import com.ifarma.ifarma.services.AuthenticationService;
 
 import java.util.List;
 
@@ -19,9 +24,17 @@ import devlight.io.library.ntb.NavigationTabBar;
  */
 
 public class UserViewPagerAdapter extends FragmentPagerAdapter {
+    public static final String PREFS_NAME = "Preferences";
+    public static final String FLAG_LOGGED = "isLogged";
 
     private Context context;
     private List<NavigationTabBar.Model> models;
+
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private AuthenticationController authCtrl;
+    private FirebaseAuth fbAuth;
+    private AuthenticationService authService;
+    boolean isLogged;
 
     private static LayoutInflater inflater = null;
 
@@ -31,12 +44,16 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
         this.models = models;
         this.context = context;
 
+        authCtrl = new AuthenticationController();
+        authService = AuthenticationService.getInstance();
+
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
 
     @Override
     public Fragment getItem(int position) {
+
         switch (position){
             case 0:
                 return new SearchFragment();
@@ -53,6 +70,5 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return models.size();
     }
-
 }
 

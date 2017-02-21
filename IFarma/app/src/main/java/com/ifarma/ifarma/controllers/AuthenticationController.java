@@ -3,8 +3,8 @@ package com.ifarma.ifarma.controllers;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
-import com.ifarma.ifarma.Services.AuthenticationService;
-import com.ifarma.ifarma.Services.AuthenticationState;
+import com.ifarma.ifarma.services.AuthenticationService;
+import com.ifarma.ifarma.services.AuthenticationState;
 
 /**
  * Created by gustavooliveira on 2/18/17.
@@ -26,6 +26,10 @@ public class AuthenticationController {
 
     public void setCurrentUser(FirebaseUser user){
         authService.setUsuarioLogado(user);
+    }
+
+    public FirebaseUser getCurrentUser(){
+        return authService.getUsuarioLogado();
     }
 
     public AuthenticationState getEstadoAtual(){

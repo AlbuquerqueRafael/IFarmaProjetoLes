@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.Services;
+package com.ifarma.ifarma.services;
 
 /**
  * Created by gustavooliveira on 2/19/17.
@@ -13,5 +13,13 @@ public enum AuthenticationState {
 
     AuthenticationState(String mensagem){
         estado = mensagem;
+    }
+
+    public String getEstadoMensagem(){
+        return estado;
+    }
+
+    public AuthenticationState getEstadoCorrespondente(String estado){
+        return AuthenticationState.valueOf(estado);
     }
 }

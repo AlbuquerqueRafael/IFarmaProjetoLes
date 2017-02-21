@@ -42,7 +42,6 @@ public class EditAccountFragment extends Fragment {
             }
         });
 
-
         return rootView;
     }
 }
