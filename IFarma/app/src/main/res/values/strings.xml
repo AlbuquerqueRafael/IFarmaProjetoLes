@@ -9,4 +9,9 @@
     <string name="register_product_toolbar">Novo Produto</string>
     <string name="edit_perfil">Editar Perfil</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="info_pharma_toolbar">Editar Informações</string>
+
 </resources>

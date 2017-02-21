@@ -1,24 +1,29 @@
 package com.ifarma.ifarma.model;
 
 
+import java.io.Serializable;
+
 /**
  * Created by Kelvin on 18-Feb-17.
  */
 
-public class Product {
+public class Product implements Serializable{
 
     private String name;
     private double price;
     private String lab;
     private String description;
     private boolean generic;
+    private String pharmacyId;
 
-    public Product(String name, double price, String lab, String description, boolean generic){
+
+    public Product(String name, double price, String lab, String description, boolean generic, String pharmacyId){
         this.name = name;
         this.price = price;
         this.lab = lab;
         this.description = description;
         this.generic = generic;
+        this.pharmacyId = pharmacyId;
     }
 
     public Product(){}
@@ -37,6 +42,10 @@ public class Product {
 
     public String getDescription(){
         return description;
+    }
+
+    public String getPharmacyId(){
+        return pharmacyId;
     }
 
     public boolean isGeneric(){
@@ -63,7 +72,19 @@ public class Product {
         this.generic = newGeneric;
     }
 
+    public void setPharmacyId(String pharmacyId){
+        this.pharmacyId = pharmacyId;
+    }
 
+    public boolean equals(Object prod){
+        if(!(prod instanceof Product)){
+            return false;
+        }
+
+        Product prod1 = (Product) prod;
+
+        return prod1.getNameProduct().equals(this.getNameProduct());
+    }
 
 
 }

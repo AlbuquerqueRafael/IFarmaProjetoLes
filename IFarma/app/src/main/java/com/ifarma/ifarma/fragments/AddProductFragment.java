@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.model.Product;
 
 import java.util.ArrayList;
@@ -72,16 +74,67 @@ public class AddProductFragment extends Fragment {
         _cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Product product = new Product();
-                String name = _nameProductInput.getText().toString();
-                String price = _priceProductInput.getText().toString();
-                String lab = _labProductInput.getText().toString();
-                String description = _descriptionProductInput.getText().toString();
-                
+                if(!validateLogin(_nameProductInput, _priceProductInput, _labProductInput, _descriptionProductInput)){
+                    Toast.makeText(getContext(), "O cadastro falhou!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Product product = new Product();
+                    String name = _nameProductInput.getText().toString();
+                    Double price = Double.parseDouble(_priceProductInput.getText().toString());
+                    String lab = _labProductInput.getText().toString();
+                    String description = _descriptionProductInput.getText().toString();
+                    boolean generic = _genericoCheckbox.isChecked();
+                    product.setNameProduct(name);
+                    product.setDescription(description);
+                    product.setPrice(price);
+                    product.setGeneric(generic);
+                    product.setLab(lab);
+
+                    //TODO substituir email farmacia default pela logada atualmente
+                    FirebaseController.newProduct("dias@gmaildotcom", product);
+                }
             }
         });
 
         return rootView;
     }
 
+    private static boolean validateLogin(EditText _nameProductInput, EditText _priceProductInput,
+                                         EditText _labProductInput, EditText _descriptionProductInput){
+
+        boolean valid = true;
+        String name = _nameProductInput.getText().toString();
+        String price = _priceProductInput.getText().toString();
+        String lab = _labProductInput.getText().toString();
+        String description = _descriptionProductInput.getText().toString();
+
+        if (name.isEmpty()) {
+            _nameProductInput.setError("Nome inválido.");
+            valid = false;
+        } else {
+            _nameProductInput.setError(null);
+        }
+
+        if (price.isEmpty()) {
+            _priceProductInput.setError("Preço inválido.");
+            valid = false;
+        } else {
+            _priceProductInput.setError(null);
+        }
+
+        if (lab.isEmpty()) {
+            _labProductInput.setError("Laboratório inválido.");
+            valid = false;
+        } else {
+            _labProductInput.setError(null);
+        }
+
+        if (description.isEmpty()) {
+            _descriptionProductInput.setError("Descrição inválida.");
+            valid = false;
+        } else {
+            _descriptionProductInput.setError(null);
+        }
+
+        return valid;
+    }
 }

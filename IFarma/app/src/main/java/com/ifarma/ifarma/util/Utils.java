@@ -6,6 +6,6 @@ package com.ifarma.ifarma.util;
 public class Utils {
 
     public static String convertEmail(String email){
-        return email.replace("@", "at");
+        return email.replace(".", "dot");
     }
 }

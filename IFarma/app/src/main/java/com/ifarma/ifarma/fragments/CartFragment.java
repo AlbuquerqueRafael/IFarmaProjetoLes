@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.ifarma.ifarma.R;
 
+
 public class CartFragment extends Fragment {
 
     private View rootView;

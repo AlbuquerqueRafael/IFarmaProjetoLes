@@ -14,6 +14,7 @@ import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.fragments.AccountFragment;
 import com.ifarma.ifarma.fragments.AddProductFragment;
 import com.ifarma.ifarma.fragments.CartFragment;
+import com.ifarma.ifarma.fragments.EditInfoPharmaFragment;
 import com.ifarma.ifarma.fragments.SearchFragment;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new CartFragment();
             case 2:
-                return new AccountFragment();
+                return new EditInfoPharmaFragment();
             default:
                 return new SearchFragment();
         }

@@ -6,5 +6,7 @@
     <color name="editTextColor">#6f2c97</color>
 
     <color name="white">#FFFFFF</color>
+    <color name="price">#999999</color>
+    <color name="medName">#222222</color>
 
 </resources>

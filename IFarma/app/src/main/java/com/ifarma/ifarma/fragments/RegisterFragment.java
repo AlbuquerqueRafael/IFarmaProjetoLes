@@ -29,11 +29,11 @@ public class RegisterFragment extends Fragment {
     private View rootView;
     private RecyclerView loginRecycler;
     private RecyclerView registerRecycler;
-
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth fbAuth;
 
     private AuthenticationController authCtrl;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
