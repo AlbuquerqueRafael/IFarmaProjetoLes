@@ -45,8 +45,6 @@ public class AccountFragment extends Fragment {
 
         FirebaseUser user = authCtrl.getCurrentUser();
 
-        Log.e("TESTE VIEW", "VIEW CADASTRAR OU ENTRAR");
-
         return rootView;
     }
 
@@ -119,6 +117,11 @@ public class AccountFragment extends Fragment {
                         Toast.makeText(getActivity(), "Você foi desconectado com sucesso!",
                                 Toast.LENGTH_LONG).show();
                         authCtrl.setAuthState(AuthenticationState.DESLOGADO);
+
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean(FLAG_LOGGED, false);
+                        editor.commit();
                     }
 
                     _actionButton.setOnClickListener(new View.OnClickListener() {
