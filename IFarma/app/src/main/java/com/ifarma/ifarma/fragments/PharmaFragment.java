@@ -13,12 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
-import com.ifarma.ifarma.adapters.PharmaMedSearchAdapter;
 import com.ifarma.ifarma.adapters.PharmaSearchAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
@@ -39,8 +40,10 @@ public class PharmaFragment extends Fragment {
 
     private View rootView;
     private ArrayList<Product> listItems;
-    private PharmaMedSearchAdapter adapterMed;
+    private MedicineSearchAdapter adapterMed;
     private RecyclerView _listView;
+    private TextView _textView;
+    private ImageView _imageView;
     private EditText _searchInput;
     private int searchTextSize;
     private Pharma pharm;
@@ -49,14 +52,22 @@ public class PharmaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        savedInstanceState = getArguments();
+        if (container != null) {
+            container.removeAllViews();
+        }
 
+        savedInstanceState = getArguments();
+        pharm = (Pharma) savedInstanceState.getSerializable("pharm");
 
         rootView = inflater.inflate(R.layout.fragment_pharma_view, container, false);
+        _imageView = (ImageView) rootView.findViewById(R.id.pharmaLogo);
+        _textView = (TextView) rootView.findViewById(R.id.pharmName);
+        _searchInput = (EditText) rootView.findViewById(R.id.pharmaSearchMed);
         _searchInput = (EditText) rootView.findViewById(R.id.pharmaSearchMed);
         _listView = (RecyclerView) rootView.findViewById(R.id.listpharmaview);
         _listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
+        _textView.setText(pharm.getName());
         _searchInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,13 +128,13 @@ public class PharmaFragment extends Fragment {
     public void initMedList(){
         listItems = new ArrayList<Product>();
 
-        if(pharm != null){
+        if(pharm.getProducts() != null){
             for(Map.Entry<String, Product> entry: pharm.getProducts().entrySet()){
                 listItems.add(entry.getValue());
             }
         }
 
-        adapterMed = new PharmaMedSearchAdapter(getActivity(), listItems);
+        adapterMed = new MedicineSearchAdapter(getActivity(), listItems);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         _listView.setHasFixedSize(true);
         _listView.setLayoutManager(mLayoutManager);

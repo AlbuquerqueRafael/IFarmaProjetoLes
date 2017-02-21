@@ -65,23 +65,23 @@ public class PharmaSearchAdapter extends RecyclerView.Adapter<PharmaHolder> impl
             @Override
             public void onClick(View v) {
                 onClickSubject.onNext(pharma);
-//
-//                Bundle bundles = new Bundle();
-//                Pharma pharm = pharma;
-//
-//                // ensure your object has not null
-//                if (pharm != null) {
-//                    bundles.putSerializable("pharm", pharm);
-//                }
+
+                Bundle bundles = new Bundle();
+                Pharma pharm = pharma;
+
+                // ensure your object has not null
+                if (pharm != null) {
+                    bundles.putSerializable("pharm", pharm);
+                }
 
 
                 MainActivity activity = (MainActivity) context;
                 PharmaFragment pharmaFragment = new PharmaFragment();
 
-//                pharmaFragment.setArguments(bundles);
+                pharmaFragment.setArguments(bundles);
                 android.support.v4.app.FragmentTransaction fragmentTransaction =  activity.getSupportFragmentManager().beginTransaction();
 
-                fragmentTransaction.replace(R.id.fragment_container, pharmaFragment);
+                fragmentTransaction.replace(R.id.activity_main, pharmaFragment);
                 fragmentTransaction.commit();
             }
         });
