@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.model.Customer;
 import com.ifarma.ifarma.model.Pharma;
@@ -212,6 +213,24 @@ public class FirebaseController {
         product.setGeneric(generic);
 
         productsReference.child(product.getNameProduct()).setValue(product);
+
+    }
+
+    public static void retrieveCurrentPharma(String pharmaID, final OnCurrentPharmaGetDataListener listener) {
+        final Firebase pharmasReference = getFirebase().child(PHARMACIES).child(pharmaID);
+
+        pharmasReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Pharma pharma = dataSnapshot.getValue(Pharma.class);
+                listener.onSuccess(pharma);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
     }
 
