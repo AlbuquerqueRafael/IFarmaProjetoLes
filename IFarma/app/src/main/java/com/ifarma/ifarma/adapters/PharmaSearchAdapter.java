@@ -1,10 +1,17 @@
 package com.ifarma.ifarma.adapters;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.activities.MainActivity;
+import com.ifarma.ifarma.fragments.PharmaFragment;
 import com.ifarma.ifarma.holders.PharmaHolder;
 import com.ifarma.ifarma.holders.ViewHolder;
 import com.ifarma.ifarma.model.Pharma;
@@ -14,6 +21,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.Context;
+
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by Rafael on 2/19/2017.
@@ -28,6 +38,7 @@ public class PharmaSearchAdapter extends RecyclerView.Adapter<PharmaHolder> impl
     private View view;
     private Context context;
     private PharmaHolder holder;
+    private final PublishSubject<Pharma> onClickSubject = PublishSubject.create();
 
     public PharmaSearchAdapter(Context context, ArrayList<Pharma> mProductArrayList) {
 
@@ -49,6 +60,35 @@ public class PharmaSearchAdapter extends RecyclerView.Adapter<PharmaHolder> impl
     @Override
     public void onBindViewHolder(PharmaHolder holder, int position) {
         holder.pharmaName.setText(mDisplayedValues.get(position).getName());
+        final Pharma pharma = mDisplayedValues.get(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickSubject.onNext(pharma);
+//
+//                Bundle bundles = new Bundle();
+//                Pharma pharm = pharma;
+//
+//                // ensure your object has not null
+//                if (pharm != null) {
+//                    bundles.putSerializable("pharm", pharm);
+//                }
+
+
+                MainActivity activity = (MainActivity) context;
+                PharmaFragment pharmaFragment = new PharmaFragment();
+
+//                pharmaFragment.setArguments(bundles);
+                android.support.v4.app.FragmentTransaction fragmentTransaction =  activity.getSupportFragmentManager().beginTransaction();
+
+                fragmentTransaction.replace(R.id.fragment_container, pharmaFragment);
+                fragmentTransaction.commit();
+            }
+        });
+    }
+
+    public Observable<Pharma> getPositionClicks(){
+        return onClickSubject.asObservable();
     }
 
     @Override
