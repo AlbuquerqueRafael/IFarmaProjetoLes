@@ -21,6 +21,7 @@ import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.decoration.DividerItemDecoration;
+import com.ifarma.ifarma.decoration.RecyclerItemClickListener;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
 import android.support.design.widget.FloatingActionButton;
@@ -51,6 +52,9 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
 
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         _searchInput = (EditText) rootView.findViewById(R.id.txtsearch);
@@ -60,6 +64,7 @@ public class SearchFragment extends Fragment {
 
         RadioButton initButton = (RadioButton) rootView.findViewById(R.id.medicineButton);
         initButton.setChecked(true);
+
 
         _searchInput.setOnClickListener(new View.OnClickListener() {
             @Override

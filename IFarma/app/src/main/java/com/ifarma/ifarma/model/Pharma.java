@@ -2,12 +2,13 @@ package com.ifarma.ifarma.model;
 import com.ifarma.ifarma.exceptions.*;
 import com.ifarma.ifarma.util.Validate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Pharma extends AbstractUser {
+public class Pharma extends AbstractUser implements Serializable {
 
 	private Map<String, Product> products;
 	private List<Product> Product;

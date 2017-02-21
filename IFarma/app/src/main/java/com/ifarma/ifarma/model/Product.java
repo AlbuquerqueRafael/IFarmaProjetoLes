@@ -1,11 +1,13 @@
 package com.ifarma.ifarma.model;
 
 
+import java.io.Serializable;
+
 /**
  * Created by Kelvin on 18-Feb-17.
  */
 
-public class Product {
+public class Product implements Serializable{
 
     private String name;
     private double price;
