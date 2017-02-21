@@ -3,10 +3,14 @@ package com.ifarma.ifarma.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.firebase.client.Firebase;
 import com.ifarma.ifarma.R;
@@ -14,6 +18,7 @@ import com.ifarma.ifarma.adapters.ViewPagerAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
+import com.ifarma.ifarma.fragments.SearchFragment;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
 
@@ -26,12 +31,15 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_LOGGED = "isLogged";
-
+    private MainActivity mainActivity;
+    private ViewPagerAdapter pagerAdapter;
+    private int oldPage = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
+        mainActivity = this;
 
 ////        try {
 //            //FirebaseController.savePharmacy("Dias", "dias@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "00000000000000");
@@ -108,16 +116,29 @@ public class MainActivity extends AppCompatActivity {
                         .build()
         );
 
+        pagerAdapter =  new ViewPagerAdapter(getSupportFragmentManager(), getApplicationContext(), models);
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), getApplicationContext(), models));
 
         navigationTabBar.setModels(models);
         navigationTabBar.setViewPager(viewPager, 0);
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(final int position) {
+                Fragment fragment = pagerAdapter.getItem(position);
+                if(fragment instanceof SearchFragment){
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
+
+                    fragmentTransaction.replace(R.id.activity_main, fragment);
+                    fragmentTransaction.commit();
+
+                }
+
+
+                oldPage = position;
                 navigationTabBar.getModels().get(position).hideBadge();
             }
 

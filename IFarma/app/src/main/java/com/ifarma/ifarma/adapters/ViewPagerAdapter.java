@@ -57,7 +57,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return models.size();
+        return 3;
     }
 
 }
