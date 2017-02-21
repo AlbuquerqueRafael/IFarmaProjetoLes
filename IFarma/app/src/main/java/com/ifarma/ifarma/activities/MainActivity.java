@@ -42,10 +42,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private String isAuthenticated(){
+    private Boolean isAuthenticated(){
         return true;
-        String defaultState = AuthenticationState.DESLOGADO.getEstadoMensagem();
-        return sharedPref.getString(FLAG_LOGGED, defaultState);
     }
 
     private void initUI(){
@@ -144,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
                 navigationTabBar.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        boolean estaLogado= isAuthenticated().equalsIgnoreCase(AuthenticationState.DESLOGADO.getEstadoMensagem());
-                        if (estaLogado)
+                        NavigationTabBar.Model model;
+                        if (isAuthenticated()) {
                             model = navigationTabBar.getModels().get(2);
                             model.showBadge();
                         } else {

@@ -63,8 +63,7 @@ public class AccountFragment extends Fragment {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-//                sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
-//                editor = sharedPref.edit();
+//                sharedPref = Prefer.edit();
 
                 Button _actionButton = (Button) rootView.findViewById(R.id.sign_register_btn);
                 TextView msgLogado = (TextView) rootView.findViewById(R.id.alert_msg);

@@ -10,7 +10,7 @@ import com.ifarma.ifarma.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.fragments.AccountFragment;
-import com.ifarma.ifarma.fragments.AddProductFragment;
+import com.ifarma.ifarma.fragments.pharmacy.AddProductFragment;
 import com.ifarma.ifarma.fragments.user.CartFragment;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.services.AuthenticationService;
