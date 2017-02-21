@@ -37,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_LOGGED = "isLogged";
     private MainActivity mainActivity;
-    private UserViewPagerAdapter pagerAdapter;
     private int oldPage = 0;
+    private FragmentPagerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
 
         final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
-
-        FragmentPagerAdapter adapter;
 
         if (isPharmacy()){
             models.add(
@@ -174,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(final int position) {
-                Fragment fragment = pagerAdapter.getItem(position);
+                Fragment fragment = adapter.getItem(position);
                 if(fragment instanceof SearchFragment){
                     android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
 
@@ -183,8 +182,6 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-
-                oldPage = position;
                 navigationTabBar.getModels().get(position).hideBadge();
             }
             @Override
@@ -225,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isPharmacy(){
-        return true;
+        return false;
     }
 
 }
