@@ -1,10 +1,12 @@
 package com.ifarma.ifarma.fragments;
 
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,16 +21,22 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ifarma.ifarma.R;
-import com.ifarma.ifarma.Services.AuthenticationState;
 import com.ifarma.ifarma.adapters.LoginFoldableAdapter;
 import com.ifarma.ifarma.adapters.RegisterFoldableAdapter;
 import com.ifarma.ifarma.controllers.AuthenticationController;
+import com.ifarma.ifarma.services.AuthenticationState;
 
 public class RegisterFragment extends Fragment {
+    public static final String PREFS_NAME = "Preferences";
+    public static final String FLAG_LOGGED = "isLogged";
 
     private View rootView;
     private RecyclerView loginRecycler;
     private RecyclerView registerRecycler;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
+
+    private FrameLayout _frameLayout;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth fbAuth;
@@ -46,7 +54,7 @@ public class RegisterFragment extends Fragment {
 
         ImageView _backButton = (ImageView) rootView.findViewById(R.id.back_btn);
 
-        final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
+        _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
         _frameLayout.setVisibility(View.VISIBLE);
 
         _backButton.setOnClickListener(new View.OnClickListener() {
@@ -59,9 +67,6 @@ public class RegisterFragment extends Fragment {
 
                 android.support.v4.app.FragmentTransaction fragmentTransaction =
                         getActivity().getSupportFragmentManager().beginTransaction();
-
-                authCtrl.signOut();
-
                 fragmentTransaction.replace(R.id.fragment_container, new AccountFragment());
                 fragmentTransaction.commit();
             }
@@ -73,7 +78,7 @@ public class RegisterFragment extends Fragment {
 
     }
 
-    private void setUI(){
+    private void setUI() {
         LoginFoldableAdapter loginAdapter = new LoginFoldableAdapter(getActivity());
         RegisterFoldableAdapter registerAdapter = new RegisterFoldableAdapter(getActivity());
 
@@ -86,56 +91,45 @@ public class RegisterFragment extends Fragment {
         };
 
         loginRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        registerRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         loginRecycler.addItemDecoration(itemDecoration);
         loginRecycler.setAdapter(loginAdapter);
 
+        registerRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         registerRecycler.addItemDecoration(itemDecoration);
         registerRecycler.setAdapter(registerAdapter);
     }
 
-
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState){
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         fbAuth = FirebaseAuth.getInstance();
-        if (fbAuth.getCurrentUser() != null) {
-           //TODO tirar LOGS
-            Log.e("CURRENT USER",fbAuth.getCurrentUser().getEmail());
-        }
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-//                authCtrl.signOut();
-
                 authCtrl.setCurrentUser(user);
 
                 if (user != null) {
                     // User is signed in
-                    Log.e("SIGNED IN - FRAGMENT", "onAuthStateChanged:signed_in:" + user.getUid());
-                    //TODO retirar quando tiver transiçao
-                    Toast.makeText(getActivity(), "Login Efetuado com Sucesso",
-                            Toast.LENGTH_LONG).show();
 
-                    authCtrl.setAuthState(AuthenticationState.LOGADO);
-                } else {
-                    // User is signed out
-                    Log.e("SIGNED OUT - FRAGMENT", "onAuthStateChanged:signed_out");
-                    if (authCtrl.getEstadoAtual() == AuthenticationState.LOGADO){
-                        Toast.makeText(getActivity(), "Você foi desconectado com sucesso!",
-                                Toast.LENGTH_LONG).show();
-                        authCtrl.setAuthState(AuthenticationState.DESLOGADO);
+                    Log.e("USER STATE", "onAuthStateChanged: " + authCtrl.getEstadoAtual().getEstadoMensagem());
+
+                    if (authCtrl.getEstadoAtual() == AuthenticationState.LOGADO) {
+                        //TODO retirar quando tiver transiçao
+                        LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
+                        _pagerLayout.setVisibility(View.VISIBLE);
+                        _frameLayout.setVisibility(View.GONE);
+
+                        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                ((AppCompatActivity) getActivity()).getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment_container, new AccountFragment());
+                        fragmentTransaction.commit();
                     }
                 }
             }
         };
-
-
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.ViewPagerAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
+import com.ifarma.ifarma.services.AuthenticationState;
 
 import java.util.ArrayList;
 
@@ -44,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private boolean isAuthenticated(){
+    private String isAuthenticated(){
         SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
-        boolean defaultState = false;
+        String defaultState = AuthenticationState.DESLOGADO.getEstadoMensagem();
 
-        return sharedPref.getBoolean(FLAG_LOGGED, defaultState);
+        return sharedPref.getString(FLAG_LOGGED, defaultState);
     }
 
     private void initUI(){
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(final int position) {
-                navigationTabBar.getModels().get(position).hideBadge();
+//                navigationTabBar.getModels().get(position).hideBadge();
             }
 
             @Override
@@ -112,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
                 navigationTabBar.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (!isAuthenticated())
+                        boolean estaLogado= isAuthenticated().equalsIgnoreCase(AuthenticationState.DESLOGADO.getEstadoMensagem());
+                        if (estaLogado)
                             model.showBadge();
                     }
                 }, 100);

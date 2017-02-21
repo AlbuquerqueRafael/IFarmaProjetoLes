@@ -101,11 +101,6 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                             progressDialog.dismiss();
 
                             holder._loginButton.setEnabled(true);
-
-                                android.support.v4.app.FragmentTransaction fragmentTransaction =
-                                        ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction();
-                                fragmentTransaction.replace(R.id.fragment_container, new EditAccountFragment());
-                                fragmentTransaction.commit();
                         }
                     }, 2000);
 

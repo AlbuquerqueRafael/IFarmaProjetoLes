@@ -1,10 +1,9 @@
-package com.ifarma.ifarma.Services;
+package com.ifarma.ifarma.services;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,13 +18,13 @@ public final class AuthenticationService {
     private static FirebaseUser usuarioLogado;
     private static FirebaseAuth fbAuth;
 
-    private AuthenticationState authState;
+    private static AuthenticationState authState;
 
 
 
     private AuthenticationService(){
         fbAuth = FirebaseAuth.getInstance();
-        authState = AuthenticationState.DESLOGADO;
+//        authState = AuthenticationState.DESLOGADO;
     }
 
 
@@ -36,13 +35,10 @@ public final class AuthenticationService {
         result.addOnCompleteListener( new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.e("sign IN - SERVICE", "signInWithEmail:onComplete:" + task.isSuccessful());
-
                 // If sign in fails, display a message to the user. If sign in succeeds
                 // the auth state listener will be notified and logic to handle the
                 // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
-                    Log.e("sign IN - SERVICE", "signInWithEmail:failed");
                     setAuthState(AuthenticationState.DESLOGADO);
                 }
             }
