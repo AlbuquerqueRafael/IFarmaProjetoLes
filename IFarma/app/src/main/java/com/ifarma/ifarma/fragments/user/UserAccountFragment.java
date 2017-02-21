@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.fragments;
+package com.ifarma.ifarma.fragments.user;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,8 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.fragments.AccountFragment;
 
-public class EditAccountFragment extends Fragment {
+public class UserAccountFragment extends Fragment {
 
     private View rootView;
 
@@ -19,7 +20,7 @@ public class EditAccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_edit_account, container, false);
+        rootView = inflater.inflate(R.layout.fragment_user_register, container, false);
 
         ImageView _backButton = (ImageView) rootView.findViewById(R.id.back_btn);
 
@@ -40,7 +41,6 @@ public class EditAccountFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-
 
         return rootView;
     }

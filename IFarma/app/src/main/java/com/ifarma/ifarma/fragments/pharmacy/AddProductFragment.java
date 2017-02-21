@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.fragments;
+package com.ifarma.ifarma.fragments.pharmacy;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Product;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class AddProductFragment extends Fragment {
 
         _backButton = (ImageView) rootView.findViewById(R.id.back_btn_cadastro_product);
 
-        /*final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
+        final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
         _frameLayout.setVisibility(View.VISIBLE);
 
         _backButton.setOnClickListener(new View.OnClickListener() {
@@ -66,10 +67,10 @@ public class AddProductFragment extends Fragment {
 
                 android.support.v4.app.FragmentTransaction fragmentTransaction =
                         getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new AccountFragment());
+                fragmentTransaction.replace(R.id.fragment_container, new MedicinesFragment());
                 fragmentTransaction.commit();
             }
-        });*/
+        });
 
         _cadastrar.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.fragments;
+package com.ifarma.ifarma.fragments.user;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

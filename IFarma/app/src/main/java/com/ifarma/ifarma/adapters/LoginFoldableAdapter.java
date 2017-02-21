@@ -19,9 +19,10 @@ package com.ifarma.ifarma.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,14 +33,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.controllers.AuthenticationController;
-import com.ifarma.ifarma.fragments.EditAccountFragment;
-import com.ifarma.ifarma.exceptions.SignInException;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
 import java.util.HashMap;
@@ -53,6 +51,9 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
     private Map<Integer, Boolean> mFoldStates = new HashMap<>();
     private static Context mContext;
     private static LayoutInflater inflater;
+
+    public static final String PREFS_NAME = "Preferences";
+    public static final String FLAG_LOGGED = "isLogged";
 
     private AuthenticationController authCtrl;
 
@@ -101,11 +102,6 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                             progressDialog.dismiss();
 
                             holder._loginButton.setEnabled(true);
-
-                                android.support.v4.app.FragmentTransaction fragmentTransaction =
-                                        ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction();
-                                fragmentTransaction.replace(R.id.fragment_container, new EditAccountFragment());
-                                fragmentTransaction.commit();
                         }
                     }, 2000);
 
@@ -115,6 +111,16 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                         Log.e("sign IN - SERVICE", "signInWithEmail:onFailure:" + e.getMessage());
                         Toast.makeText(mContext, "Email ou senha inválidos",
                                 Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                result.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean(FLAG_LOGGED, true);
+                        editor.commit();
                     }
                 });
             }

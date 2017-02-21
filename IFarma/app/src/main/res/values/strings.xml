@@ -2,12 +2,14 @@
     <string name="app_name">iFarma</string>
 
     <string name="register_msg">Cadastre-se ou entre para facilitar a sua compra</string>
+    <string name="sign_register_out">Desconectar</string>
     <string name="sign_register_in">Entrar ou Cadastrar</string>
     <string name="me_toolbar">Meu Perfil</string>
     <string name="sign_in">Registrar</string>
     <string name="log_in">Entrar</string>
     <string name="register_product_toolbar">Novo Produto</string>
     <string name="edit_perfil">Editar Perfil</string>
+    <string name="pharm_toolbar">Minha Farmácia</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
