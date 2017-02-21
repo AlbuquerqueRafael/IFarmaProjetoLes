@@ -19,7 +19,9 @@ package com.ifarma.ifarma.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +34,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.ifarma.ifarma.R;
@@ -50,6 +53,9 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
     private Map<Integer, Boolean> mFoldStates = new HashMap<>();
     private static Context mContext;
     private static LayoutInflater inflater;
+
+    public static final String PREFS_NAME = "Preferences";
+    public static final String FLAG_LOGGED = "isLogged";
 
     private AuthenticationController authCtrl;
 
@@ -107,6 +113,16 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                         Log.e("sign IN - SERVICE", "signInWithEmail:onFailure:" + e.getMessage());
                         Toast.makeText(mContext, "Email ou senha inválidos",
                                 Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                result.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean(FLAG_LOGGED, true);
+                        editor.commit();
                     }
                 });
             }

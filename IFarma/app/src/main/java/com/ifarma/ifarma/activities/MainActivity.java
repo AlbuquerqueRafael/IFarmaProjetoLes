@@ -12,6 +12,7 @@ import com.firebase.client.Firebase;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.PharmViewPagerAdapter;
 import com.ifarma.ifarma.adapters.UserViewPagerAdapter;
+import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.services.AuthenticationState;
@@ -42,8 +43,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private Boolean isAuthenticated(){
-        return true;
+    private boolean isAuthenticated(){
+        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
+        boolean defaultState = false;
+        return sharedPref.getBoolean(FLAG_LOGGED, defaultState);
     }
 
     private void initUI(){
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
 
-        FragmentPagerAdapter adapter = null;
+        FragmentPagerAdapter adapter;
 
         if (isPharmacy()){
             models.add(
@@ -125,9 +128,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {}
 
             @Override
-            public void onPageSelected(final int position) {
-//                navigationTabBar.getModels().get(position).hideBadge();
-            }
+            public void onPageSelected(final int position) {}
 
             @Override
             public void onPageScrollStateChanged(final int state) {}
@@ -143,14 +144,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         NavigationTabBar.Model model;
-                        if (isAuthenticated()) {
+                        if (!isAuthenticated() && !isPharmacy()) {
                             model = navigationTabBar.getModels().get(2);
                             model.showBadge();
                         } else {
                             if (isPharmacy()) {
                                 model = navigationTabBar.getModels().get(1);
-                                model.setBadgeTitle("+ " + getPharmRequestsCount());
-                                model.showBadge();
+                                if (getPharmRequestsCount() > 0) {
+                                    model.setBadgeTitle("+ " + getPharmRequestsCount());
+                                    model.showBadge();
+                                }
                             }
                         }
                     }
@@ -161,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getPharmRequestsCount(){
-        return 3;
+        return 0;
     }
 
     private boolean isPharmacy(){

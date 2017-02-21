@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.fragments.pharmacy;
+package com.ifarma.ifarma.fragments.user;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +14,7 @@ import com.ifarma.ifarma.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PharmacyFragment extends Fragment {
+public class UserFragment extends Fragment {
 
     private View rootView;
     private ListView _configList;
@@ -23,7 +23,7 @@ public class PharmacyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_pharmacy, container, false);
+        rootView = inflater.inflate(R.layout.fragment_user, container, false);
         _configList = (ListView) rootView.findViewById(R.id.config_list);
 
         final List<String> configOptions = getConfigOptions();

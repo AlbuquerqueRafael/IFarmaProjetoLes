@@ -1,6 +1,7 @@
 package com.ifarma.ifarma.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,6 +14,7 @@ import com.ifarma.ifarma.fragments.AccountFragment;
 import com.ifarma.ifarma.fragments.pharmacy.AddProductFragment;
 import com.ifarma.ifarma.fragments.user.CartFragment;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
+import com.ifarma.ifarma.fragments.user.UserFragment;
 import com.ifarma.ifarma.services.AuthenticationService;
 
 import java.util.List;
@@ -60,11 +62,20 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new CartFragment();
             case 2:
+                if (isAuthenticated())
+                    return new UserFragment();
                 return new AccountFragment();
             default:
                 return new SearchFragment();
         }
     }
+
+    private boolean isAuthenticated(){
+        SharedPreferences sharedPref = context.getSharedPreferences(PREFS_NAME, 0);
+        boolean defaultState = false;
+        return sharedPref.getBoolean(FLAG_LOGGED, defaultState);
+    }
+
 
     @Override
     public int getCount() {
