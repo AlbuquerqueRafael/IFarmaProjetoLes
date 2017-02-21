@@ -20,7 +20,7 @@ public class EditAccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_edit_account, container, false);
+        rootView = inflater.inflate(R.layout.fragment_user_register, container, false);
 
         ImageView _backButton = (ImageView) rootView.findViewById(R.id.back_btn);
 
