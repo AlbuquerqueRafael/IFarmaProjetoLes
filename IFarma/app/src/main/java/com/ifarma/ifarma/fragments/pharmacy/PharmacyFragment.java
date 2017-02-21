@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.fragments.user.UserAccountFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class PharmacyFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
+                        callFragment(new PharmaAccountFragment());
                         break;
                     case 1:
                         break;
@@ -52,5 +54,12 @@ public class PharmacyFragment extends Fragment {
         list.add("Editar conta");
 
         return list;
+    }
+
+    private void callFragment(Fragment fragment){
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
     }
 }

@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.fragments.AccountFragment;
 
-public class EditAccountFragment extends Fragment {
+public class UserAccountFragment extends Fragment {
 
     private View rootView;
 
