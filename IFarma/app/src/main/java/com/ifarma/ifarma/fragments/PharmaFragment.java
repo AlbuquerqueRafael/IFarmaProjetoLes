@@ -57,11 +57,7 @@ public class PharmaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        if (container != null) {
-            container.removeAllViews();
-        }
-
+        
         savedInstanceState = getArguments();
         pharm = (Pharma) savedInstanceState.getSerializable("pharm");
 
