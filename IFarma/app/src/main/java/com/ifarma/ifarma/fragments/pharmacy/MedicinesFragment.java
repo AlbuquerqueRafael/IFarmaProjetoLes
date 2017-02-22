@@ -132,9 +132,10 @@ public class MedicinesFragment extends Fragment {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 String defaultState = "";
                 String email =  prefs.getString(FLAG_EMAIL, defaultState);
+                email = email.replace(".", "dot");
 
                 for (Product p : lista){{
-                    Toast.makeText(getContext(), p.getPharmacyId(), Toast.LENGTH_SHORT).show();
+                    if (email.equals(p.getPharmacyId()))
                         listItems.add(p);
                 }}
 
