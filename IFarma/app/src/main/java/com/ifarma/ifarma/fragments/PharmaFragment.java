@@ -3,6 +3,7 @@ package com.ifarma.ifarma.fragments;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,16 +83,22 @@ public class PharmaFragment extends Fragment {
                 AlertDialog alertDialog = new AlertDialog.Builder(
                        getActivity()).create();
 
-                alertDialog.setTitle("Alert Dialog");
-
+                alertDialog.setTitle(Html.fromHtml("<font color='#b3b3b3'>Informações da farmacia: </font>"));
                 // Setting Dialog Message
-                alertDialog.setMessage("Welcome to AndroidHive.info");
+                alertDialog.setMessage(Html.fromHtml("<font color='#b3b3b3'>Endereço: " + pharm.getAddress() + "</font>" + "<br>" +
+                                                     "<font color='#b3b3b3'>CEP: " + pharm.getCep() + "</font>"));
 
                 // Setting Icon to Dialog
-
                 // Setting OK Button
+                alertDialog.setButton(Dialog.BUTTON_POSITIVE,Html.fromHtml("<font color='#b3b3b3'>Ok</font>"),new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
 
                 alertDialog.show();
+                alertDialog.getWindow().getDecorView().getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xe6fff9));
             }
         });
         _searchInput.setOnClickListener(new View.OnClickListener() {
