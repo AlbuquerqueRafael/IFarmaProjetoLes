@@ -168,7 +168,6 @@ public class SearchFragment extends Fragment {
             }
 
         });
-
     }
 
     public void initPharmaList(){
@@ -197,7 +196,6 @@ public class SearchFragment extends Fragment {
             }
 
         });
-
 
     }
 

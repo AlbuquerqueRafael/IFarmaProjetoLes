@@ -1,11 +1,16 @@
 package com.ifarma.ifarma.fragments.pharmacy;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Product;
 
@@ -38,6 +45,8 @@ public class AddProductFragment extends Fragment {
     private EditText _descriptionProductInput;
     private CheckBox _genericoCheckbox;
     private ImageView _backButton;
+    public static final String FLAG_EMAIL = "currentEmail";
+    private MedicineSearchAdapter adapterMed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,8 +99,20 @@ public class AddProductFragment extends Fragment {
                     product.setGeneric(generic);
                     product.setLab(lab);
 
-                    //TODO substituir email farmacia default pela logada atualmente
-                    FirebaseController.newProduct("dias@gmaildotcom", product);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    String defaultState = "";
+                    String email =  prefs.getString(FLAG_EMAIL, defaultState);
+                    email = email.replace(".", "dot");
+                    FirebaseController.newProduct(email, product);
+
+                    LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
+                    _pagerLayout.setVisibility(View.VISIBLE);
+                    _frameLayout.setVisibility(View.GONE);
+
+                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                            getActivity().getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, new MedicinesFragment());
+                    fragmentTransaction.commit();
                 }
             }
         });

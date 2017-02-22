@@ -79,9 +79,9 @@ public class PharmaSearchAdapter extends RecyclerView.Adapter<PharmaHolder> impl
                 PharmaFragment pharmaFragment = new PharmaFragment();
 
                 pharmaFragment.setArguments(bundles);
-                android.support.v4.app.FragmentTransaction fragmentTransaction =  activity.getSupportFragmentManager().beginTransaction();
-
-                fragmentTransaction.replace(R.id.activity_main, pharmaFragment);
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        activity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, pharmaFragment);
                 fragmentTransaction.commit();
             }
         });

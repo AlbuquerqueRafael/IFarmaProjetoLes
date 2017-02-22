@@ -92,7 +92,6 @@ public class FirebaseController {
 
     }
 
-
     public static void retrievePharmacies(final OnPharmaGetDataListener listener){
         final Firebase pharmasReference = getFirebase().child(PHARMACIES);
         final List<Pharma> lista = new ArrayList<>();

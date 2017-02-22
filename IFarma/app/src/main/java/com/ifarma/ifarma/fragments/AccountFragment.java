@@ -25,6 +25,7 @@ import com.ifarma.ifarma.services.AuthenticationState;
 public class AccountFragment extends Fragment {
     private String PREFS_NAME = "Preferences";
     private String FLAG_LOGGED = "isLogged";
+    public static final String FLAG_EMAIL = "currentEmail";
 
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
@@ -121,6 +122,7 @@ public class AccountFragment extends Fragment {
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putBoolean(FLAG_LOGGED, false);
+                        editor.putString(FLAG_EMAIL, "");
                         editor.commit();
                     }
 

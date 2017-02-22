@@ -1,7 +1,9 @@
 package com.ifarma.ifarma.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,21 +12,27 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.PharmViewPagerAdapter;
+import com.ifarma.ifarma.adapters.PharmaSearchAdapter;
 import com.ifarma.ifarma.adapters.UserViewPagerAdapter;
 import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
+import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.services.AuthenticationService;
 import com.ifarma.ifarma.services.AuthenticationState;
 
 import java.util.ArrayList;
@@ -36,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_LOGGED = "isLogged";
+    public static final String FLAG_EMAIL = "currentEmail";
+    public boolean isPharmacy = false;
     private MainActivity mainActivity;
     private int oldPage = 0;
     private FragmentPagerAdapter adapter;
@@ -47,51 +57,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mainActivity = this;
 
-////        try {
-//            //FirebaseController.savePharmacy("Dias", "dias@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "00000000000000");
-//            Product product = new Product("Dipirona", 2.5, "A", "B", true);
-//            FirebaseController.newProduct("dias@gmaildotcom", product);
-//
-////        } catch (InvalidUserDataException e) {
-////            e.printStackTrace();
-////        }
-
-        try {
-            FirebaseController.saveCustomer("Mafra", "jvmafra.at.gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "70175610401");
-            FirebaseController.saveProduct("Dipirona", 2.50, "BAYER", "10mg, para dor de cabeça", true);
-        } catch (InvalidUserDataException e) {
-            e.printStackTrace();
+        isPharmacy = false;
+        
+        if (getIntent().hasExtra("isPharmacy")) {
+            isPharmacy = getIntent().getExtras().getBoolean("isPharmacy");
         }
 
+        if (!isPharmacy)
+            checkIsPharmacy();
+
         initUI();
-
-        FirebaseController.retrieveProducts(new OnMedGetDataListener() {
-
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onSuccess(final List<Product> lista) {
-                System.out.println(lista.size());
-                int i = 0;
-
-                for (Product p : lista){{
-                    System.out.println("PRODUTO #" + i);
-                    System.out.println(p.getNameProduct());
-                    System.out.println(p.getPrice());
-                    System.out.println("------------------------------------------------");
-                    i++;
-                }}
-            }
-        });
     }
 
 
     private boolean isAuthenticated(){
-        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean defaultState = false;
-        return sharedPref.getBoolean(FLAG_LOGGED, defaultState);
+        return prefs.getBoolean(FLAG_LOGGED, defaultState);
     }
 
     private void initUI(){
@@ -221,8 +203,45 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 
+    private void checkIsPharmacy(){
+        final List<String> pharmList = new ArrayList<>();
+        final String email = currentEmail();
+
+        FirebaseController.retrievePharmacies(new OnPharmaGetDataListener() {
+
+            @Override
+            public void onStart() {}
+
+
+            @Override
+            public void onSuccess(List<Pharma> lista) {
+                for (Pharma p : lista){
+                    pharmList.add(p.getEmail());
+
+                    if (p.getEmail().equals(email)){
+                        isPharmacy = true;
+
+                        finish();
+                        Intent mIntent = new Intent(mainActivity, MainActivity.class);
+                        Bundle mBundle = new Bundle();
+                        mBundle.putBoolean("isPharmacy", true);
+                        mIntent.putExtras(mBundle);
+                        startActivity(mIntent);
+                    }
+                }
+            }
+
+        });
+    }
+
     private boolean isPharmacy(){
-        return false;
+        return this.isPharmacy;
+    }
+
+    private String currentEmail(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String defaultState = "";
+        return prefs.getString(FLAG_EMAIL, defaultState);
     }
 
 }

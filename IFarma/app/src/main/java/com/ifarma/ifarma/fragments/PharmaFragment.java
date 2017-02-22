@@ -3,6 +3,7 @@ package com.ifarma.ifarma.fragments;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,17 +11,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
@@ -29,6 +32,7 @@ import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.decoration.DividerItemDecoration;
+import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
 
@@ -51,7 +55,9 @@ public class PharmaFragment extends Fragment {
     private EditText _searchInput;
     private int searchTextSize;
     private Pharma pharm;
-    private FloatingActionButton _infoButton;
+    private FrameLayout _frameLayout;
+    private ImageView _infoButton;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,33 +72,49 @@ public class PharmaFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_pharma_view, container, false);
         _imageView = (ImageView) rootView.findViewById(R.id.pharmaLogo);
         _textView = (TextView) rootView.findViewById(R.id.pharmName);
-        _infoButton = (FloatingActionButton) rootView.findViewById(R.id.filter_btn_pharma);
         _searchInput = (EditText) rootView.findViewById(R.id.pharmaSearchMed);
         _searchInput = (EditText) rootView.findViewById(R.id.pharmaSearchMed);
         _listView = (RecyclerView) rootView.findViewById(R.id.listpharmaview);
+        _infoButton = (ImageView) rootView.findViewById(R.id.filter_btn_pharma);
         _listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
-        _textView.setText(pharm.getName());
+        ImageView _backButton = (ImageView) rootView.findViewById(R.id.back_btn);
+
+        _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
+        _frameLayout.setVisibility(View.VISIBLE);
 
         _infoButton.setOnClickListener( new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog.Builder(
-                       getActivity()).create();
-
-                alertDialog.setTitle("Alert Dialog");
-
-                // Setting Dialog Message
-                alertDialog.setMessage("Welcome to AndroidHive.info");
-
-                // Setting Icon to Dialog
-
-                // Setting OK Button
-
-                alertDialog.show();
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Informações da Farmácia")
+                        .setMessage("Contato: " + pharm.getEmail() + "\nEndereço: " + pharm.getAddress() + "\nCEP: " + pharm.getCep())
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
+
+        _backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
+                _pagerLayout.setVisibility(View.VISIBLE);
+                _frameLayout.setVisibility(View.GONE);
+
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new SearchFragment());
+                fragmentTransaction.commit();
+            }
+        });
+
+        _textView.setText(pharm.getName());
         _searchInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
