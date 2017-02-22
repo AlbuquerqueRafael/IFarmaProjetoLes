@@ -19,16 +19,35 @@ package com.ifarma.ifarma.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.activities.MainActivity;
+import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.exceptions.InvalidUserDataException;
+import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
+import com.ifarma.ifarma.fragments.user.SearchFragment;
+import com.ifarma.ifarma.fragments.user.UserAccountFragment;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
 import java.util.HashMap;
@@ -42,6 +61,9 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
     private Map<Integer, Boolean> mFoldStates = new HashMap<>();
     private static Context mContext;
     private static LayoutInflater inflater;
+    private FirebaseAuth firebaseAuth;
+    public static final String FLAG_LOGGED = "isLogged";
+    public static final String FLAG_EMAIL = "currentEmail";
 
     public RegisterFoldableAdapter(Context context) {
         mContext = context;
@@ -72,13 +94,49 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                 progressDialog.setMessage("Registrando...");
                 progressDialog.show();
 
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                progressDialog.dismiss();
-                                holder._registerButton.setEnabled(true);
+                firebaseAuth = FirebaseAuth.getInstance();
+
+                firebaseAuth.createUserWithEmailAndPassword(holder._registerEmailInput.getText().toString().trim(), holder._registerPasswordInput.getText().toString().trim())
+                        .addOnCompleteListener((MainActivity) mContext, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()){
+
+                                    if (holder._checkBoxPharmacy.isChecked()){
+                                        try {
+                                            FirebaseController.savePharmacy("XD", holder._registerEmailInput.getText().toString(), holder._registerPasswordInput.getText().toString(), "Santa Catarina", "1353", "58414470", "00000000000000");
+                                        } catch (InvalidUserDataException e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        try {
+                                            FirebaseController.saveCustomer("Mafroso", holder._registerEmailInput.getText().toString(), holder._registerPasswordInput.getText().toString(), "Santa Catarina", "1353", "58414470", "70175610401");
+                                        } catch (InvalidUserDataException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    new android.os.Handler().postDelayed(
+                                            new Runnable() {
+                                                public void run() {
+                                                    ((MainActivity) mContext).finish();
+                                                    Intent mIntent = new Intent(mContext, MainActivity.class);
+                                                    Bundle mBundle = new Bundle();
+                                                    mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isChecked());
+                                                    mIntent.putExtras(mBundle);
+                                                    mContext.startActivity(mIntent);
+                                                }
+                                            }, 2000);
+
+
+                                } else {
+                                    progressDialog.dismiss();
+                                    holder._registerButton.setEnabled(true);
+                                    Toast.makeText(mContext, "Registro falhou! :(", Toast.LENGTH_LONG).show();
+                                }
                             }
-                        }, 2000);
+                        });
+
 
             }
         });
@@ -175,6 +233,51 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
 
     }
 
+    private void showDialog(final FolderHolder holder){
+        new AlertDialog.Builder(mContext)
+                .setTitle("Alerta")
+                .setMessage("O seu perfil está sendo criado com informações em branco. Deseja terminar o seu cadastro?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Fragment fragment;
+
+                        if (holder._checkBoxPharmacy.isSelected()){
+                            fragment = new EditInfoPharmaFragment();
+                        } else {
+                            fragment = new UserAccountFragment();
+                        }
+
+                        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment_container, fragment);
+                        fragmentTransaction.commit();
+                    }
+                })
+                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((MainActivity) mContext).finish();
+                        Intent mIntent = new Intent(mContext, MainActivity.class);
+                        Bundle mBundle = new Bundle();
+                        mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isSelected());
+                        mIntent.putExtras(mBundle);
+                        mContext.startActivity(mIntent);
+
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean(FLAG_LOGGED, true);
+                        editor.putString(FLAG_EMAIL, holder._registerEmailInput.getText().toString().trim());
+                        editor.commit();
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .show();
+
+    }
+
     @Override
     public int getItemCount() {
         return 1;
@@ -192,6 +295,9 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
 
         @Bind(R.id.register_btn)
         protected Button _registerButton;
+
+        @Bind(R.id.is_pharmacy)
+        protected CheckBox _checkBoxPharmacy;
 
         @Bind(R.id.cover_register_btn)
         protected Button _coverRegisterButton;

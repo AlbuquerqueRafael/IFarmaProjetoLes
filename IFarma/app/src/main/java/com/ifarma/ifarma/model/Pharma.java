@@ -15,7 +15,7 @@ public class Pharma extends AbstractUser implements Serializable {
 
 	private String cnpj;
 	//private Map<Product, Integer> stock = new Map<Product, Integer>();
-	public Pharma(final String name, final String email, final String password, 
+	public Pharma(final String name, final String email, final String password,
 			final String address, final String houseNumber, final String cep)
 			throws InvalidUserDataException {
 		super(name, email, password, address, houseNumber, cep);

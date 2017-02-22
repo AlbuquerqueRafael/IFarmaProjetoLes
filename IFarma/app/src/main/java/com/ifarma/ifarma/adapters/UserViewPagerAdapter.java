@@ -2,6 +2,7 @@ package com.ifarma.ifarma.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -46,9 +47,6 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
         this.models = models;
         this.context = context;
 
-        authCtrl = new AuthenticationController();
-        authService = AuthenticationService.getInstance();
-
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
@@ -71,9 +69,9 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
     }
 
     private boolean isAuthenticated(){
-        SharedPreferences sharedPref = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean defaultState = false;
-        return sharedPref.getBoolean(FLAG_LOGGED, defaultState);
+        return prefs.getBoolean(FLAG_LOGGED, defaultState);
     }
 
 

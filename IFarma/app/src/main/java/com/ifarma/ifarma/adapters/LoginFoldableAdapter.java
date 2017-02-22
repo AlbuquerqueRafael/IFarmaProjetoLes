@@ -92,10 +92,6 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                 progressDialog.setMessage("Autenticando...");
                 progressDialog.show();
 
-                //TODO tirar os logs.
-                Log.e("InputEmail - ADAPTER", holder._loginEmailInput.getText().toString());
-                Log.e("InputSenha - ADAPTER", holder._loginPasswordInput.getText().toString());
-
                 final String email = holder._loginEmailInput.getText().toString();
                 String senha = holder._loginPasswordInput.getText().toString();
                 Task<AuthResult> result = authCtrl.signIn(email, senha);
@@ -112,7 +108,6 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                 result.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e("sign IN - SERVICE", "signInWithEmail:onFailure:" + e.getMessage());
                         Toast.makeText(mContext, "Email ou senha inválidos",
                                 Toast.LENGTH_LONG).show();
                     }

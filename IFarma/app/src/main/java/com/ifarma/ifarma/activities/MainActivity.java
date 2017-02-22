@@ -29,6 +29,7 @@ import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
+import com.ifarma.ifarma.fragments.pharmacy.MedicinesFragment;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
@@ -42,7 +43,6 @@ import devlight.io.library.ntb.NavigationTabBar;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_LOGGED = "isLogged";
     public static final String FLAG_EMAIL = "currentEmail";
     public boolean isPharmacy = false;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         mainActivity = this;
 
         isPharmacy = false;
-        
+
         if (getIntent().hasExtra("isPharmacy")) {
             isPharmacy = getIntent().getExtras().getBoolean("isPharmacy");
         }
@@ -162,10 +162,14 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTransaction.replace(R.id.activity_main, fragment);
                     fragmentTransaction.commit();
 
-                }
+                } else if (fragment instanceof MedicinesFragment){
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
 
-                navigationTabBar.getModels().get(position).hideBadge();
+                    fragmentTransaction.replace(R.id.activity_main, fragment);
+                    fragmentTransaction.commit();
+                }
             }
+
             @Override
             public void onPageScrollStateChanged(final int state) {}
         });
@@ -185,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
                             model.showBadge();
                         } else {
                             if (isPharmacy()) {
-                                model = navigationTabBar.getModels().get(1);
                                 if (getPharmRequestsCount() > 0) {
+                                    model = navigationTabBar.getModels().get(1);
                                     model.setBadgeTitle("+ " + getPharmRequestsCount());
                                     model.showBadge();
                                 }

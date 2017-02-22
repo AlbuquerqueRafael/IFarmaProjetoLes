@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,6 +43,10 @@ public class MedicinesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        if (container != null) {
+            container.removeAllViews();
+        }
 
         rootView = inflater.inflate(R.layout.fragment_medicines, container, false);
 
@@ -113,7 +118,6 @@ public class MedicinesFragment extends Fragment {
         return rootView;
     }
 
-
     public void initMedList(){
         listItems = new ArrayList<Product>();
         final ProgressDialog dialog = new ProgressDialog(getActivity());
@@ -132,7 +136,6 @@ public class MedicinesFragment extends Fragment {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 String defaultState = "";
                 String email =  prefs.getString(FLAG_EMAIL, defaultState);
-                email = email.replace(".", "dot");
 
                 for (Product p : lista){{
                     if (email.equals(p.getPharmacyId()))

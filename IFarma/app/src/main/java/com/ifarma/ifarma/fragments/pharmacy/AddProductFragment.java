@@ -85,7 +85,7 @@ public class AddProductFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!validateLogin(_nameProductInput, _priceProductInput, _labProductInput, _descriptionProductInput)){
-                    Toast.makeText(getContext(), "O cadastro falhou!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Falha ao criar o produto!", Toast.LENGTH_SHORT).show();
                 } else {
                     Product product = new Product();
                     String name = _nameProductInput.getText().toString();
@@ -102,12 +102,15 @@ public class AddProductFragment extends Fragment {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     String defaultState = "";
                     String email =  prefs.getString(FLAG_EMAIL, defaultState);
+                    product.setPharmacyId(email);
                     email = email.replace(".", "dot");
                     FirebaseController.newProduct(email, product);
 
                     LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
                     _pagerLayout.setVisibility(View.VISIBLE);
                     _frameLayout.setVisibility(View.GONE);
+
+                    Toast.makeText(getContext(), "Produto criado com sucesso!", Toast.LENGTH_SHORT).show();
 
                     android.support.v4.app.FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();

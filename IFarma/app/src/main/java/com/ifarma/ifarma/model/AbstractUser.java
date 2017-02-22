@@ -17,7 +17,7 @@ public abstract class AbstractUser{
 	
 	public AbstractUser() {}
 	
-	public AbstractUser(final String name, final String email, final String password, 
+	public AbstractUser(final String name, final String email, final String password,
 			final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
 		
 		if(!Validate.isValidName(name)){
