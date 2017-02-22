@@ -1,9 +1,12 @@
 package com.ifarma.ifarma.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -17,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
@@ -47,7 +51,7 @@ public class PharmaFragment extends Fragment {
     private EditText _searchInput;
     private int searchTextSize;
     private Pharma pharm;
-
+    private FloatingActionButton _infoButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,12 +66,33 @@ public class PharmaFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_pharma_view, container, false);
         _imageView = (ImageView) rootView.findViewById(R.id.pharmaLogo);
         _textView = (TextView) rootView.findViewById(R.id.pharmName);
+        _infoButton = (FloatingActionButton) rootView.findViewById(R.id.filter_btn_pharma);
         _searchInput = (EditText) rootView.findViewById(R.id.pharmaSearchMed);
         _searchInput = (EditText) rootView.findViewById(R.id.pharmaSearchMed);
         _listView = (RecyclerView) rootView.findViewById(R.id.listpharmaview);
         _listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
         _textView.setText(pharm.getName());
+
+        _infoButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(
+                       getActivity()).create();
+
+                alertDialog.setTitle("Alert Dialog");
+
+                // Setting Dialog Message
+                alertDialog.setMessage("Welcome to AndroidHive.info");
+
+                // Setting Icon to Dialog
+
+                // Setting OK Button
+
+                alertDialog.show();
+            }
+        });
         _searchInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

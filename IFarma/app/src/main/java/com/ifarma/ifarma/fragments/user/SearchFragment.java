@@ -1,5 +1,6 @@
 package com.ifarma.ifarma.fragments.user;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -139,6 +140,8 @@ public class SearchFragment extends Fragment {
 
     public void initMedList(){
         listItems = new ArrayList<Product>();
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        initDialog(dialog);
 
         FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
@@ -161,6 +164,7 @@ public class SearchFragment extends Fragment {
 
 
                 _listView.setAdapter(adapterMed);
+                closeDialog(dialog);
             }
 
         });
@@ -213,5 +217,15 @@ public class SearchFragment extends Fragment {
             }
 
         });
+    }
+
+    private void initDialog(ProgressDialog dialog){
+        dialog.setMessage("Carregando dados...");
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void closeDialog(ProgressDialog dialog){
+        dialog.dismiss();
     }
 }
