@@ -97,7 +97,6 @@ public class EditInfoUserFragment extends Fragment {
     }
 
     private void loadUserInfo(){
-        customer = new Customer();
 
         final int TIME = 4000; //Timeout
         final ProgressDialog dialog = new ProgressDialog(getActivity());
@@ -107,8 +106,6 @@ public class EditInfoUserFragment extends Fragment {
         String defaultState = "";
         String email = prefs.getString(FLAG_EMAIL, defaultState);
         email = email.replace(".", "dot");
-
-        Toast.makeText(getActivity(), email, Toast.LENGTH_SHORT).show();
 
         FirebaseController.retrieveCurrentCustomer(email, new OnCurrentCustomerGetDataListener() {
             @Override

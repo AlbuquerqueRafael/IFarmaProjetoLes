@@ -123,7 +123,7 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                                                     progressDialog.dismiss();
                                                     showDialog(holder);
                                                 }
-                                            }, 2000);
+                                            }, 3000);
 
 
                                 } else {
@@ -244,18 +244,14 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        Fragment fragment;
+                        ((MainActivity) mContext).finish();
+                        Intent mIntent = new Intent(mContext, MainActivity.class);
+                        Bundle mBundle = new Bundle();
+                        mBundle.putBoolean("incompleteRegister", true);
+                        mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isChecked());
+                        mIntent.putExtras(mBundle);
+                        mContext.startActivity(mIntent);
 
-                        if (holder._checkBoxPharmacy.isSelected()){
-                            fragment = new EditInfoPharmaFragment();
-                        } else {
-                            fragment = new EditInfoUserFragment();
-                        }
-
-                        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                                ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragment_container, fragment);
-                        fragmentTransaction.commit();
                     }
                 })
                 .setNegativeButton("Não", new DialogInterface.OnClickListener() {
@@ -266,7 +262,8 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                         ((MainActivity) mContext).finish();
                         Intent mIntent = new Intent(mContext, MainActivity.class);
                         Bundle mBundle = new Bundle();
-                        mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isSelected());
+                        mBundle.putBoolean("incompleteRegister", true);
+                        mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isChecked());
                         mIntent.putExtras(mBundle);
                         mContext.startActivity(mIntent);
                     }

@@ -106,7 +106,6 @@ public class EditInfoPharmaFragment extends Fragment {
 
 
     public void initPharma(){
-        pharma = new Pharma();
 
         final int TIME = 4000; //Timeout
         final ProgressDialog dialog = new ProgressDialog(getActivity());

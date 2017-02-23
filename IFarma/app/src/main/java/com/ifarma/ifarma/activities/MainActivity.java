@@ -29,7 +29,9 @@ import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
+import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
 import com.ifarma.ifarma.fragments.pharmacy.MedicinesFragment;
+import com.ifarma.ifarma.fragments.user.EditInfoUserFragment;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
@@ -45,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String FLAG_LOGGED = "isLogged";
     public static final String FLAG_EMAIL = "currentEmail";
-    public boolean isPharmacy = false;
+    private boolean isPharmacy = false;
+    private boolean incompleteRegister = false;
     private MainActivity mainActivity;
     private FragmentPagerAdapter adapter;
 
@@ -60,6 +63,24 @@ public class MainActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("isPharmacy")) {
             isPharmacy = getIntent().getExtras().getBoolean("isPharmacy");
+        }
+
+        if (getIntent().hasExtra("incompleteRegister")) {
+            if (getIntent().getExtras().getBoolean("incompleteRegister")){
+                incompleteRegister = getIntent().getExtras().getBoolean("incompleteRegister");
+
+                Fragment fragment;
+
+                if (isPharmacy){
+                    fragment = new EditInfoPharmaFragment();
+                } else {
+                    fragment = new EditInfoUserFragment();
+                }
+
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+            }
         }
 
         if (!isPharmacy)
