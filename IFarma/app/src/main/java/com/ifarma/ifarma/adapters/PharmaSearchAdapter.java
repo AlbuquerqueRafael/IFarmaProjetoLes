@@ -1,19 +1,14 @@
 package com.ifarma.ifarma.adapters;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.activities.MainActivity;
-import com.ifarma.ifarma.fragments.PharmaFragment;
+import com.ifarma.ifarma.fragments.pharmacy.PharmaFragment;
 import com.ifarma.ifarma.holders.PharmaHolder;
-import com.ifarma.ifarma.holders.ViewHolder;
 import com.ifarma.ifarma.model.Pharma;
 
 import java.util.ArrayList;

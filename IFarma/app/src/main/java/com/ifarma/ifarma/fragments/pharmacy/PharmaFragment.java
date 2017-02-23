@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.fragments;
+package com.ifarma.ifarma.fragments.pharmacy;
 
 import android.app.Dialog;
 import android.content.Context;

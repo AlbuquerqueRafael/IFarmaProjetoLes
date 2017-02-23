@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.fragments.user.UserFragment;
 
 public class AccountFragment extends Fragment {
 

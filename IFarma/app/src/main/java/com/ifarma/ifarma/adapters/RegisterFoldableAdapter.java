@@ -46,8 +46,7 @@ import com.ifarma.ifarma.activities.MainActivity;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
-import com.ifarma.ifarma.fragments.user.SearchFragment;
-import com.ifarma.ifarma.fragments.user.UserAccountFragment;
+import com.ifarma.ifarma.fragments.user.EditInfoUserFragment;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
 import java.util.HashMap;
@@ -121,14 +120,10 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                                     new android.os.Handler().postDelayed(
                                             new Runnable() {
                                                 public void run() {
-                                                    ((MainActivity) mContext).finish();
-                                                    Intent mIntent = new Intent(mContext, MainActivity.class);
-                                                    Bundle mBundle = new Bundle();
-                                                    mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isChecked());
-                                                    mIntent.putExtras(mBundle);
-                                                    mContext.startActivity(mIntent);
+                                                    progressDialog.dismiss();
+                                                    showDialog(holder);
                                                 }
-                                            }, 3000);
+                                            }, 2000);
 
 
                                 } else {
@@ -236,6 +231,13 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
     }
 
     private void showDialog(final FolderHolder holder){
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(FLAG_LOGGED, true);
+        editor.putString(FLAG_EMAIL, holder._registerEmailInput.getText().toString().trim());
+        editor.commit();
+
         new AlertDialog.Builder(mContext)
                 .setTitle("Alerta")
                 .setMessage("O seu perfil está sendo criado com informações em branco. Deseja terminar o seu cadastro?")
@@ -247,7 +249,7 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                         if (holder._checkBoxPharmacy.isSelected()){
                             fragment = new EditInfoPharmaFragment();
                         } else {
-                            fragment = new UserAccountFragment();
+                            fragment = new EditInfoUserFragment();
                         }
 
                         android.support.v4.app.FragmentTransaction fragmentTransaction =
@@ -259,21 +261,14 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                 .setNegativeButton("Não", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
                         ((MainActivity) mContext).finish();
                         Intent mIntent = new Intent(mContext, MainActivity.class);
                         Bundle mBundle = new Bundle();
                         mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isSelected());
                         mIntent.putExtras(mBundle);
                         mContext.startActivity(mIntent);
-
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean(FLAG_LOGGED, true);
-                        editor.putString(FLAG_EMAIL, holder._registerEmailInput.getText().toString().trim());
-                        editor.commit();
-
-                        dialog.dismiss();
-
                     }
                 })
                 .show();
