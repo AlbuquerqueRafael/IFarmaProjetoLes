@@ -145,6 +145,7 @@ public class MedicinesFragment extends Fragment {
 
 
                 _listView.setAdapter(adapterMed);
+                closeDialog(dialog);
             }
 
         });

@@ -92,14 +92,14 @@ public class MainActivity extends AppCompatActivity {
                             .build()
             );
 
-            models.add(
-                    new NavigationTabBar.Model.Builder(
-                            ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp),
-                            Color.parseColor("#00897B"))
-                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp))
-                            .title("Pedidos")
-                            .build()
-            );
+//            models.add(
+//                    new NavigationTabBar.Model.Builder(
+//                            ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp),
+//                            Color.parseColor("#00897B"))
+//                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp))
+//                            .title("Pedidos")
+//                            .build()
+//            );
 
             models.add(
                     new NavigationTabBar.Model.Builder(
@@ -122,14 +122,14 @@ public class MainActivity extends AppCompatActivity {
                             .build()
             );
 
-            models.add(
-                    new NavigationTabBar.Model.Builder(
-                            ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp),
-                            Color.parseColor("#00897B"))
-                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp))
-                            .title("Carrinho")
-                            .build()
-            );
+//            models.add(
+//                    new NavigationTabBar.Model.Builder(
+//                            ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp),
+//                            Color.parseColor("#00897B"))
+//                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp))
+//                            .title("Carrinho")
+//                            .build()
+//            );
 
             models.add(
                     new NavigationTabBar.Model.Builder(
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         NavigationTabBar.Model model;
                         if (!isAuthenticated() && !isPharmacy()) {
-                            model = navigationTabBar.getModels().get(2);
+                            model = navigationTabBar.getModels().get(navigationTabBar.getModels().size() - 1);
                             model.showBadge();
                         }
                     }

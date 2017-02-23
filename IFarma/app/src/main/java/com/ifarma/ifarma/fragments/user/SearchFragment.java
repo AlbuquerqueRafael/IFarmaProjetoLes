@@ -51,12 +51,15 @@ public class SearchFragment extends Fragment {
     private EditText _searchInput;
     private RadioGroup _radioGroup;
     private int searchTextSize;
-    private FloatingActionButton _filterButton;
     private String option;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        if (container != null) {
+            container.removeAllViews();
+        }
 
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         _searchInput = (EditText) rootView.findViewById(R.id.txtsearch);
