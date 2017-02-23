@@ -37,6 +37,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import devlight.io.library.ntb.NavigationTabBar;
+
 public class SearchFragment extends Fragment {
 
     private View rootView;
@@ -55,9 +57,6 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (container != null) {
-            container.removeAllViews();
-        }
 
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         _searchInput = (EditText) rootView.findViewById(R.id.txtsearch);
@@ -217,10 +216,19 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private void initDialog(ProgressDialog dialog){
+    private void initDialog(final ProgressDialog dialog){
         dialog.setMessage("Carregando dados...");
         dialog.setCancelable(false);
         dialog.show();
+
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        dialog.dismiss();
+                    }
+                }, 3000);
+
     }
 
     private void closeDialog(ProgressDialog dialog){

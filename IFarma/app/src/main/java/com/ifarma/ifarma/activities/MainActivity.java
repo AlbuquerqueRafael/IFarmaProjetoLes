@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String FLAG_EMAIL = "currentEmail";
     public boolean isPharmacy = false;
     private MainActivity mainActivity;
-    private int oldPage = 0;
     private FragmentPagerAdapter adapter;
 
     @Override
@@ -78,11 +77,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initUI(){
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
-        final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
+        ArrayList<NavigationTabBar.Model> models;
 
         final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
 
         if (isPharmacy()){
+            models = new ArrayList<>();
             models.add(
                     new NavigationTabBar.Model.Builder(
                             ContextCompat.getDrawable(this, R.drawable.ic_store_mall_directory_white_24dp),
@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
             adapter = new PharmViewPagerAdapter(getSupportFragmentManager(), getApplicationContext(), models);
         } else {
+            models = new ArrayList<>();
             models.add(
                     new NavigationTabBar.Model.Builder(
                             ContextCompat.getDrawable(this, R.drawable.ic_search_white_24dp),
@@ -155,17 +156,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(final int position) {
-                Fragment fragment = adapter.getItem(position);
-                if(fragment instanceof SearchFragment){
+                if(position == 0 && !isPharmacy()){
                     android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
 
-                    fragmentTransaction.replace(R.id.activity_main, fragment);
+                    fragmentTransaction.replace(R.id.activity_main, new SearchFragment());
                     fragmentTransaction.commit();
 
-                } else if (fragment instanceof MedicinesFragment){
+                } else if (position == 0 && isPharmacy()){
                     android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
 
-                    fragmentTransaction.replace(R.id.activity_main, fragment);
+                    fragmentTransaction.replace(R.id.activity_main, new MedicinesFragment());
                     fragmentTransaction.commit();
                 }
             }
@@ -187,24 +187,12 @@ public class MainActivity extends AppCompatActivity {
                         if (!isAuthenticated() && !isPharmacy()) {
                             model = navigationTabBar.getModels().get(2);
                             model.showBadge();
-                        } else {
-                            if (isPharmacy()) {
-                                if (getPharmRequestsCount() > 0) {
-                                    model = navigationTabBar.getModels().get(1);
-                                    model.setBadgeTitle("+ " + getPharmRequestsCount());
-                                    model.showBadge();
-                                }
-                            }
                         }
                     }
                 }, 100);
             }
         }, 500);
 
-    }
-
-    private int getPharmRequestsCount(){
-        return 0;
     }
 
     private void checkIsPharmacy(){

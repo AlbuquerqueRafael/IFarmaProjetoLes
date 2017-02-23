@@ -104,13 +104,15 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
 
                                     if (holder._checkBoxPharmacy.isChecked()){
                                         try {
-                                            FirebaseController.savePharmacy("XD", holder._registerEmailInput.getText().toString(), holder._registerPasswordInput.getText().toString(), "Santa Catarina", "1353", "58414470", "00000000000000");
+                                            FirebaseController.savePharmacy("", holder._registerEmailInput.getText().toString(),
+                                                                            holder._registerPasswordInput.getText().toString(), "", "", "", "");
                                         } catch (InvalidUserDataException e) {
                                             e.printStackTrace();
                                         }
                                     } else {
                                         try {
-                                            FirebaseController.saveCustomer("Mafroso", holder._registerEmailInput.getText().toString(), holder._registerPasswordInput.getText().toString(), "Santa Catarina", "1353", "58414470", "70175610401");
+                                            FirebaseController.saveCustomer("", holder._registerEmailInput.getText().toString(),
+                                                                            holder._registerPasswordInput.getText().toString(), "", "", "", "");
                                         } catch (InvalidUserDataException e) {
                                             e.printStackTrace();
                                         }
@@ -126,7 +128,7 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                                                     mIntent.putExtras(mBundle);
                                                     mContext.startActivity(mIntent);
                                                 }
-                                            }, 2000);
+                                            }, 3000);
 
 
                                 } else {

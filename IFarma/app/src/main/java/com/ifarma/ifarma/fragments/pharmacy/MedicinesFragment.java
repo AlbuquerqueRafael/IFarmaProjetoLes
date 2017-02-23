@@ -44,10 +44,6 @@ public class MedicinesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (container != null) {
-            container.removeAllViews();
-        }
-
         rootView = inflater.inflate(R.layout.fragment_medicines, container, false);
 
         _listView = (RecyclerView) rootView.findViewById(R.id.listview);
@@ -149,16 +145,23 @@ public class MedicinesFragment extends Fragment {
 
 
                 _listView.setAdapter(adapterMed);
-                closeDialog(dialog);
             }
 
         });
     }
 
-    private void initDialog(ProgressDialog dialog){
+    private void initDialog(final ProgressDialog dialog){
         dialog.setMessage("Carregando dados...");
         dialog.setCancelable(false);
         dialog.show();
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        dialog.dismiss();
+                    }
+                }, 3000);
+
     }
 
     private void closeDialog(ProgressDialog dialog){
