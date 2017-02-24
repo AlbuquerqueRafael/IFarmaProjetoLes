@@ -18,7 +18,7 @@ public class PharmaDataValidationTests {
 	public void setUp() throws InvalidUserDataException{				
 		pharma = new Pharma();
 		validCNPJ = "46633676000113";
-		invalidCNPJ = "00000670000003";
+		invalidCNPJ = "0000067000000300000000000";
 		
 	}
 		
@@ -44,8 +44,8 @@ public class PharmaDataValidationTests {
 	@Test
 	public void testShouldFailCreatingInvalidName(){
 		try {
-			pharmaCrt = new Pharma("Gilo boy ph@rm@", "redepharma@hotmail.com", 
-					"5151526w2a", "Rua das Cebolas que n�o fazem chorar", 
+			pharmaCrt = new Pharma("Gilo boy ph@rm@", "redepharma@hotmail.com",
+					"5151526w2a", "Rua das Cebolas que nao fazem chorar",
 					"1500", "58410538");
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());

@@ -62,7 +62,7 @@ public class CostumerDataValidationTests {
 		
 		invalidCEPforCampinaGrande = "50875-090";
 				
-		invalidCPF = "12345678910";
+		invalidCPF = "12345678910000";
 		
 		invalidAddressWithOnlyNumbers = "54564645414651651565";
 		

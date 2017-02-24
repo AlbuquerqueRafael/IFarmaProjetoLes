@@ -1,12 +1,9 @@
 package com.ifarma.ifarma.model;
 
-import com.ifarma.ifarma.exceptions.InvalidUserDataException;
-import com.ifarma.ifarma.util.Validate;
-
 import com.ifarma.ifarma.exceptions.*;
 import com.ifarma.ifarma.util.*;
 
-public abstract class AbstractUser{
+abstract class AbstractUser{
 
 	private String name;
 	private String email; 
@@ -15,10 +12,10 @@ public abstract class AbstractUser{
 	private String houseNumber; 
 	private String cep;
 	
-	public AbstractUser() {}
+	AbstractUser() {}
 	
-	public AbstractUser(final String name, final String email, final String password,
-			final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
+	AbstractUser(final String name, final String email, final String password,
+				 final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
 		
 		if(!Validate.isValidName(name)){
 			throw new InvalidNameException();

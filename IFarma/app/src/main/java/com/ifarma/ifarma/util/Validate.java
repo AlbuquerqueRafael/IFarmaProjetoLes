@@ -1,17 +1,19 @@
 package com.ifarma.ifarma.util;
 
+import android.widget.EditText;
+
 public final class Validate {
 
 	private static final int CG_CEP_END = 58449999;
 	private static final int CG_CEP_BEGIN = 58400000;
-	private final static String NAME_REGEX = "[a-z A-Z]+";
-	private final static String ONLY_NUM_REGEX = "[0-9]+";
-	private final static String HOUSE_NUM_REGEX = "[a-z0-9A-Z-]+";
-	private final static String VALID_CHARS_BEFORE_AT = "[0-9a-zA-Z-._]+";
-	private final static String ONLY_LETTERS = "[a-zA-Z]+";
-	private final static String ADDRESS_REGEX = "[a-z A-Z-.]+";
-	private final static String AT_SYMBOL = "@";
-	private final static String SPACE_STRING = " ";
+	private static final String NAME_REGEX = "[a-z A-Z]+";
+	private static final String ONLY_NUM_REGEX = "[0-9]+";
+	private static final String HOUSE_NUM_REGEX = "[a-z0-9A-Z-]+";
+	private static final String VALID_CHARS_BEFORE_AT = "[0-9a-zA-Z-._]+";
+	private static final String ONLY_LETTERS = "[a-zA-Z]+";
+	private static final String ADDRESS_REGEX = "[a-z A-Z-.]+";
+	private static final String AT_SYMBOL = "@";
+	private static final String SPACE_STRING = " ";
 	
 	private static final int[] PESOCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
 	private static final int[] PESOCNPJ = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
@@ -36,17 +38,21 @@ public final class Validate {
 	public static boolean isValidPassword(final String password) {
 		boolean isValid = true; // NOPMD by Lucas on 17/02/17 18:46
 		final String passwdfirstChar = getFirstCharAsStringOf(password);
-//		if(passwdfirstChar.matches("")  // NOPMD by Lucas on 17/02/17 18:48
-//				|| password.length() < 8
-//				|| password.matches(ONLY_NUM_REGEX)
-//				|| passwdfirstChar.matches(" ")){ // NOPMD by Lucas on 17/02/17 18:49
-//			isValid = false;
-//		}
+		if(passwdfirstChar.matches("")  // NOPMD by Lucas on 17/02/17 18:48
+				|| password.length() < 8
+				|| password.matches(ONLY_NUM_REGEX)
+				|| passwdfirstChar.matches(" ")){ // NOPMD by Lucas on 17/02/17 18:49
+			isValid = false;
+		}
 		return isValid;
 	}
 
 	private static String getFirstCharAsStringOf(final String data){
-		return data.substring(0,1);
+		String answer = "";
+		if(!data.isEmpty()){
+			answer = data.substring(0,1);
+		}
+		return answer;
 	}
 	
 	private static String getPartBeforeAtSymbol(final String email){
@@ -93,7 +99,7 @@ public final class Validate {
 				isValid = true;
 			}
 		}
-		return true;
+		return isValid;
 	}
 
 	public static boolean isValidHouseNumber(final String houseNumber) {
@@ -140,8 +146,79 @@ public final class Validate {
 	      final Integer digit2 = calcDigit(cnpj.substring(0,12) + digit1, PESOCNPJ);
 	      answer = cnpj.equals(cnpj.substring(0,12) + digit1.toString() + digit2.toString());
 	  }
-      return true;
+      return answer;
    }
-		
+	public static boolean isValidMedicine(EditText _nameProductInput, EditText _priceProductInput,
+										  EditText _labProductInput, EditText _descriptionProductInput){
+
+		boolean valid = true;
+		String name = _nameProductInput.getText().toString();
+		String price = _priceProductInput.getText().toString();
+		String lab = _labProductInput.getText().toString();
+		String description = _descriptionProductInput.getText().toString();
+
+		if (!isValidProductName(name)) {
+			_nameProductInput.setError("Nome inválido.");
+			valid = false;
+		} else {
+			_nameProductInput.setError(null);
+		}
+
+		if (price.isEmpty()) {
+			_priceProductInput.setError("Preço inválido.");
+			valid = false;
+		} else {
+			_priceProductInput.setError(null);
+		}
+
+		if (!isValidProductLab(lab)) {
+			_labProductInput.setError("Laboratório inválido.");
+			valid = false;
+		} else {
+			_labProductInput.setError(null);
+		}
+
+		if (!isValidProductDescription(description)) {
+			_descriptionProductInput.setError("Descrição inválida.");
+			valid = false;
+		} else {
+			_descriptionProductInput.setError(null);
+		}
+
+		return valid;
+	}
+
+	public static boolean isValidProductName(final String productName){
+		boolean isValid = true;
+		String firstCharOfProductName = getFirstCharAsStringOf(productName);
+		if(productName.isEmpty() ||
+				!firstCharOfProductName.matches(ONLY_LETTERS) ||
+				!productName.matches("[a-z0-9A-Z-._/ ]+")){
+			isValid = false;
+		}
+		return isValid;
+	}
+
+	public static boolean isValidProductDescription(final String newDescription) {
+		boolean isValid = true;
+		String firstCharOfProductDescription = getFirstCharAsStringOf(newDescription);
+		if(newDescription.isEmpty() ||
+				!firstCharOfProductDescription.matches(ONLY_LETTERS)||
+				!newDescription.matches("[a-z0-9A-Z-,;._/ ]+")){
+			isValid = false;
+		}
+		return isValid;
+	}
+
+	public static boolean isValidProductLab(final String newLab) {
+		boolean isValid = true;
+		String firstCharOfProductLab = getFirstCharAsStringOf(newLab);
+		if(newLab.isEmpty() ||
+				!firstCharOfProductLab.matches(ONLY_LETTERS) ||
+				!newLab.matches("[a-z0-9A-Z-._/& ]+")){
+			isValid = false;
+		}
+		return isValid;
+	}
 
 }

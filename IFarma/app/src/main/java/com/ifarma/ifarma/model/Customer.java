@@ -2,8 +2,6 @@ package com.ifarma.ifarma.model;
 import com.ifarma.ifarma.exceptions.*;
 import com.ifarma.ifarma.util.*;
 
-import com.ifarma.ifarma.exceptions.InvalidUserDataException;
-
 public class Customer extends AbstractUser {
 	
 	private String cpf;

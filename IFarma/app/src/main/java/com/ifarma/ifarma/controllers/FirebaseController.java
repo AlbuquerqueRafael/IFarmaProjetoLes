@@ -5,6 +5,8 @@ import android.util.Log;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.ifarma.ifarma.exceptions.InvalidCEPException;
+import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.model.Customer;
 import com.ifarma.ifarma.model.Pharma;
@@ -60,19 +62,24 @@ public class FirebaseController {
     }
 
     public static void savePharmacy(String name, String email, String password, String address, String houseNumber, String cep,
-                                    String cnpj) throws InvalidUserDataException {
+                                    String cnpj) {
 
         Firebase firebaseRef = getFirebase();
         Firebase pharmarciesReference = firebaseRef.child(PHARMACIES);
 
         Pharma pharma = new Pharma();
-        pharma.setCep(cep);
-        pharma.setHouseNumber(houseNumber);
-        pharma.setAddress(address);
-        pharma.setName(name);
-        pharma.setPassword(password);
-        pharma.setEmail(email);
-        pharma.setCnpj(cnpj);
+        try {
+            pharma.setCep(cep);
+            pharma.setHouseNumber(houseNumber);
+            pharma.setAddress(address);
+            pharma.setName(name);
+            pharma.setPassword(password);
+            pharma.setEmail(email);
+            pharma.setCnpj(cnpj);
+        } catch (InvalidUserDataException e) {
+            e.printStackTrace();
+        }
+
         pharma.initProducts();
 
         String emailNode = Utils.convertEmail(pharma.getEmail());
@@ -205,11 +212,15 @@ public class FirebaseController {
         System.out.println("SAVING PRODUCT");
 
         Product product = new Product();
-        product.setNameProduct(name);
-        product.setPrice(price);
-        product.setLab(lab);
-        product.setDescription(description);
-        product.setGeneric(generic);
+        try {
+            product.setNameProduct(name);
+            product.setPrice(price);
+            product.setLab(lab);
+            product.setDescription(description);
+            product.setGeneric(generic);
+        } catch (InvalidProductDataException e) {
+            e.printStackTrace();
+        }
 
         productsReference.child(product.getNameProduct()).setValue(product);
 
