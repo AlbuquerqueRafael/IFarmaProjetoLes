@@ -1,17 +1,13 @@
 package com.ifarma.ifarma.adapters;
 
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.ifarma.ifarma.R;
-import com.ifarma.ifarma.activities.MainActivity;
-import com.ifarma.ifarma.fragments.PharmaFragment;
 import com.ifarma.ifarma.holders.ViewHolder;
-import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
 
 import java.util.ArrayList;
@@ -19,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.Context;
-import android.widget.Toast;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;

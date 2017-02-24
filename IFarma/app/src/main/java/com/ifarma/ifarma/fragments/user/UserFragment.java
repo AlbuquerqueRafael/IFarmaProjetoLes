@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.activities.MainActivity;
 import com.ifarma.ifarma.controllers.AuthenticationController;
-import com.ifarma.ifarma.fragments.pharmacy.MedicinesFragment;
 import com.ifarma.ifarma.services.AuthenticationState;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class UserFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        callFragment(new UserAccountFragment());
+                        callFragment(new EditInfoUserFragment());
                         break;
                     case 1:
                         break;

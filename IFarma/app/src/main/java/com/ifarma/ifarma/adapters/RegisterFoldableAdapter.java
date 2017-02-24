@@ -46,8 +46,7 @@ import com.ifarma.ifarma.activities.MainActivity;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
-import com.ifarma.ifarma.fragments.user.SearchFragment;
-import com.ifarma.ifarma.fragments.user.UserAccountFragment;
+import com.ifarma.ifarma.fragments.user.EditInfoUserFragment;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
 import java.util.HashMap;
@@ -104,13 +103,15 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
 
                                     if (holder._checkBoxPharmacy.isChecked()){
                                         try {
-                                            FirebaseController.savePharmacy("XD", holder._registerEmailInput.getText().toString(), holder._registerPasswordInput.getText().toString(), "Santa Catarina", "1353", "58414470", "00000000000000");
+                                            FirebaseController.savePharmacy("", holder._registerEmailInput.getText().toString(),
+                                                                            holder._registerPasswordInput.getText().toString(), "", "", "", "");
                                         } catch (InvalidUserDataException e) {
                                             e.printStackTrace();
                                         }
                                     } else {
                                         try {
-                                            FirebaseController.saveCustomer("Mafroso", holder._registerEmailInput.getText().toString(), holder._registerPasswordInput.getText().toString(), "Santa Catarina", "1353", "58414470", "70175610401");
+                                            FirebaseController.saveCustomer("", holder._registerEmailInput.getText().toString(),
+                                                                            holder._registerPasswordInput.getText().toString(), "", "", "", "");
                                         } catch (InvalidUserDataException e) {
                                             e.printStackTrace();
                                         }
@@ -119,14 +120,10 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                                     new android.os.Handler().postDelayed(
                                             new Runnable() {
                                                 public void run() {
-                                                    ((MainActivity) mContext).finish();
-                                                    Intent mIntent = new Intent(mContext, MainActivity.class);
-                                                    Bundle mBundle = new Bundle();
-                                                    mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isChecked());
-                                                    mIntent.putExtras(mBundle);
-                                                    mContext.startActivity(mIntent);
+                                                    progressDialog.dismiss();
+                                                    showDialog(holder);
                                                 }
-                                            }, 2000);
+                                            }, 3000);
 
 
                                 } else {
@@ -234,44 +231,41 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
     }
 
     private void showDialog(final FolderHolder holder){
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(FLAG_LOGGED, true);
+        editor.putString(FLAG_EMAIL, holder._registerEmailInput.getText().toString().trim());
+        editor.commit();
+
         new AlertDialog.Builder(mContext)
                 .setTitle("Alerta")
                 .setMessage("O seu perfil está sendo criado com informações em branco. Deseja terminar o seu cadastro?")
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        Fragment fragment;
+                        ((MainActivity) mContext).finish();
+                        Intent mIntent = new Intent(mContext, MainActivity.class);
+                        Bundle mBundle = new Bundle();
+                        mBundle.putBoolean("incompleteRegister", true);
+                        mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isChecked());
+                        mIntent.putExtras(mBundle);
+                        mContext.startActivity(mIntent);
 
-                        if (holder._checkBoxPharmacy.isSelected()){
-                            fragment = new EditInfoPharmaFragment();
-                        } else {
-                            fragment = new UserAccountFragment();
-                        }
-
-                        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                                ((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragment_container, fragment);
-                        fragmentTransaction.commit();
                     }
                 })
                 .setNegativeButton("Não", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
                         ((MainActivity) mContext).finish();
                         Intent mIntent = new Intent(mContext, MainActivity.class);
                         Bundle mBundle = new Bundle();
-                        mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isSelected());
+                        mBundle.putBoolean("incompleteRegister", true);
+                        mBundle.putBoolean("isPharmacy", holder._checkBoxPharmacy.isChecked());
                         mIntent.putExtras(mBundle);
                         mContext.startActivity(mIntent);
-
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean(FLAG_LOGGED, true);
-                        editor.putString(FLAG_EMAIL, holder._registerEmailInput.getText().toString().trim());
-                        editor.commit();
-
-                        dialog.dismiss();
-
                     }
                 })
                 .show();

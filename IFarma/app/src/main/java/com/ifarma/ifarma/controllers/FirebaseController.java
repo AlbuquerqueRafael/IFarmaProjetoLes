@@ -61,6 +61,17 @@ public class FirebaseController {
         customersReference.child(customerNode).setValue(customer);
     }
 
+    public static void editCustomer(Customer customer) {
+
+        Firebase firebaseRef = getFirebase();
+        Firebase customersReference = firebaseRef.child(CUSTOMERS);
+
+        String emailNode = Utils.convertEmail(customer.getEmail());
+
+        customersReference.child(emailNode).setValue(customer);
+
+    }
+
     public static void savePharmacy(String name, String email, String password, String address, String houseNumber, String cep,
                                     String cnpj) {
 
@@ -244,7 +255,23 @@ public class FirebaseController {
 
     }
 
+    public static void retrieveCurrentCustomer(String customerID, final OnCurrentCustomerGetDataListener listener) {
+        final Firebase pharmasReference = getFirebase().child(CUSTOMERS).child(customerID);
 
+        pharmasReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Customer customer = dataSnapshot.getValue(Customer.class);
+                listener.onSuccess(customer);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+    }
 
 
 

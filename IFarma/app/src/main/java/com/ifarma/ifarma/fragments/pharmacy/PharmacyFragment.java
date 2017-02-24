@@ -16,8 +16,6 @@ import android.widget.Toast;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.activities.MainActivity;
 import com.ifarma.ifarma.controllers.AuthenticationController;
-import com.ifarma.ifarma.fragments.RegisterFragment;
-import com.ifarma.ifarma.fragments.user.UserAccountFragment;
 import com.ifarma.ifarma.services.AuthenticationState;
 
 import java.util.ArrayList;

@@ -29,7 +29,9 @@ import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
+import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
 import com.ifarma.ifarma.fragments.pharmacy.MedicinesFragment;
+import com.ifarma.ifarma.fragments.user.EditInfoUserFragment;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
@@ -45,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String FLAG_LOGGED = "isLogged";
     public static final String FLAG_EMAIL = "currentEmail";
-    public boolean isPharmacy = false;
+    private boolean isPharmacy = false;
+    private boolean incompleteRegister = false;
     private MainActivity mainActivity;
-    private int oldPage = 0;
     private FragmentPagerAdapter adapter;
 
     @Override
@@ -61,6 +63,24 @@ public class MainActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("isPharmacy")) {
             isPharmacy = getIntent().getExtras().getBoolean("isPharmacy");
+        }
+
+        if (getIntent().hasExtra("incompleteRegister")) {
+            if (getIntent().getExtras().getBoolean("incompleteRegister")){
+                incompleteRegister = getIntent().getExtras().getBoolean("incompleteRegister");
+
+                Fragment fragment;
+
+                if (isPharmacy){
+                    fragment = new EditInfoPharmaFragment();
+                } else {
+                    fragment = new EditInfoUserFragment();
+                }
+
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+            }
         }
 
         if (!isPharmacy)
@@ -78,11 +98,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initUI(){
         final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
-        final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
+        ArrayList<NavigationTabBar.Model> models;
 
         final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
 
         if (isPharmacy()){
+            models = new ArrayList<>();
             models.add(
                     new NavigationTabBar.Model.Builder(
                             ContextCompat.getDrawable(this, R.drawable.ic_store_mall_directory_white_24dp),
@@ -92,14 +113,14 @@ public class MainActivity extends AppCompatActivity {
                             .build()
             );
 
-            models.add(
-                    new NavigationTabBar.Model.Builder(
-                            ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp),
-                            Color.parseColor("#00897B"))
-                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp))
-                            .title("Pedidos")
-                            .build()
-            );
+//            models.add(
+//                    new NavigationTabBar.Model.Builder(
+//                            ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp),
+//                            Color.parseColor("#00897B"))
+//                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp))
+//                            .title("Pedidos")
+//                            .build()
+//            );
 
             models.add(
                     new NavigationTabBar.Model.Builder(
@@ -112,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
             adapter = new PharmViewPagerAdapter(getSupportFragmentManager(), getApplicationContext(), models);
         } else {
+            models = new ArrayList<>();
             models.add(
                     new NavigationTabBar.Model.Builder(
                             ContextCompat.getDrawable(this, R.drawable.ic_search_white_24dp),
@@ -121,14 +143,14 @@ public class MainActivity extends AppCompatActivity {
                             .build()
             );
 
-            models.add(
-                    new NavigationTabBar.Model.Builder(
-                            ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp),
-                            Color.parseColor("#00897B"))
-                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp))
-                            .title("Carrinho")
-                            .build()
-            );
+//            models.add(
+//                    new NavigationTabBar.Model.Builder(
+//                            ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp),
+//                            Color.parseColor("#00897B"))
+//                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp))
+//                            .title("Carrinho")
+//                            .build()
+//            );
 
             models.add(
                     new NavigationTabBar.Model.Builder(
@@ -155,17 +177,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(final int position) {
-                Fragment fragment = adapter.getItem(position);
-                if(fragment instanceof SearchFragment){
+                if(position == 0 && !isPharmacy()){
                     android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
 
-                    fragmentTransaction.replace(R.id.activity_main, fragment);
+                    fragmentTransaction.replace(R.id.activity_main, new SearchFragment());
                     fragmentTransaction.commit();
 
-                } else if (fragment instanceof MedicinesFragment){
+                } else if (position == 0 && isPharmacy()){
                     android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
 
-                    fragmentTransaction.replace(R.id.activity_main, fragment);
+                    fragmentTransaction.replace(R.id.activity_main, new MedicinesFragment());
                     fragmentTransaction.commit();
                 }
             }
@@ -185,26 +206,14 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         NavigationTabBar.Model model;
                         if (!isAuthenticated() && !isPharmacy()) {
-                            model = navigationTabBar.getModels().get(2);
+                            model = navigationTabBar.getModels().get(navigationTabBar.getModels().size() - 1);
                             model.showBadge();
-                        } else {
-                            if (isPharmacy()) {
-                                if (getPharmRequestsCount() > 0) {
-                                    model = navigationTabBar.getModels().get(1);
-                                    model.setBadgeTitle("+ " + getPharmRequestsCount());
-                                    model.showBadge();
-                                }
-                            }
                         }
                     }
                 }, 100);
             }
         }, 500);
 
-    }
-
-    private int getPharmRequestsCount(){
-        return 0;
     }
 
     private void checkIsPharmacy(){

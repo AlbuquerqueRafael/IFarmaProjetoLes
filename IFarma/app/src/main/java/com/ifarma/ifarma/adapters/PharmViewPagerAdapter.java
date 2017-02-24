@@ -40,9 +40,9 @@ public class PharmViewPagerAdapter extends FragmentPagerAdapter {
         switch (position){
             case 0:
                 return new MedicinesFragment();
+//            case 1:
+//                return new DemandFragment();
             case 1:
-                return new DemandFragment();
-            case 2:
                 return new PharmacyFragment();
             default:
                 return new MedicinesFragment();

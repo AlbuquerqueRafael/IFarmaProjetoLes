@@ -52,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
-                    android:hint="Nome*"
+                    android:hint="Nome"
                     android:textColor="#000"
                     android:textSize="16sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -63,11 +63,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
-                <EditText android:id="@+id/cnpj_input"
+                <EditText android:id="@+id/cpf_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:hint="CPF*"
+                    android:hint="CPF"
                     android:textColor="#000"
                     android:textSize="16sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPostalAddress"
-                    android:hint="Endereço*"
+                    android:hint="Endereço"
                     android:textColor="#000"
                     android:textSize="16sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -97,7 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:hint="CEP*"
+                    android:hint="CEP"
                     android:textColor="#000"
                     android:textSize="16sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -107,17 +107,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
-                <EditText android:id="@+id/pharm_number"
+                <EditText android:id="@+id/house_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:hint="Número*"
+                    android:hint="Número"
                     android:textColor="#000"
                     android:textSize="16sp"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_cadastrar"
+                android:id="@+id/btn_save"
                 android:background="@drawable/rounded_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

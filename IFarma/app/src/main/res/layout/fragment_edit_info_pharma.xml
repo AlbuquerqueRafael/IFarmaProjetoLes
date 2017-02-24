@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"
-                    android:hint="Nome*"
+                    android:hint="Nome"
                     android:textColor="#000"
                     android:textSize="16sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -68,7 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:hint="CNPJ*"
+                    android:hint="CNPJ"
                     android:textColor="#000"
                     android:textSize="16sp"/>
             </android.support.design.widget.TextInputLayout>
