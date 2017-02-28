@@ -6,15 +6,18 @@ import com.ifarma.ifarma.util.*;
 abstract class AbstractUser{
 
 	private String name;
-	private String email; 
-	private String password;
+	private String email;
 	private String address; 
 	private String houseNumber; 
 	private String cep;
-	
-	AbstractUser() {}
-	
-	AbstractUser(final String name, final String email, final String password,
+
+    public AbstractUser() {}
+
+    public AbstractUser(String email){
+		this.email = email;
+	}
+
+    public AbstractUser(final String name, final String email,
 				 final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
 		
 		if(!Validate.isValidName(name)){
@@ -24,11 +27,7 @@ abstract class AbstractUser{
 		if(!Validate.isValidEmail(email)){
 			throw new InvalidEmailException();
 		}
-		
-		if(!Validate.isValidPassword(password)){
-			throw new InvalidPasswordException();
-		}
-		
+
 		if(!Validate.isValidAddress(address)){
 			throw new InvalidAddressException();
 		}
@@ -43,7 +42,6 @@ abstract class AbstractUser{
 		
 		this.name = name;
 		this.email = email;
-		this.password = password;
 		this.address = address;
 		this.houseNumber = houseNumber;
 		this.cep = cep;
@@ -58,17 +56,6 @@ abstract class AbstractUser{
 			throw new InvalidNameException();
 		}
 		this.name = name;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(final String password) throws InvalidPasswordException {
-		if(!Validate.isValidPassword(password)){
-			throw new InvalidPasswordException();
-		}
-		this.password = password;
 	}
 
 	public String getAddress() {

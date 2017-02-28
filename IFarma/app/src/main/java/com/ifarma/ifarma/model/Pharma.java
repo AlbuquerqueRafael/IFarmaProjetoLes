@@ -10,15 +10,19 @@ import java.util.Map;
 public class Pharma extends AbstractUser implements Serializable {
 
 	private Map<String, Product> products;
-
 	private String cnpj;
-	public Pharma(final String name, final String email, final String password,
-			final String address, final String houseNumber, final String cep)
+
+	public Pharma(final String name, final String email,
+				  final String address, final String houseNumber, final String cep)
 			throws InvalidUserDataException {
-		super(name, email, password, address, houseNumber, cep);
+		super(name, email, address, houseNumber, cep);
 	}
-	
-	public Pharma(){super();}
+
+    public Pharma(String email){
+		super(email);
+	}
+
+    public Pharma(){super();}
 	
 	public String getCnpj() {
 		return cnpj;

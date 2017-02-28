@@ -102,6 +102,8 @@ public final class Validate {
 		return isValid;
 	}
 
+	/** A house number is valid if starts with a number. Nevertheless, the house number may have
+	 * letters and a hyphen to be used as separator. */
 	public static boolean isValidHouseNumber(final String houseNumber) {
 		boolean isValid = true; // NOPMD by Lucas on 17/02/17 18:47
 		final String houseNumFirstChar = getFirstCharAsStringOf(houseNumber);
@@ -123,6 +125,8 @@ public final class Validate {
       return soma > 9 ? 0 : soma;
    }
 
+	/** Check if certain CPF is valid according to how this number is constructed in Brazil.
+	 * For example, has exactly 11 characters.*/
    public static boolean isValidCPF(final String cpf) {
 	  boolean answer = true; // NOPMD by Lucas on 17/02/17 18:47
       if (cpf==null || cpf.length() != 11){
@@ -136,6 +140,8 @@ public final class Validate {
       return answer;
    }
 
+	/** Check if certain CNPJ is valid according to how this number is constructed in Brazil.
+	 * For example, has exactly 14 characters.*/
    public static boolean isValidCNPJ(final String cnpj) {
 	  boolean answer = true; // NOPMD by Lucas on 17/02/17 18:47
       if (cnpj==null || cnpj.length()!=14){ 
@@ -188,6 +194,8 @@ public final class Validate {
 		return valid;
 	}
 
+    /**A product name is valid if starts with a letter and has no special symbols, except for
+     * dot, underscore, hyphen, space and bar.*/
 	public static boolean isValidProductName(final String productName){
 		boolean isValid = true;
 		String firstCharOfProductName = getFirstCharAsStringOf(productName);
@@ -199,6 +207,8 @@ public final class Validate {
 		return isValid;
 	}
 
+    /**A description is valid if starts with a letter and has no special symbols, except for
+     * dot, underscore, comma, semicolon, hyphen, space and bar.*/
 	public static boolean isValidProductDescription(final String newDescription) {
 		boolean isValid = true;
 		String firstCharOfProductDescription = getFirstCharAsStringOf(newDescription);
@@ -210,6 +220,8 @@ public final class Validate {
 		return isValid;
 	}
 
+    /**A lab name is valid if starts with a letter and has no special symbols, except for
+     * dot, underscore, hyphen, space, & and bar.*/
 	public static boolean isValidProductLab(final String newLab) {
 		boolean isValid = true;
 		String firstCharOfProductLab = getFirstCharAsStringOf(newLab);

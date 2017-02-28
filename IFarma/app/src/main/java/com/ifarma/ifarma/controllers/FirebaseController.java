@@ -1,11 +1,9 @@
 package com.ifarma.ifarma.controllers;
 
-import android.util.Log;
-
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.ifarma.ifarma.exceptions.InvalidCEPException;
+import com.ifarma.ifarma.exceptions.InvalidNameException;
 import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.model.Customer;
@@ -39,22 +37,25 @@ public class FirebaseController {
         return firebase;
     }
 
-    public static void saveCustomer(String name, String email, String password, String address, String houseNumber, String cep,
-        String cpf) throws InvalidUserDataException {
+    public static void saveCustomer(String name, String email, String address, String houseNumber, String cep,
+                                    String cpf){
 
-        System.out.println("SAVING CUSTOMER");
+        Utils.showSavingCostumerMsg();
 
         Firebase firebaseRef = getFirebase();
         Firebase customersReference = firebaseRef.child(CUSTOMERS);
 
         Customer customer = new Customer();
-        customer.setName(name);
-        customer.setCpf(cpf);
-        customer.setEmail(email);
-        customer.setPassword(password);
-        customer.setAddress(address);
-        customer.setHouseNumber(houseNumber);
-        customer.setCep(cep);
+        try {
+            customer.setName(name);
+            customer.setCpf(cpf);
+            customer.setEmail(email);
+            customer.setAddress(address);
+            customer.setHouseNumber(houseNumber);
+            customer.setCep(cep);
+        } catch (InvalidUserDataException e) {
+            e.printStackTrace();
+        }
 
         String customerNode = Utils.convertEmail(customer.getEmail());
 
@@ -72,7 +73,7 @@ public class FirebaseController {
 
     }
 
-    public static void savePharmacy(String name, String email, String password, String address, String houseNumber, String cep,
+    public static void savePharmacy(String name, String email, String address, String houseNumber, String cep,
                                     String cnpj) {
 
         Firebase firebaseRef = getFirebase();
@@ -84,7 +85,6 @@ public class FirebaseController {
             pharma.setHouseNumber(houseNumber);
             pharma.setAddress(address);
             pharma.setName(name);
-            pharma.setPassword(password);
             pharma.setEmail(email);
             pharma.setCnpj(cnpj);
         } catch (InvalidUserDataException e) {
@@ -125,29 +125,27 @@ public class FirebaseController {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-                System.out.println("FILHO MODIFICADO!");
-
+                Utils.showChildModifiedMsg();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                System.out.println("onChildRemoved");
+                Utils.showChildRemovedMsg();
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-                System.out.println("onChildMoved");
+                Utils.showChildMovedMsg();
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("onCancelled");
+                Utils.showOnCancelledMsg();
             }
 
 
         });
     }
-
 
     public static void retrieveProducts( final OnMedGetDataListener listener) {
         final Firebase productsReference = getFirebase().child(PHARMACIES);
@@ -169,29 +167,28 @@ public class FirebaseController {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-                System.out.println("FILHO MODIFICADO!");
+                Utils.showChildModifiedMsg();
 
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                System.out.println("onChildRemoved");
+                Utils.showChildRemovedMsg();
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
-                System.out.println("onChildMoved");
+                Utils.showChildMovedMsg();
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("onCancelled");
+                Utils.showOnCancelledMsg();
             }
 
 
         });
     }
-
 
     private void collectPhoneNumbers(Map<String,Object> users) {
 
@@ -220,7 +217,7 @@ public class FirebaseController {
         Firebase firebaseRef = getFirebase();
         Firebase productsReference = firebaseRef.child(PRODUCTS);
 
-        System.out.println("SAVING PRODUCT");
+        Utils.showSavingProductMsg();
 
         Product product = new Product();
         try {

@@ -5,14 +5,18 @@ import com.ifarma.ifarma.util.*;
 public class Customer extends AbstractUser {
 	
 	private String cpf;
-	
+
 	public Customer() {super();}
-	
-	public Customer(final String name, final String email, final String password, 
-			final String address, final String houseNumber, final String cep)
+
+	public Customer(String email){
+		super(email);
+	}
+
+	public Customer(final String name, final String email,
+					final String address, final String houseNumber, final String cep)
 			throws InvalidUserDataException {
 
-		super(name, email, password, address, houseNumber, cep);
+		super(name, email, address, houseNumber, cep);
 	}
 	
 	public String getCpf() {

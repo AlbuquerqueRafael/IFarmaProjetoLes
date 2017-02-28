@@ -26,7 +26,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -45,8 +44,6 @@ import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.activities.MainActivity;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
-import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
-import com.ifarma.ifarma.fragments.user.EditInfoUserFragment;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
 import java.util.HashMap;
@@ -102,16 +99,12 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                                 if (task.isSuccessful()){
 
                                     if (holder._checkBoxPharmacy.isChecked()){
-                                        try {
-                                            FirebaseController.savePharmacy("", holder._registerEmailInput.getText().toString(),
-                                                                            holder._registerPasswordInput.getText().toString(), "", "", "", "");
-                                        } catch (InvalidUserDataException e) {
-                                            e.printStackTrace();
-                                        }
+                                        FirebaseController.savePharmacy("", holder._registerEmailInput.getText().toString(),
+                                                "", "", "", "");
                                     } else {
                                         try {
                                             FirebaseController.saveCustomer("", holder._registerEmailInput.getText().toString(),
-                                                                            holder._registerPasswordInput.getText().toString(), "", "", "", "");
+                                                    "", "", "", "");
                                         } catch (InvalidUserDataException e) {
                                             e.printStackTrace();
                                         }

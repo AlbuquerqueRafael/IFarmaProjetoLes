@@ -29,8 +29,10 @@ import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
+import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.util.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,11 +95,15 @@ public class AddProductFragment extends Fragment {
                     String lab = _labProductInput.getText().toString();
                     String description = _descriptionProductInput.getText().toString();
                     boolean generic = _genericoCheckbox.isChecked();
-                    product.setNameProduct(name);
-                    product.setDescription(description);
-                    product.setPrice(price);
-                    product.setGeneric(generic);
-                    product.setLab(lab);
+                    try {
+                        product.setNameProduct(name);
+                        product.setPrice(price);
+                        product.setLab(lab);
+                        product.setDescription(description);
+                        product.setGeneric(generic);
+                    } catch (InvalidProductDataException e) {
+                        e.printStackTrace();
+                    }
 
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     String defaultState = "";
@@ -126,40 +132,40 @@ public class AddProductFragment extends Fragment {
     private static boolean validateLogin(EditText _nameProductInput, EditText _priceProductInput,
                                          EditText _labProductInput, EditText _descriptionProductInput){
 
-        boolean valid = true;
-        String name = _nameProductInput.getText().toString();
-        String price = _priceProductInput.getText().toString();
-        String lab = _labProductInput.getText().toString();
-        String description = _descriptionProductInput.getText().toString();
+        boolean isValid = Validate.isValidMedicine(_nameProductInput, _priceProductInput, _labProductInput, _descriptionProductInput);
+//        String name = _nameProductInput.getText().toString();
+//        String price = _priceProductInput.getText().toString();
+//        String lab = _labProductInput.getText().toString();
+//        String description = _descriptionProductInput.getText().toString();
+//
+//        if (name.isEmpty()) {
+//            _nameProductInput.setError("Nome inválido.");
+//            isValid = false;
+//        } else {
+//            _nameProductInput.setError(null);
+//        }
+//
+//        if (price.isEmpty()) {
+//            _priceProductInput.setError("Preço inválido.");
+//            isValid = false;
+//        } else {
+//            _priceProductInput.setError(null);
+//        }
+//
+//        if (lab.isEmpty()) {
+//            _labProductInput.setError("Laboratório inválido.");
+//            isValid = false;
+//        } else {
+//            _labProductInput.setError(null);
+//        }
+//
+//        if (description.isEmpty()) {
+//            _descriptionProductInput.setError("Descrição inválida.");
+//            isValid = false;
+//        } else {
+//            _descriptionProductInput.setError(null);
+//        }
 
-        if (name.isEmpty()) {
-            _nameProductInput.setError("Nome inválido.");
-            valid = false;
-        } else {
-            _nameProductInput.setError(null);
-        }
-
-        if (price.isEmpty()) {
-            _priceProductInput.setError("Preço inválido.");
-            valid = false;
-        } else {
-            _priceProductInput.setError(null);
-        }
-
-        if (lab.isEmpty()) {
-            _labProductInput.setError("Laboratório inválido.");
-            valid = false;
-        } else {
-            _labProductInput.setError(null);
-        }
-
-        if (description.isEmpty()) {
-            _descriptionProductInput.setError("Descrição inválida.");
-            valid = false;
-        } else {
-            _descriptionProductInput.setError(null);
-        }
-
-        return valid;
+        return isValid;
     }
 }
