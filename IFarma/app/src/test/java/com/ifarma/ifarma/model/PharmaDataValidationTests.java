@@ -4,8 +4,6 @@ import com.ifarma.ifarma.exceptions.*;
 
 import org.junit.*;
 
-import com.ifarma.ifarma.model.*;
-
 public class PharmaDataValidationTests {
 			
 	private String validCNPJ;
@@ -45,7 +43,7 @@ public class PharmaDataValidationTests {
 	public void testShouldFailCreatingInvalidName(){
 		try {
 			pharmaCrt = new Pharma("Gilo boy ph@rm@", "redepharma@hotmail.com",
-					"5151526w2a", "Rua das Cebolas que nao fazem chorar",
+					"Rua das Cebolas que nao fazem chorar",
 					"1500", "58410538");
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());

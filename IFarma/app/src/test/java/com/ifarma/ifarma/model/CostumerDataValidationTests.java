@@ -9,10 +9,7 @@ public class CostumerDataValidationTests {
 		
 	private String invalidNameMixingLettersAndNumbersAndSpecialChars;
 	private String validName;
-	
-	private String invalidPasswordOnlyNumbers;
-	private String validPasswordLettersAndSpecialChars;
-	
+
 	private String validMail;
 	private String invalidMailStartingWithNumber;
 	
@@ -37,9 +34,7 @@ public class CostumerDataValidationTests {
 		validName = "Jobson Lucas";		
 		
 		validMail = "lucas@gmail.com";
-	
-		validPasswordLettersAndSpecialChars = "lucas%&*";
-		
+
 		validAddress = "R. das mulatas saradas-loucas";
 		
 		validHouseNumber = "150";
@@ -54,12 +49,10 @@ public class CostumerDataValidationTests {
 	
 	@Before
 	public void setUpInvalidUserData(){
-		invalidNameMixingLettersAndNumbersAndSpecialChars = "J156651o51b$@# 156156�u�@!asdqwe2 !@#sdf#WER@xcv$%$���&**/-*";
+		invalidNameMixingLettersAndNumbersAndSpecialChars = "J156651o51b$@# 1561568u([!asdqwe2 !@#sdf#WER@xcv$%$**/-*";
 				
 		invalidMailStartingWithNumber = "9sdfsdf99@gmail.com";
-				
-		invalidPasswordOnlyNumbers = "46644684";
-		
+
 		invalidCEPforCampinaGrande = "50875-090";
 				
 		invalidCPF = "12345678910000";
@@ -104,16 +97,6 @@ public class CostumerDataValidationTests {
 			customer.setEmail(invalidMailStartingWithNumber);
 		} catch (InvalidEmailException e) {
 			Assert.assertEquals(new InvalidEmailException().getMessage(), e.getMessage());
-		}		
-		
-	}
-	
-	@Test
-	public void testShouldNotSetPasswordOfCustomer(){
-		try {
-			customer.setPassword(invalidPasswordOnlyNumbers);
-		} catch (InvalidPasswordException e) {
-			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
 		}		
 		
 	}
@@ -169,18 +152,7 @@ public class CostumerDataValidationTests {
 		Assert.assertEquals(validMail, customer.getEmail());
 		
 	}
-	
-	@Test
-	public void testShouldSetPasswordOfCustomer(){
-		try {
-			customer.setPassword(validPasswordLettersAndSpecialChars);
-		} catch (InvalidPasswordException e) {
-			Assert.assertEquals(new InvalidPasswordException().getMessage(), e.getMessage());
-		}		
-		Assert.assertEquals(validPasswordLettersAndSpecialChars, customer.getPassword());
-		
-	}
-	
+
 	@Test
 	public void testShouldSetAddressOfCustomer(){
 		try {

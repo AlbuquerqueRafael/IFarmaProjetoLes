@@ -17,9 +17,6 @@ public class PharmaOperationsTests {
 	private double price = 2.50;
 
     private Pharma pharma;
-    private String validCNPJ;
-    private String pharmaName;
-
 
 	@Before
 	public void setUpProducts() throws InvalidProductDataException{
@@ -32,12 +29,11 @@ public class PharmaOperationsTests {
     @Before
     public void setUpPharma() throws InvalidUserDataException {
         pharma = new Pharma("Gilo boy pharma", "redepharma@hotmail.com",
-                "5151526w2a", "Rua das Cebolas que nao fazem chorar",
+                "Rua das Cebolas que nao fazem chorar",
                 "1500", "58410538");
 
     }
 
-	
 	@Test
 	public void testShouldAddAndRemoveProduct(){
         pharma.initProducts();
