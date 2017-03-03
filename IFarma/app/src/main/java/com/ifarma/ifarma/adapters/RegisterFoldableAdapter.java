@@ -99,15 +99,9 @@ public class RegisterFoldableAdapter extends RecyclerView.Adapter<RegisterFoldab
                                 if (task.isSuccessful()){
 
                                     if (holder._checkBoxPharmacy.isChecked()){
-                                        FirebaseController.savePharmacy("", holder._registerEmailInput.getText().toString(),
-                                                "", "", "", "");
+                                        FirebaseController.savePharmacy(holder._registerEmailInput.getText().toString());
                                     } else {
-                                        try {
-                                            FirebaseController.saveCustomer("", holder._registerEmailInput.getText().toString(),
-                                                    "", "", "", "");
-                                        } catch (InvalidUserDataException e) {
-                                            e.printStackTrace();
-                                        }
+                                            FirebaseController.saveCustomer(holder._registerEmailInput.getText().toString());
                                     }
 
                                     new android.os.Handler().postDelayed(

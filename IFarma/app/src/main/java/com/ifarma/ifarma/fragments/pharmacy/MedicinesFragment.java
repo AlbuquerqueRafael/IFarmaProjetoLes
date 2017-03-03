@@ -117,7 +117,6 @@ public class MedicinesFragment extends Fragment {
     public void initMedList(){
         listItems = new ArrayList<Product>();
         final ProgressDialog dialog = new ProgressDialog(getActivity());
-        initDialog(dialog);
 
         FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
@@ -145,27 +144,9 @@ public class MedicinesFragment extends Fragment {
 
 
                 _listView.setAdapter(adapterMed);
-                closeDialog(dialog);
             }
 
         });
     }
 
-    private void initDialog(final ProgressDialog dialog){
-        dialog.setMessage("Carregando dados...");
-        dialog.setCancelable(false);
-        dialog.show();
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        dialog.dismiss();
-                    }
-                }, 3000);
-
-    }
-
-    private void closeDialog(ProgressDialog dialog){
-        dialog.dismiss();
-    }
 }

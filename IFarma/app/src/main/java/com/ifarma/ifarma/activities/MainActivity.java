@@ -113,14 +113,14 @@ public class MainActivity extends AppCompatActivity {
                             .build()
             );
 
-//            models.add(
-//                    new NavigationTabBar.Model.Builder(
-//                            ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp),
-//                            Color.parseColor("#00897B"))
-//                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp))
-//                            .title("Pedidos")
-//                            .build()
-//            );
+            models.add(
+                    new NavigationTabBar.Model.Builder(
+                            ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp),
+                            Color.parseColor("#00897B"))
+                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_inbox_white_24dp))
+                            .title("Pedidos")
+                            .build()
+            );
 
             models.add(
                     new NavigationTabBar.Model.Builder(
@@ -143,14 +143,14 @@ public class MainActivity extends AppCompatActivity {
                             .build()
             );
 
-//            models.add(
-//                    new NavigationTabBar.Model.Builder(
-//                            ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp),
-//                            Color.parseColor("#00897B"))
-//                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp))
-//                            .title("Carrinho")
-//                            .build()
-//            );
+            models.add(
+                    new NavigationTabBar.Model.Builder(
+                            ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp),
+                            Color.parseColor("#00897B"))
+                            .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_add_shopping_cart_white_24dp))
+                            .title("Carrinho")
+                            .build()
+            );
 
             models.add(
                     new NavigationTabBar.Model.Builder(
@@ -176,20 +176,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {}
 
             @Override
-            public void onPageSelected(final int position) {
-                if(position == 0 && !isPharmacy()){
-                    android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
-
-                    fragmentTransaction.replace(R.id.activity_main, new SearchFragment());
-                    fragmentTransaction.commit();
-
-                } else if (position == 0 && isPharmacy()){
-                    android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
-
-                    fragmentTransaction.replace(R.id.activity_main, new MedicinesFragment());
-                    fragmentTransaction.commit();
-                }
-            }
+            public void onPageSelected(final int position) {}
 
             @Override
             public void onPageScrollStateChanged(final int state) {}
@@ -245,6 +232,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment f = this.getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (f instanceof EditInfoPharmaFragment || f instanceof  EditInfoUserFragment){
+            Toast.makeText(this, "Você precisa terminar o cadastro", Toast.LENGTH_SHORT).show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private boolean isPharmacy(){

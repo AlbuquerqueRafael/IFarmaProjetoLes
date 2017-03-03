@@ -3,10 +3,10 @@ package com.ifarma.ifarma.controllers;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.ifarma.ifarma.exceptions.InvalidNameException;
 import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.model.Customer;
+import com.ifarma.ifarma.model.Order;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.util.Utils;
 import com.ifarma.ifarma.model.Product;
@@ -26,6 +26,7 @@ public class FirebaseController {
     private final static String CUSTOMERS = "customers";
     private final static String PHARMACIES = "pharmacies";
     private final static String PRODUCTS = "products";
+    private final static String ORDERS = "orders";
     public static final String FIREBASE_URL = "https://ifarma-5d2e6.firebaseio.com/";
 
     private static Firebase firebase;
@@ -37,25 +38,24 @@ public class FirebaseController {
         return firebase;
     }
 
-    public static void saveCustomer(String name, String email, String address, String houseNumber, String cep,
-                                    String cpf){
+    public static void sendOrder(String pharmacyId, Order order){
+        Firebase firebaseRef = getFirebase();
+        Firebase demandsReference = firebaseRef.child(PHARMACIES).child(pharmacyId).child(ORDERS);
+
+        Firebase newDemand = demandsReference.push();
+
+        newDemand.setValue(order);
+
+    }
+
+    public static void saveCustomer(String email){
 
         Utils.showSavingCostumerMsg();
 
         Firebase firebaseRef = getFirebase();
         Firebase customersReference = firebaseRef.child(CUSTOMERS);
 
-        Customer customer = new Customer();
-        try {
-            customer.setName(name);
-            customer.setCpf(cpf);
-            customer.setEmail(email);
-            customer.setAddress(address);
-            customer.setHouseNumber(houseNumber);
-            customer.setCep(cep);
-        } catch (InvalidUserDataException e) {
-            e.printStackTrace();
-        }
+        Customer customer = new Customer(email);
 
         String customerNode = Utils.convertEmail(customer.getEmail());
 
@@ -73,25 +73,12 @@ public class FirebaseController {
 
     }
 
-    public static void savePharmacy(String name, String email, String address, String houseNumber, String cep,
-                                    String cnpj) {
+    public static void savePharmacy(String email) {
 
         Firebase firebaseRef = getFirebase();
         Firebase pharmarciesReference = firebaseRef.child(PHARMACIES);
 
-        Pharma pharma = new Pharma();
-        try {
-            pharma.setCep(cep);
-            pharma.setHouseNumber(houseNumber);
-            pharma.setAddress(address);
-            pharma.setName(name);
-            pharma.setEmail(email);
-            pharma.setCnpj(cnpj);
-        } catch (InvalidUserDataException e) {
-            e.printStackTrace();
-        }
-
-        pharma.initProducts();
+        Pharma pharma = new Pharma(email);
 
         String emailNode = Utils.convertEmail(pharma.getEmail());
 
@@ -117,7 +104,18 @@ public class FirebaseController {
         pharmasReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                Pharma pharma = dataSnapshot.getValue(Pharma.class);
+
+                String name = dataSnapshot.child("name").getValue().toString();
+                String emptyName = "";
+
+                Pharma pharma;
+
+                if (emptyName.equals(name)) {
+                    pharma = new Pharma(dataSnapshot.child("email").getValue().toString());
+                } else {
+                    pharma = dataSnapshot.getValue(Pharma.class);
+                }
+
                 lista.add(pharma);
 
                 listener.onSuccess(lista);
@@ -240,7 +238,17 @@ public class FirebaseController {
         pharmasReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Pharma pharma = dataSnapshot.getValue(Pharma.class);
+                String name = dataSnapshot.child("name").getValue().toString();
+                String emptyName = "";
+
+                Pharma pharma;
+
+                if (emptyName.equals(name)) {
+                    pharma = new Pharma(dataSnapshot.child("email").getValue().toString());
+                } else {
+                    pharma = dataSnapshot.getValue(Pharma.class);
+                }
+
                 listener.onSuccess(pharma);
             }
 
@@ -258,7 +266,18 @@ public class FirebaseController {
         pharmasReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Customer customer = dataSnapshot.getValue(Customer.class);
+
+                String name = dataSnapshot.child("name").getValue().toString();
+                String emptyName = "";
+
+                Customer customer;
+
+                if (emptyName.equals(name)) {
+                    customer = new Customer(dataSnapshot.child("email").getValue().toString());
+                } else {
+                    customer = dataSnapshot.getValue(Customer.class);
+                }
+
                 listener.onSuccess(customer);
             }
 

@@ -20,6 +20,7 @@ public class Pharma extends AbstractUser implements Serializable {
 
     public Pharma(String email){
 		super(email);
+		this.cnpj = "";
 	}
 
     public Pharma(){super();}
@@ -55,7 +56,4 @@ public class Pharma extends AbstractUser implements Serializable {
 		return products;
 	}
 
-	public int getTotalProductsRegistered(){
-		return getProducts().size();
-	}
 }

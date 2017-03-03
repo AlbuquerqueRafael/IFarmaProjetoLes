@@ -45,14 +45,14 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
         switch (position){
             case 0:
                 return new SearchFragment();
-//            case 1:
-//                return new CartFragment();
             case 1:
+                return new CartFragment();
+            case 2:
                 if (isAuthenticated())
                     return new UserFragment();
                 return new AccountFragment();
             default:
-                return new SearchFragment();
+                return null;
         }
     }
 

@@ -14,12 +14,14 @@ public class ViewHolder extends RecyclerView.ViewHolder{
     public TextView medPrice;
     public TextView medName;
     public TextView medDescription;
+    public TextView medPharmacy;
 
     public ViewHolder(View itemView) {
         super(itemView);
-        medName = (TextView) itemView.findViewById(R.id.medName);
-        medPrice = (TextView) itemView.findViewById(R.id.medPrice);
-        medDescription = (TextView) itemView.findViewById(R.id.medDescription);
+        medName = (TextView) itemView.findViewById(R.id.remedy_name);
+        medPrice = (TextView) itemView.findViewById(R.id.remedy_price);
+        medDescription = (TextView) itemView.findViewById(R.id.remedy_description);
+        medPharmacy = (TextView) itemView.findViewById(R.id.remedy_pharm);
 
     }
 }

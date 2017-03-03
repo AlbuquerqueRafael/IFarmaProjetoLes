@@ -14,9 +14,9 @@ public class Product implements Serializable{
     private String description;
     private boolean generic;
     private String pharmacyId;
+    private String pharmacyName;
 
-
-    public Product(String name, double price, String lab, String description, boolean generic, String pharmacyId) throws InvalidProductDataException{
+    public Product(String name, double price, String lab, String description, boolean generic, String pharmacyId, String pharmacyName) throws InvalidProductDataException{
             if(!Validate.isValidProductName(name)){
                 throw new InvalidProductDataException("The Product Name is invalid.");
             }
@@ -32,6 +32,7 @@ public class Product implements Serializable{
         this.description = description;
         this.generic = generic;
         this.pharmacyId = pharmacyId;
+        this.pharmacyName = pharmacyName;
     }
 
     public Product(){}
@@ -105,4 +106,11 @@ public class Product implements Serializable{
     }
 
 
+    public String getPharmacyName() {
+        return this.pharmacyName;
+    }
+
+    public void setPharmacyName(String pharmacyName){
+        this.pharmacyName = pharmacyName;
+    }
 }

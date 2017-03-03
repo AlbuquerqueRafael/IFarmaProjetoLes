@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.Context;
+import android.widget.Toast;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -33,7 +34,6 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
     private Context context;
     private ViewHolder holder;
     private final PublishSubject<Product> onClickSubject = PublishSubject.create();
-
 
     public MedicineSearchAdapter(Context context, ArrayList<Product> mProductArrayList) {
 
@@ -57,6 +57,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
         holder.medName.setText(mDisplayedValues.get(position).getNameProduct());
         holder.medPrice.setText("R$ " + mDisplayedValues.get(position).getPrice() + "");
         holder.medDescription.setText(mDisplayedValues.get(position).getDescription());
+        holder.medPharmacy.setText(mDisplayedValues.get(position).getPharmacyName());
 
         final Product product = mDisplayedValues.get(position);
 
@@ -67,13 +68,22 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
 
                 new AlertDialog.Builder(context)
                         .setTitle("Informações do Produto")
-                        .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab()  + "\nDescrição: " + product.getDescription() + "\nPreço: R$ " + product.getPrice())
+                        .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab()  + "\nDescrição: " + product.getDescription()
+                                + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + product.getPrice())
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         })
                         .show();
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, product.getNameProduct(), Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
     }

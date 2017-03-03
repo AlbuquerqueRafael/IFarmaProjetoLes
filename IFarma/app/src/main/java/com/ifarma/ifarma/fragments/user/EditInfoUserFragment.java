@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class EditInfoUserFragment extends Fragment {
     private EditText _cepField;
     private EditText _houseNumberField;
     private Customer customer;
+    private ImageView _backButton;
     public static final String FLAG_EMAIL = "currentEmail";
 
     @Override
@@ -38,7 +40,7 @@ public class EditInfoUserFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_user_register, container, false);
 
-        ImageView _backButton = (ImageView) rootView.findViewById(R.id.back_btn);
+        _backButton = (ImageView) rootView.findViewById(R.id.back_btn);
 
         final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
         _frameLayout.setVisibility(View.VISIBLE);
@@ -115,11 +117,15 @@ public class EditInfoUserFragment extends Fragment {
             public void onSuccess(Customer currentCustomer) {
                 customer = new Customer();
                 customer = currentCustomer;
-                _nameField.setText(customer.getName());
-                _cpfField.setText(customer.getCpf());
-                _addressField.setText(customer.getAddress());
-                _houseNumberField.setText(customer.getHouseNumber());
-                _cepField.setText(customer.getCep());
+                _nameField.setText(customer.getName().trim());
+                _cpfField.setText(customer.getCpf().trim());
+                _addressField.setText(customer.getAddress().trim());
+                _houseNumberField.setText(customer.getHouseNumber().trim());
+                _cepField.setText(customer.getCep().trim());
+
+                if (customer.getName().equals("")){
+                    _backButton.setVisibility(View.GONE);
+                }
 
                 dialog.dismiss();
             }
@@ -132,6 +138,7 @@ public class EditInfoUserFragment extends Fragment {
         }, TIME);
 
     }
+
 
     private void initDialog(ProgressDialog dialog){
         dialog.setMessage("Carregando dados...");

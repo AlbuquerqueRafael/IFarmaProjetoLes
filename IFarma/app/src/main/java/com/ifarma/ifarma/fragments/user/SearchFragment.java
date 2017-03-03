@@ -57,10 +57,6 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (container != null) {
-            container.removeAllViews();
-        }
-
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         _searchInput = (EditText) rootView.findViewById(R.id.txtsearch);
         _listView = (RecyclerView) rootView.findViewById(R.id.listview);
@@ -143,7 +139,6 @@ public class SearchFragment extends Fragment {
     public void initMedList(){
         listItems = new ArrayList<Product>();
         final ProgressDialog dialog = new ProgressDialog(getActivity());
-        initDialog(dialog);
 
         FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
@@ -166,7 +161,6 @@ public class SearchFragment extends Fragment {
 
 
                 _listView.setAdapter(adapterMed);
-                closeDialog(dialog);
             }
 
         });
@@ -219,22 +213,4 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private void initDialog(final ProgressDialog dialog){
-        dialog.setMessage("Carregando dados...");
-        dialog.setCancelable(false);
-        dialog.show();
-
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        dialog.dismiss();
-                    }
-                }, 3000);
-
-    }
-
-    private void closeDialog(ProgressDialog dialog){
-        dialog.dismiss();
-    }
 }

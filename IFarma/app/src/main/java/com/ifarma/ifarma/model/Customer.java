@@ -6,10 +6,13 @@ public class Customer extends AbstractUser {
 	
 	private String cpf;
 
-	public Customer() {super();}
+	public Customer() {
+		super();
+	}
 
 	public Customer(String email){
 		super(email);
+		this.cpf = "";
 	}
 
 	public Customer(final String name, final String email,

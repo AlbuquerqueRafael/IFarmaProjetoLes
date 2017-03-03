@@ -15,6 +15,10 @@ abstract class AbstractUser{
 
     public AbstractUser(String email){
 		this.email = email;
+		this.name = "";
+		this.address = "";
+		this.houseNumber = "";
+		this.cep = "";
 	}
 
     public AbstractUser(final String name, final String email,

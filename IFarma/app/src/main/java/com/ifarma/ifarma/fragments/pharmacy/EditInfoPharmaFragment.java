@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class EditInfoPharmaFragment extends Fragment {
     private EditText _cepPharmaInput;
     private Button _saveButton;
     private Pharma pharma;
+    private ImageView _backButton;
 
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_EMAIL = "currentEmail";
@@ -53,7 +55,7 @@ public class EditInfoPharmaFragment extends Fragment {
         _cepPharmaInput = (EditText) rootView.findViewById(R.id.input_cep_pharma);
         _saveButton = (Button) rootView.findViewById(R.id.btn_salvar);
 
-        ImageView _backButton = (ImageView) rootView.findViewById(R.id.back_btn_info_pharma);
+        _backButton = (ImageView) rootView.findViewById(R.id.back_btn_info_pharma);
 
         final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
         _frameLayout.setVisibility(View.VISIBLE);
@@ -126,11 +128,16 @@ public class EditInfoPharmaFragment extends Fragment {
             public void onSuccess(Pharma currentPharma) {
                 pharma = new Pharma();
                 pharma = currentPharma;
-                _namePharmaInput.setText(pharma.getName());
-                _cnpjPharmaInput.setText(pharma.getCnpj());
-                _addressPharmaInput.setText(pharma.getAddress());
-                _houseNumberPharmaInput.setText(pharma.getHouseNumber());
-                _cepPharmaInput.setText(pharma.getCep());
+                _namePharmaInput.setText(pharma.getName().trim());
+                _cnpjPharmaInput.setText(pharma.getCnpj().trim());
+                _addressPharmaInput.setText(pharma.getAddress().trim());
+                _houseNumberPharmaInput.setText(pharma.getHouseNumber().trim());
+                _cepPharmaInput.setText(pharma.getCep().trim());
+
+                if (pharma.getName().equals("")){
+                    _backButton.setVisibility(View.GONE);
+                }
+
                 closeDialog(dialog);
             }
         });
@@ -148,6 +155,7 @@ public class EditInfoPharmaFragment extends Fragment {
         dialog.setCancelable(false);
         dialog.show();
     }
+
 
     private void closeDialog(ProgressDialog dialog){
         dialog.dismiss();

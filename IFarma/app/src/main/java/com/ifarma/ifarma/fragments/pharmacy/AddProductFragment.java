@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -28,9 +29,11 @@ import android.widget.Toast;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.controllers.OnCurrentPharmaGetDataListener;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
+import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
 import com.ifarma.ifarma.util.Validate;
 
@@ -49,12 +52,19 @@ public class AddProductFragment extends Fragment {
     private ImageView _backButton;
     public static final String FLAG_EMAIL = "currentEmail";
     private MedicineSearchAdapter adapterMed;
+    private String pharmacyName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_addproduct, container, false);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String defaultState = "";
+        String email =  prefs.getString(FLAG_EMAIL, defaultState);
+        email = email.replace(".", "dot");
+        configPharmacyName(email);
 
         _cadastrar = (AppCompatButton) rootView.findViewById(R.id.btn_cadastrar);
         _nameProductInput = (EditText) rootView.findViewById(R.id.input_name_product);
@@ -101,6 +111,7 @@ public class AddProductFragment extends Fragment {
                         product.setLab(lab);
                         product.setDescription(description);
                         product.setGeneric(generic);
+                        product.setPharmacyName(pharmacyName);
                     } catch (InvalidProductDataException e) {
                         e.printStackTrace();
                     }
@@ -129,42 +140,26 @@ public class AddProductFragment extends Fragment {
         return rootView;
     }
 
+    public void configPharmacyName(String email){
+
+        FirebaseController.retrieveCurrentPharma(email, new OnCurrentPharmaGetDataListener() {
+
+            @Override
+            public void onStart() {}
+
+            @Override
+            public void onSuccess(Pharma currentPharma) {
+                pharmacyName = currentPharma.getName();
+                return;
+            }
+        });
+
+    }
+
     private static boolean validateLogin(EditText _nameProductInput, EditText _priceProductInput,
                                          EditText _labProductInput, EditText _descriptionProductInput){
 
         boolean isValid = Validate.isValidMedicine(_nameProductInput, _priceProductInput, _labProductInput, _descriptionProductInput);
-//        String name = _nameProductInput.getText().toString();
-//        String price = _priceProductInput.getText().toString();
-//        String lab = _labProductInput.getText().toString();
-//        String description = _descriptionProductInput.getText().toString();
-//
-//        if (name.isEmpty()) {
-//            _nameProductInput.setError("Nome inválido.");
-//            isValid = false;
-//        } else {
-//            _nameProductInput.setError(null);
-//        }
-//
-//        if (price.isEmpty()) {
-//            _priceProductInput.setError("Preço inválido.");
-//            isValid = false;
-//        } else {
-//            _priceProductInput.setError(null);
-//        }
-//
-//        if (lab.isEmpty()) {
-//            _labProductInput.setError("Laboratório inválido.");
-//            isValid = false;
-//        } else {
-//            _labProductInput.setError(null);
-//        }
-//
-//        if (description.isEmpty()) {
-//            _descriptionProductInput.setError("Descrição inválida.");
-//            isValid = false;
-//        } else {
-//            _descriptionProductInput.setError(null);
-//        }
 
         return isValid;
     }
