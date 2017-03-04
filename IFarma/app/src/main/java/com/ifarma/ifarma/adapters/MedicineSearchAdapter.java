@@ -81,7 +81,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
 
         final Product product = mDisplayedValues.get(position);
 
-        addToCart.setOnClickListener(new View.OnClickListener() {
+       /* addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < _selectedProducts.size(); i++) {
@@ -93,7 +93,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                 AdapterService.reloadAdapter(1);
 
             }
-        });
+        });*/
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +106,12 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                         .setTitle("Informações do Produto")
                         .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab() + "\nDescrição: " + product.getDescription()
                                 + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + String.format("%.2f", product.getPrice()))
+                        .setNegativeButton("Excluir", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(context, "DEU CERTO", Toast.LENGTH_SHORT).show();
+                    }
+                })
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
