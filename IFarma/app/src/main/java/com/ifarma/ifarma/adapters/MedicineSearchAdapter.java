@@ -111,9 +111,22 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                         .setNegativeButton("Excluir", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        FirebaseController.removeProduct(Utils.convertEmail(product.getPharmacyId()), "-KeOSFeRQAqrLkNZA4Lr");
-                        Toast.makeText(context, "Produto excluído", Toast.LENGTH_SHORT).show();
-                        AdapterService.reloadAdapter(0);
+                        new AlertDialog.Builder(context)
+                                .setTitle("Tem certeza que deseja excluir " + product.getNameProduct() + " ?")
+                                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        FirebaseController.removeProduct(Utils.convertEmail(product.getPharmacyId()), product.getNameProduct());
+                                        Toast.makeText(context, "Produto excluído!", Toast.LENGTH_SHORT).show();
+                                        AdapterService.reloadAdapter(0);
+                                    }
+                                }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).show();
+
                     }
                 })
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

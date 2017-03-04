@@ -205,7 +205,7 @@ public class FirebaseController {
 
         Firebase firebaseRef = getFirebase();
         Firebase productsPharmacyReference = firebaseRef.child(PHARMACIES).child(pharmacyId).child(PRODUCTS);
-        Firebase newProduct = productsPharmacyReference.push();
+        Firebase newProduct = productsPharmacyReference.child(product.getNameProduct());
 
         newProduct.setValue(product);
     }
