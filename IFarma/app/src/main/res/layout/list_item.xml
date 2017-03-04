@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ripple_effect"
-    android:backgroundTint="@android:color/white">
+    android:backgroundTint="@android:color/white"
+    android:focusable="true"
+    android:clickable="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +19,8 @@
             android:text="{{ Nome do remédio }}"
             android:id="@+id/remedy_name"
             android:textStyle="bold"
-            android:layout_marginBottom="15dp"/>
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"

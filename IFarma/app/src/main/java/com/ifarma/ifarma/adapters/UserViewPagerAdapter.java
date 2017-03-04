@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
+import android.widget.AdapterView;
 
 import com.ifarma.ifarma.fragments.AccountFragment;
 import com.ifarma.ifarma.fragments.user.CartFragment;

@@ -4,39 +4,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.PharmViewPagerAdapter;
-import com.ifarma.ifarma.adapters.PharmaSearchAdapter;
 import com.ifarma.ifarma.adapters.UserViewPagerAdapter;
-import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.controllers.FirebaseController;
-import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
-import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
-import com.ifarma.ifarma.fragments.pharmacy.MedicinesFragment;
 import com.ifarma.ifarma.fragments.user.EditInfoUserFragment;
-import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Pharma;
-import com.ifarma.ifarma.model.Product;
-import com.ifarma.ifarma.services.AuthenticationService;
-import com.ifarma.ifarma.services.AuthenticationState;
+import com.ifarma.ifarma.services.AdapterService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean incompleteRegister = false;
     private MainActivity mainActivity;
     private FragmentPagerAdapter adapter;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initUI(){
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+        viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
         ArrayList<NavigationTabBar.Model> models;
 
         final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
@@ -170,13 +156,21 @@ public class MainActivity extends AppCompatActivity {
 
         navigationTabBar.setModels(models);
         navigationTabBar.setViewPager(viewPager, 0);
+
+        AdapterService.setViewPager(viewPager);
+        AdapterService.setNavigationTabBar(navigationTabBar);
+        AdapterService.setPagerAdapter(adapter);
+
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {}
 
             @Override
-            public void onPageSelected(final int position) {}
+            public void onPageSelected(final int position) {
+                viewPager.setAdapter(adapter);
+                navigationTabBar.setViewPager(viewPager, position);
+            }
 
             @Override
             public void onPageScrollStateChanged(final int state) {}

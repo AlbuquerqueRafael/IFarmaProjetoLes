@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +37,7 @@ public class EditInfoPharmaFragment extends Fragment {
     private EditText _cepPharmaInput;
     private Button _saveButton;
     private Pharma pharma;
-    private ImageView _backButton;
+    private FloatingActionButton _backButton;
 
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_EMAIL = "currentEmail";
@@ -55,7 +55,7 @@ public class EditInfoPharmaFragment extends Fragment {
         _cepPharmaInput = (EditText) rootView.findViewById(R.id.input_cep_pharma);
         _saveButton = (Button) rootView.findViewById(R.id.btn_salvar);
 
-        _backButton = (ImageView) rootView.findViewById(R.id.back_btn_info_pharma);
+        _backButton = (FloatingActionButton) rootView.findViewById(R.id.back_btn_info_pharma);
 
         final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
         _frameLayout.setVisibility(View.VISIBLE);
@@ -116,9 +116,9 @@ public class EditInfoPharmaFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String defaultState = "";
         String email =  prefs.getString(FLAG_EMAIL, defaultState);
-        email = email.replace(".", "dot");
+        final String newEmail = email.replace(".", "dot");
 
-        FirebaseController.retrieveCurrentPharma(email, new OnCurrentPharmaGetDataListener() {
+        FirebaseController.retrieveCurrentPharma(newEmail, new OnCurrentPharmaGetDataListener() {
             @Override
             public void onStart() {
 
@@ -126,7 +126,7 @@ public class EditInfoPharmaFragment extends Fragment {
 
             @Override
             public void onSuccess(Pharma currentPharma) {
-                pharma = new Pharma();
+                pharma = new Pharma(newEmail);
                 pharma = currentPharma;
                 _namePharmaInput.setText(pharma.getName().trim());
                 _cnpjPharmaInput.setText(pharma.getCnpj().trim());

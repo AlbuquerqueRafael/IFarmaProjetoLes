@@ -5,9 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,16 +31,16 @@ public class EditInfoUserFragment extends Fragment {
     private EditText _cepField;
     private EditText _houseNumberField;
     private Customer customer;
-    private ImageView _backButton;
+    private FloatingActionButton _backButton;
     public static final String FLAG_EMAIL = "currentEmail";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_user_register, container, false);
+        rootView = inflater.inflate(R.layout.fragment_edit_info_user, container, false);
 
-        _backButton = (ImageView) rootView.findViewById(R.id.back_btn);
+        _backButton = (FloatingActionButton) rootView.findViewById(R.id.back_btn);
 
         final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
         _frameLayout.setVisibility(View.VISIBLE);
@@ -61,11 +61,11 @@ public class EditInfoUserFragment extends Fragment {
         });
 
         AppCompatButton _saveButton = (AppCompatButton) rootView.findViewById(R.id.btn_save);
-        _nameField = (EditText) rootView.findViewById(R.id.name_input);
-        _cpfField = (EditText) rootView.findViewById(R.id.cpf_input);
-        _addressField = (EditText) rootView.findViewById(R.id.address_input);
-        _cepField = (EditText) rootView.findViewById(R.id.cep_input);
-        _houseNumberField = (EditText) rootView.findViewById(R.id.house_number);
+        _nameField = (EditText) rootView.findViewById(R.id.user_name_input);
+        _cpfField = (EditText) rootView.findViewById(R.id.user_cpf_input);
+        _addressField = (EditText) rootView.findViewById(R.id.user_address_input);
+        _cepField = (EditText) rootView.findViewById(R.id.user_cep_input);
+        _houseNumberField = (EditText) rootView.findViewById(R.id.user_house_number);
 
         loadUserInfo();
 

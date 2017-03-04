@@ -83,7 +83,7 @@
                 <EditText android:id="@+id/input_address_pharma"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textCapWords"
                     android:hint="Endereço"
                     android:textColor="#000"
                     android:textSize="16sp" />

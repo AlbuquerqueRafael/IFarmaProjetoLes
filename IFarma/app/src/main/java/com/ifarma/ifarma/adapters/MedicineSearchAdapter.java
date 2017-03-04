@@ -1,16 +1,27 @@
 package com.ifarma.ifarma.adapters;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.fragments.user.CartFragment;
+import com.ifarma.ifarma.fragments.user.UserFragment;
 import com.ifarma.ifarma.holders.ViewHolder;
 import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.services.AdapterService;
+import com.ifarma.ifarma.services.CartService;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +44,20 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
     private View view;
     private Context context;
     private ViewHolder holder;
+    private boolean _isSelecting;
+    private List<Product> _selectedProducts;
+    private FloatingActionButton addToCart;
+    private View rootView;
     private final PublishSubject<Product> onClickSubject = PublishSubject.create();
 
-    public MedicineSearchAdapter(Context context, ArrayList<Product> mProductArrayList) {
+    public MedicineSearchAdapter(Context context, ArrayList<Product> mProductArrayList, View rootView) {
 
         this.mOriginalValues = mProductArrayList;
         this.mDisplayedValues = mProductArrayList;
         this.context = context;
+        this.rootView = rootView;
+        this.addToCart = (FloatingActionButton) rootView.findViewById(R.id.add_to_cart);
+
         inflater = LayoutInflater.from(context);
     }
 
@@ -53,36 +71,92 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        _selectedProducts = new ArrayList<Product>();
+
         holder.medName.setText(mDisplayedValues.get(position).getNameProduct());
-        holder.medPrice.setText("R$ " + mDisplayedValues.get(position).getPrice() + "");
+        holder.medPrice.setText("R$ " + String.format("%.2f", mDisplayedValues.get(position).getPrice()));
         holder.medDescription.setText(mDisplayedValues.get(position).getDescription());
         holder.medPharmacy.setText(mDisplayedValues.get(position).getPharmacyName());
 
         final Product product = mDisplayedValues.get(position);
 
+        addToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < _selectedProducts.size(); i++) {
+                    CartService.addToCart(_selectedProducts.get(i));
+                }
+
+                Toast.makeText(context, _selectedProducts.size() + " produtos adicionados ao carrinho! :)", Toast.LENGTH_SHORT).show();
+
+                AdapterService.reloadAdapter(1);
+
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickSubject.onNext(product);
+
+                if (!_isSelecting){
+                    onClickSubject.onNext(product);
 
                 new AlertDialog.Builder(context)
                         .setTitle("Informações do Produto")
-                        .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab()  + "\nDescrição: " + product.getDescription()
-                                + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + product.getPrice())
+                        .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab() + "\nDescrição: " + product.getDescription()
+                                + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + String.format("%.2f", product.getPrice()))
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         })
                         .show();
+                } else {
+                    if (!_selectedProducts.contains(product)) {
+                        _selectedProducts.add(product);
+                        v.setBackgroundColor(Color.parseColor("#436455"));
+                    } else {
+                        _selectedProducts.remove(product);
+                        v.setBackgroundColor(Color.parseColor("#ffffff"));
+                    }
+
+                    _isSelecting = !_selectedProducts.isEmpty();
+
+                    if (_isSelecting){
+                        addToCart.setVisibility(View.VISIBLE);
+                        addToCart.animate().scaleX(1f).scaleY(1f).start();
+                    } else {
+                        addToCart.setVisibility(View.GONE);
+                        addToCart.animate().scaleX(0f).scaleY(0f).start();
+                    }
+
+                }
             }
         });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(context, product.getNameProduct(), Toast.LENGTH_SHORT).show();
+
+                if (!_selectedProducts.contains(product)) {
+                    _selectedProducts.add(product);
+                    v.setBackgroundColor(Color.parseColor("#436455"));
+                } else {
+                    _selectedProducts.remove(product);
+                    v.setBackgroundColor(Color.parseColor("#ffffff"));
+                }
+
+                _isSelecting = !_selectedProducts.isEmpty();
+
+                if (_isSelecting){
+                    addToCart.setVisibility(View.VISIBLE);
+                    addToCart.animate().scaleX(1f).scaleY(1f).start();
+                } else {
+                    addToCart.setVisibility(View.GONE);
+                    addToCart.animate().scaleX(0f).scaleY(0f).start();
+                }
+
                 return true;
             }
         });

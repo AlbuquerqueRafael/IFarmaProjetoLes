@@ -181,7 +181,7 @@ public class PharmaFragment extends Fragment {
             }
         }
 
-        adapterMed = new MedicineSearchAdapter(getActivity(), listItems);
+        adapterMed = new MedicineSearchAdapter(getActivity(), listItems, rootView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         _listView.setHasFixedSize(true);
         _listView.setLayoutManager(mLayoutManager);

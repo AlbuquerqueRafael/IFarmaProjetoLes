@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:background="@color/colorPrimaryDark"
+        android:text="Onde você quer receber o seu pedido?"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black"></View>
+
+        <Button
+            android:id="@+id/gps_address"
+            android:background="@drawable/ripple_effect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@android:color/black"
+            android:text="Usar minha localização"
+            android:drawableLeft="@drawable/ic_my_location_white_24dp"
+            android:drawableTint="@color/colorPrimary"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black"></View>
+
+
+        <Button
+            android:id="@+id/other_address"
+            android:background="@drawable/ripple_effect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@android:color/black"
+            android:text="Informar um endereço"
+            android:drawableLeft="@drawable/ic_location_on_white_24dp"
+            android:drawableTint="@color/colorPrimary"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black"></View>
+
+        <Button
+            android:id="@+id/register_address"
+            android:background="@drawable/ripple_effect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@android:color/black"
+            android:text="usar o endereço do registro"
+            android:drawableLeft="@drawable/ic_person_pin_circle_white_24dp"
+            android:drawableTint="@color/colorPrimary"
+            android:textSize="12sp"
+            android:visibility="gone"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dp"
+            android:background="@android:color/black"></View>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="13dp"
+            android:background="@color/colorPrimaryDark" />
+
+    </LinearLayout>
+</LinearLayout>

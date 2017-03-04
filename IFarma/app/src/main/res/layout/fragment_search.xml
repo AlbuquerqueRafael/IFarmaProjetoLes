@@ -104,9 +104,28 @@
                 android:id="@+id/listview"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical"/>
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_to_cart"
+        android:src="@drawable/ic_add_shopping_cart_white_24dp"
+        android:layout_gravity="bottom|left"
+        android:visibility="gone"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        app:rippleColor="@color/colorPrimaryDark"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary"
+        app:elevation="3dp"
+        app:borderWidth="0dp"
+        app:layout_anchor="@+id/scroll_view"
+        app:layout_anchorGravity="bottom|right"
+        android:scaleX="0"
+        android:scaleY="0"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -22,5 +22,6 @@
     <string name="finalize_cart">Finalizar</string>
     <string name="delivery_text">Entrega:</string>
     <string name="total_text">Total:</string>
+    <string name="buy_finish">Finalizar Compra</string>
 
 </resources>
