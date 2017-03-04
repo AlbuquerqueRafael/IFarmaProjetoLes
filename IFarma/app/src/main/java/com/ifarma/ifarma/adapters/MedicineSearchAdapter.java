@@ -12,12 +12,14 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.fragments.user.CartFragment;
 import com.ifarma.ifarma.fragments.user.UserFragment;
 import com.ifarma.ifarma.holders.ViewHolder;
 import com.ifarma.ifarma.model.Product;
 import com.ifarma.ifarma.services.AdapterService;
 import com.ifarma.ifarma.services.CartService;
+import com.ifarma.ifarma.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +111,9 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                         .setNegativeButton("Excluir", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(context, "DEU CERTO", Toast.LENGTH_SHORT).show();
+                        FirebaseController.removeProduct(Utils.convertEmail(product.getPharmacyId()), "-KeOSFeRQAqrLkNZA4Lr");
+                        Toast.makeText(context, "Produto excluído", Toast.LENGTH_SHORT).show();
+                        AdapterService.reloadAdapter(0);
                     }
                 })
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

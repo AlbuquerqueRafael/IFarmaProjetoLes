@@ -289,6 +289,10 @@ public class FirebaseController {
 
     }
 
-
+    public static void removeProduct(String pharmacyId, String productID){
+        Firebase firebaseRef = getFirebase();
+        Firebase productsPharmacyReference = firebaseRef.child(PHARMACIES).child(pharmacyId).child(PRODUCTS);
+        productsPharmacyReference.child(productID).removeValue();
+    }
 
 }
