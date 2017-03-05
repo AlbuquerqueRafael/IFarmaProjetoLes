@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/image_ng"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:tint="@color/colorPrimaryDark"
+        android:src="@drawable/ic_thumb_down_outline_white_48dp"
+        android:scaleX="-1"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_car"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:id="@+id/text_empty"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/image_ng"/>
+
+    <Button
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:text="@string/search_medicines"
+        android:id="@+id/search_medicines"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_button"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_below="@+id/image_ng"/>
+
+</RelativeLayout>

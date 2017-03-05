@@ -1,52 +1,38 @@
 package com.ifarma.ifarma.model;
 
-import com.ifarma.ifarma.exceptions.InvalidUserDataException;
-import com.ifarma.ifarma.util.Validate;
-
 import com.ifarma.ifarma.exceptions.*;
 import com.ifarma.ifarma.util.*;
 
-public abstract class AbstractUser{
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
+
+abstract class AbstractUser{
 
 	private String name;
-	private String email; 
-	private String password;
+	private String email;
 	private String address; 
 	private String houseNumber; 
 	private String cep;
-	
-	public AbstractUser() {}
-	
-	public AbstractUser(final String name, final String email, final String password, 
-			final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
-		
-		if(!Validate.isValidName(name)){
-			throw new InvalidNameException();
-		}
-				
-		if(!Validate.isValidEmail(email)){
-			throw new InvalidEmailException();
-		}
-		
-		if(!Validate.isValidPassword(password)){
-			throw new InvalidPasswordException();
-		}
-		
-		if(!Validate.isValidAddress(address)){
-			throw new InvalidAddressException();
-		}
-		
-		if(!Validate.isValidHouseNumber(houseNumber)){
-			throw new InvalidHouseNumberException();
-		}
-		
-		if(!Validate.isValidCEP(cep)){
-			throw new InvalidCEPException();
-		}
-		
+	private Map<String, Order> orders;
+    private SecureRandom random = new SecureRandom();
+
+    public AbstractUser() {}
+
+    public AbstractUser(String email){
+		this.email = email;
+		this.name = "";
+		this.address = "";
+		this.houseNumber = "";
+		this.cep = "";
+	}
+
+    public AbstractUser(final String name, final String email,
+				 final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
+
 		this.name = name;
 		this.email = email;
-		this.password = password;
 		this.address = address;
 		this.houseNumber = houseNumber;
 		this.cep = cep;
@@ -61,17 +47,6 @@ public abstract class AbstractUser{
 			throw new InvalidNameException();
 		}
 		this.name = name;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(final String password) throws InvalidPasswordException {
-		if(!Validate.isValidPassword(password)){
-			throw new InvalidPasswordException();
-		}
-		this.password = password;
 	}
 
 	public String getAddress() {
@@ -117,5 +92,28 @@ public abstract class AbstractUser{
 		}
 		this.email = email;
 	}
-		
+
+	public void initOrders(){
+		this.orders = new HashMap<>();
+	}
+
+	public void addOrder(Order order){
+		if(order != null) {
+			orders.put(nextSessionId(), order);
+		}
+	}
+
+	public void removeProduct(String id){
+		if(id != null) {
+			orders.remove(id);
+		}
+	}
+
+	public Map<String, Order> getOrders(){
+		return orders;
+	}
+
+    public String nextSessionId() {
+        return new BigInteger(130, random).toString(32);
+    }
 }

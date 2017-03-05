@@ -6,12 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 
-import com.ifarma.ifarma.R;
-import com.ifarma.ifarma.fragments.AccountFragment;
-import com.ifarma.ifarma.fragments.pharmacy.AddProductFragment;
-import com.ifarma.ifarma.fragments.user.CartFragment;
-import com.ifarma.ifarma.fragments.EditInfoPharmaFragment;
-import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.fragments.pharmacy.DemandFragment;
 import com.ifarma.ifarma.fragments.pharmacy.MedicinesFragment;
 import com.ifarma.ifarma.fragments.pharmacy.PharmacyFragment;

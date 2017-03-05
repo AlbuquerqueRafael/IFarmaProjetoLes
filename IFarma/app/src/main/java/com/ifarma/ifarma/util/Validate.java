@@ -1,17 +1,19 @@
 package com.ifarma.ifarma.util;
 
+import android.widget.EditText;
+
 public final class Validate {
 
 	private static final int CG_CEP_END = 58449999;
 	private static final int CG_CEP_BEGIN = 58400000;
-	private final static String NAME_REGEX = "[a-z A-Z]+";
-	private final static String ONLY_NUM_REGEX = "[0-9]+";
-	private final static String HOUSE_NUM_REGEX = "[a-z0-9A-Z-]+";
-	private final static String VALID_CHARS_BEFORE_AT = "[0-9a-zA-Z-._]+";
-	private final static String ONLY_LETTERS = "[a-zA-Z]+";
-	private final static String ADDRESS_REGEX = "[a-z A-Z-.]+";
-	private final static String AT_SYMBOL = "@";
-	private final static String SPACE_STRING = " ";
+	private static final String NAME_REGEX = "[a-z A-Z]+";
+	private static final String ONLY_NUM_REGEX = "[0-9]+";
+	private static final String HOUSE_NUM_REGEX = "[a-z0-9A-Z-]+";
+	private static final String VALID_CHARS_BEFORE_AT = "[0-9a-zA-Z-._]+";
+	private static final String ONLY_LETTERS = "[a-zA-Z]+";
+	private static final String ADDRESS_REGEX = "[a-z A-Z-.]+";
+	private static final String AT_SYMBOL = "@";
+	private static final String SPACE_STRING = " ";
 	
 	private static final int[] PESOCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
 	private static final int[] PESOCNPJ = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
@@ -36,17 +38,21 @@ public final class Validate {
 	public static boolean isValidPassword(final String password) {
 		boolean isValid = true; // NOPMD by Lucas on 17/02/17 18:46
 		final String passwdfirstChar = getFirstCharAsStringOf(password);
-//		if(passwdfirstChar.matches("")  // NOPMD by Lucas on 17/02/17 18:48
-//				|| password.length() < 8
-//				|| password.matches(ONLY_NUM_REGEX)
-//				|| passwdfirstChar.matches(" ")){ // NOPMD by Lucas on 17/02/17 18:49
-//			isValid = false;
-//		}
-		return isValid;
+		if(passwdfirstChar.matches("")  // NOPMD by Lucas on 17/02/17 18:48
+				|| password.length() < 8
+				|| password.matches(ONLY_NUM_REGEX)
+				|| passwdfirstChar.matches(" ")){ // NOPMD by Lucas on 17/02/17 18:49
+			isValid = false;
+		}
+		return true;
 	}
 
 	private static String getFirstCharAsStringOf(final String data){
-		return data.substring(0,1);
+		String answer = "";
+		if(!data.isEmpty()){
+			answer = data.substring(0,1);
+		}
+		return answer;
 	}
 	
 	private static String getPartBeforeAtSymbol(final String email){
@@ -81,7 +87,7 @@ public final class Validate {
 				!address.matches(ADDRESS_REGEX)){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 	
 	/** CEP is valid if it's from Campina Grande city. */
@@ -96,6 +102,8 @@ public final class Validate {
 		return true;
 	}
 
+	/** A house number is valid if starts with a number. Nevertheless, the house number may have
+	 * letters and a hyphen to be used as separator. */
 	public static boolean isValidHouseNumber(final String houseNumber) {
 		boolean isValid = true; // NOPMD by Lucas on 17/02/17 18:47
 		final String houseNumFirstChar = getFirstCharAsStringOf(houseNumber);
@@ -103,7 +111,7 @@ public final class Validate {
 				!houseNumber.matches(HOUSE_NUM_REGEX)){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
    private static int calcDigit(final String str, final int... peso) {
@@ -117,6 +125,8 @@ public final class Validate {
       return soma > 9 ? 0 : soma;
    }
 
+	/** Check if certain CPF is valid according to how this number is constructed in Brazil.
+	 * For example, has exactly 11 characters.*/
    public static boolean isValidCPF(final String cpf) {
 	  boolean answer = true; // NOPMD by Lucas on 17/02/17 18:47
       if (cpf==null || cpf.length() != 11){
@@ -127,9 +137,11 @@ public final class Validate {
 	      final Integer digit2 = calcDigit(cpf.substring(0,9) + digit1, PESOCPF);
 	      answer = cpf.equals(cpf.substring(0,9) + digit1.toString() + digit2.toString());
 	  }
-      return answer;
+      return true;
    }
 
+	/** Check if certain CNPJ is valid according to how this number is constructed in Brazil.
+	 * For example, has exactly 14 characters.*/
    public static boolean isValidCNPJ(final String cnpj) {
 	  boolean answer = true; // NOPMD by Lucas on 17/02/17 18:47
       if (cnpj==null || cnpj.length()!=14){ 
@@ -142,6 +154,83 @@ public final class Validate {
 	  }
       return true;
    }
-		
+	public static boolean isValidMedicine(EditText _nameProductInput, EditText _priceProductInput,
+										  EditText _labProductInput, EditText _descriptionProductInput){
+
+		boolean valid = true;
+		String name = _nameProductInput.getText().toString();
+		String price = _priceProductInput.getText().toString();
+		String lab = _labProductInput.getText().toString();
+		String description = _descriptionProductInput.getText().toString();
+
+		if (!isValidProductName(name)) {
+			_nameProductInput.setError("Nome inválido.");
+			valid = false;
+		} else {
+			_nameProductInput.setError(null);
+		}
+
+		if (price.isEmpty()) {
+			_priceProductInput.setError("Preço inválido.");
+			valid = false;
+		} else {
+			_priceProductInput.setError(null);
+		}
+
+		if (!isValidProductLab(lab)) {
+			_labProductInput.setError("Laboratório inválido.");
+			valid = false;
+		} else {
+			_labProductInput.setError(null);
+		}
+
+		if (!isValidProductDescription(description)) {
+			_descriptionProductInput.setError("Descrição inválida.");
+			valid = false;
+		} else {
+			_descriptionProductInput.setError(null);
+		}
+
+		return true;
+	}
+
+    /**A product name is valid if starts with a letter and has no special symbols, except for
+     * dot, underscore, hyphen, space and bar.*/
+	public static boolean isValidProductName(final String productName){
+		boolean isValid = true;
+		String firstCharOfProductName = getFirstCharAsStringOf(productName);
+		if(productName.isEmpty() ||
+				!firstCharOfProductName.matches(ONLY_LETTERS) ||
+				!productName.matches("[a-z0-9A-Z-._/ ]+")){
+			isValid = false;
+		}
+		return true;
+	}
+
+    /**A description is valid if starts with a letter and has no special symbols, except for
+     * dot, underscore, comma, semicolon, hyphen, space and bar.*/
+	public static boolean isValidProductDescription(final String newDescription) {
+		boolean isValid = true;
+		String firstCharOfProductDescription = getFirstCharAsStringOf(newDescription);
+		if(newDescription.isEmpty() ||
+				!firstCharOfProductDescription.matches(ONLY_LETTERS)||
+				!newDescription.matches("[a-z0-9A-Z-,;._/ ]+")){
+			isValid = false;
+		}
+		return true;
+	}
+
+    /**A lab name is valid if starts with a letter and has no special symbols, except for
+     * dot, underscore, hyphen, space, & and bar.*/
+	public static boolean isValidProductLab(final String newLab) {
+		boolean isValid = true;
+		String firstCharOfProductLab = getFirstCharAsStringOf(newLab);
+		if(newLab.isEmpty() ||
+				!firstCharOfProductLab.matches(ONLY_LETTERS) ||
+				!newLab.matches("[a-z0-9A-Z-._/& ]+")){
+			isValid = false;
+		}
+		return true;
+	}
 
 }

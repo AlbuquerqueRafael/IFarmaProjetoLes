@@ -1,27 +1,30 @@
 package com.ifarma.ifarma.model;
-import com.ifarma.ifarma.exceptions.*;
+import com.ifarma.ifarma.exceptions.InvalidCNPJException;
+import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.util.Validate;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Pharma extends AbstractUser implements Serializable {
 
 	private Map<String, Product> products;
-	private List<Product> Product;
 
 	private String cnpj;
-	//private Map<Product, Integer> stock = new Map<Product, Integer>();
-	public Pharma(final String name, final String email, final String password, 
-			final String address, final String houseNumber, final String cep)
+
+	public Pharma(final String name, final String email,
+				  final String address, final String houseNumber, final String cep)
 			throws InvalidUserDataException {
-		super(name, email, password, address, houseNumber, cep);
+		super(name, email, address, houseNumber, cep);
 	}
-	
-	public Pharma(){super();}
+
+    public Pharma(String email){
+		super(email);
+		this.cnpj = "";
+	}
+
+    public Pharma(){super();}
 	
 	public String getCnpj() {
 		return cnpj;
@@ -35,19 +38,23 @@ public class Pharma extends AbstractUser implements Serializable {
 	}
 
 	public void initProducts(){
-		this.products = new HashMap<String, Product>();
+		this.products = new HashMap<>();
 	}
 
 	public void addProduct(Product product){
-		this.products.entrySet();
+        if(product != null) {
+            products.put(product.getNameProduct(), product);
+        }
 	}
 
 	public void removeProduct(Product product){
-		this.products.remove(product);
+        if(product != null) {
+            products.remove(product.getNameProduct());
+        }
 	}
 
 	public Map<String, Product>  getProducts(){
 		return products;
 	}
-	
+
 }

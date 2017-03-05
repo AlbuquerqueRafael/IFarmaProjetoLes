@@ -1,14 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_demand"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="?attr/colorPrimary">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false"
+            app:statusBarScrim="@null"
+            android:fitsSystemWindows="true">
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/filter_btn"
+                android:src="@drawable/ic_filter_list_white_24dp"
+                android:layout_gravity="end"
+                android:layout_marginRight="10dp"
+                app:rippleColor="@color/colorPrimaryDark"
+                app:fabSize="mini"
+                app:backgroundTint="@color/colorPrimary"
+                app:elevation="0dp"
+                app:borderWidth="0dp"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scroll_view"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="vertical"
+                android:background="@color/colorPrimary"
+                android:paddingTop="5dp">
+
+                <RadioGroup
+                    android:id="@+id/demandRadioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:checkedButton="@+id/pendingButton"
+                    >
+                    <RadioButton
+                        android:id="@+id/pendingButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pendentes" />
+
+                    <RadioButton
+                        android:id="@+id/acceptButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aceitos" />
+
+                    <RadioButton
+                        android:id="@+id/rejectButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rejeitados" />
+
+                </RadioGroup>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/order_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:scrollbars="vertical"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PEDIDOS"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="#000"/>
+        android:id="@+id/add_to_cart"
+        android:src="@drawable/ic_add_shopping_cart_white_24dp"
+        android:layout_gravity="bottom|left"
+        android:visibility="gone"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        app:rippleColor="@color/colorPrimaryDark"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary"
+        app:elevation="3dp"
+        app:borderWidth="0dp"
+        app:layout_anchor="@+id/scroll_view"
+        app:layout_anchorGravity="bottom|right"
+        android:scaleX="0"
+        android:scaleY="0"/>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

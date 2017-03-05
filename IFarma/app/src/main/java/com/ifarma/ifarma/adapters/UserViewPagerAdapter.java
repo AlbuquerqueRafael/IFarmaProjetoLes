@@ -2,20 +2,17 @@ package com.ifarma.ifarma.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
+import android.widget.AdapterView;
 
-import com.ifarma.ifarma.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.fragments.AccountFragment;
-import com.ifarma.ifarma.fragments.pharmacy.AddProductFragment;
 import com.ifarma.ifarma.fragments.user.CartFragment;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.fragments.user.UserFragment;
-import com.ifarma.ifarma.services.AuthenticationService;
 
 import java.util.List;
 
@@ -26,17 +23,10 @@ import devlight.io.library.ntb.NavigationTabBar;
  */
 
 public class UserViewPagerAdapter extends FragmentPagerAdapter {
-    public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_LOGGED = "isLogged";
 
     private Context context;
     private List<NavigationTabBar.Model> models;
-
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private AuthenticationController authCtrl;
-    private FirebaseAuth fbAuth;
-    private AuthenticationService authService;
-    boolean isLogged;
 
     private static LayoutInflater inflater = null;
 
@@ -45,9 +35,6 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
 
         this.models = models;
         this.context = context;
-
-        authCtrl = new AuthenticationController();
-        authService = AuthenticationService.getInstance();
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -66,14 +53,14 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
                     return new UserFragment();
                 return new AccountFragment();
             default:
-                return new SearchFragment();
+                return null;
         }
     }
 
     private boolean isAuthenticated(){
-        SharedPreferences sharedPref = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean defaultState = false;
-        return sharedPref.getBoolean(FLAG_LOGGED, defaultState);
+        return prefs.getBoolean(FLAG_LOGGED, defaultState);
     }
 
 

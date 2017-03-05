@@ -14,6 +14,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="info_pharma_toolbar">Editar Informações</string>
+    <string name="info_pharma_toolbar">Editar Perfil</string>
+    <string name="search_medicines">Procurar medicamentos</string>
+    <string name="empty_car">O seu carrinho está vazio</string>
+    <string name="cart">Carrinho</string>
+    <string name="cancel_cart">Cancelar</string>
+    <string name="finalize_cart">Finalizar</string>
+    <string name="delivery_text">Entrega:</string>
+    <string name="total_text">Total:</string>
+    <string name="buy_finish">Finalizar Compra</string>
 
 </resources>

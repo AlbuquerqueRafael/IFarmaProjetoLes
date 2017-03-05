@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"
-                    android:hint="Nome*"
+                    android:hint="Nome"
                     android:textColor="#000"
                     android:textSize="16sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -67,8 +67,8 @@
                 <EditText android:id="@+id/input_cnpj_pharma"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:hint="CNPJ*"
+                    android:inputType="number"
+                    android:hint="CNPJ"
                     android:textColor="#000"
                     android:textSize="16sp"/>
             </android.support.design.widget.TextInputLayout>
@@ -83,7 +83,7 @@
                 <EditText android:id="@+id/input_address_pharma"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textCapWords"
                     android:hint="Endereço"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -99,7 +99,7 @@
                 <EditText android:id="@+id/input_house_number_pharma"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textCapWords"
                     android:hint="Número ou complemento"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -114,7 +114,7 @@
                 <EditText android:id="@+id/input_cep_pharma"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:hint="CEP"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -125,7 +125,7 @@
                 android:background="@drawable/rounded_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="50dp"
                 android:layout_marginBottom="24dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"

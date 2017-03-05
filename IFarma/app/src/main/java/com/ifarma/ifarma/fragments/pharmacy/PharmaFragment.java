@@ -1,4 +1,4 @@
-package com.ifarma.ifarma.fragments;
+package com.ifarma.ifarma.fragments.pharmacy;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -18,11 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
@@ -31,6 +32,7 @@ import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.decoration.DividerItemDecoration;
+import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
 
@@ -53,7 +55,9 @@ public class PharmaFragment extends Fragment {
     private EditText _searchInput;
     private int searchTextSize;
     private Pharma pharm;
-    private FloatingActionButton _infoButton;
+    private FrameLayout _frameLayout;
+    private ImageView _infoButton;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,39 +68,50 @@ public class PharmaFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_pharma_view, container, false);
         _imageView = (ImageView) rootView.findViewById(R.id.pharmaLogo);
         _textView = (TextView) rootView.findViewById(R.id.pharmName);
-        _infoButton = (FloatingActionButton) rootView.findViewById(R.id.filter_btn_pharma);
         _searchInput = (EditText) rootView.findViewById(R.id.pharmaSearchMed);
         _searchInput = (EditText) rootView.findViewById(R.id.pharmaSearchMed);
         _listView = (RecyclerView) rootView.findViewById(R.id.listpharmaview);
+        _infoButton = (ImageView) rootView.findViewById(R.id.filter_btn_pharma);
         _listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
 
-        _textView.setText(pharm.getName());
+        ImageView _backButton = (ImageView) rootView.findViewById(R.id.back_btn);
+
+        _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
+        _frameLayout.setVisibility(View.VISIBLE);
 
         _infoButton.setOnClickListener( new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog.Builder(
-                       getActivity()).create();
 
-                alertDialog.setTitle(Html.fromHtml("<font color='#b3b3b3'>Informações da farmacia: </font>"));
-                // Setting Dialog Message
-                alertDialog.setMessage(Html.fromHtml("<font color='#b3b3b3'>Endereço: " + pharm.getAddress() + "</font>" + "<br>" +
-                                                     "<font color='#b3b3b3'>CEP: " + pharm.getCep() + "</font>"));
-
-                // Setting Icon to Dialog
-                // Setting OK Button
-                alertDialog.setButton(Dialog.BUTTON_POSITIVE,Html.fromHtml("<font color='#b3b3b3'>Ok</font>"),new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                alertDialog.show();
-                alertDialog.getWindow().getDecorView().getBackground().setColorFilter(new LightingColorFilter(0xFF000000, 0xe6fff9));
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Informações da Farmácia")
+                        .setMessage("Contato: " + pharm.getEmail() + "\nEndereço: " + pharm.getAddress() + "\nCEP: " + pharm.getCep())
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
+
+        _backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
+                _pagerLayout.setVisibility(View.VISIBLE);
+                _frameLayout.setVisibility(View.GONE);
+
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new SearchFragment());
+                fragmentTransaction.commit();
+            }
+        });
+
+        _textView.setText(pharm.getName());
         _searchInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +178,7 @@ public class PharmaFragment extends Fragment {
             }
         }
 
-        adapterMed = new MedicineSearchAdapter(getActivity(), listItems);
+        adapterMed = new MedicineSearchAdapter(getActivity(), listItems, rootView);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         _listView.setHasFixedSize(true);
         _listView.setLayoutManager(mLayoutManager);

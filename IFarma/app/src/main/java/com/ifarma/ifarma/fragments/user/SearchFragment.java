@@ -37,6 +37,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import devlight.io.library.ntb.NavigationTabBar;
+
 public class SearchFragment extends Fragment {
 
     private View rootView;
@@ -49,15 +51,11 @@ public class SearchFragment extends Fragment {
     private EditText _searchInput;
     private RadioGroup _radioGroup;
     private int searchTextSize;
-    private FloatingActionButton _filterButton;
     private String option;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (container != null) {
-            container.removeAllViews();
-        }
 
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         _searchInput = (EditText) rootView.findViewById(R.id.txtsearch);
@@ -141,7 +139,6 @@ public class SearchFragment extends Fragment {
     public void initMedList(){
         listItems = new ArrayList<Product>();
         final ProgressDialog dialog = new ProgressDialog(getActivity());
-        initDialog(dialog);
 
         FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
@@ -157,18 +154,16 @@ public class SearchFragment extends Fragment {
                     listItems.add(p);
                 }}
 
-                adapterMed = new MedicineSearchAdapter(getActivity(), listItems);
+                adapterMed = new MedicineSearchAdapter(getActivity(), listItems, rootView);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 _listView.setHasFixedSize(true);
                 _listView.setLayoutManager(mLayoutManager);
 
 
                 _listView.setAdapter(adapterMed);
-                closeDialog(dialog);
             }
 
         });
-
     }
 
     public void initPharmaList(){
@@ -198,7 +193,6 @@ public class SearchFragment extends Fragment {
 
         });
 
-
     }
 
     public void radioGroupListener(){
@@ -219,13 +213,4 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private void initDialog(ProgressDialog dialog){
-        dialog.setMessage("Carregando dados...");
-        dialog.setCancelable(false);
-        dialog.show();
-    }
-
-    private void closeDialog(ProgressDialog dialog){
-        dialog.dismiss();
-    }
 }

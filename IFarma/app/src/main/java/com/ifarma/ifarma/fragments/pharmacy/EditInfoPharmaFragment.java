@@ -1,21 +1,29 @@
-package com.ifarma.ifarma.fragments;
+package com.ifarma.ifarma.fragments.pharmacy;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnCurrentPharmaGetDataListener;
+import com.ifarma.ifarma.fragments.AccountFragment;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.services.AuthenticationService;
 
 import java.util.List;
 
@@ -28,8 +36,11 @@ public class EditInfoPharmaFragment extends Fragment {
     private EditText _houseNumberPharmaInput;
     private EditText _cepPharmaInput;
     private Button _saveButton;
-    Pharma pharma;
+    private Pharma pharma;
+    private FloatingActionButton _backButton;
 
+    public static final String PREFS_NAME = "Preferences";
+    public static final String FLAG_EMAIL = "currentEmail";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +55,9 @@ public class EditInfoPharmaFragment extends Fragment {
         _cepPharmaInput = (EditText) rootView.findViewById(R.id.input_cep_pharma);
         _saveButton = (Button) rootView.findViewById(R.id.btn_salvar);
 
-        /*final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
+        _backButton = (FloatingActionButton) rootView.findViewById(R.id.back_btn_info_pharma);
+
+        final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
         _frameLayout.setVisibility(View.VISIBLE);
 
         _backButton.setOnClickListener(new View.OnClickListener() {
@@ -57,11 +70,10 @@ public class EditInfoPharmaFragment extends Fragment {
 
                 android.support.v4.app.FragmentTransaction fragmentTransaction =
                         getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new AccountFragment());
+                fragmentTransaction.replace(R.id.fragment_container, new PharmacyFragment());
                 fragmentTransaction.commit();
             }
-        });*/
-
+        });
         initPharma();
 
         _saveButton.setOnClickListener(new View.OnClickListener(){
@@ -74,9 +86,19 @@ public class EditInfoPharmaFragment extends Fragment {
                     pharma.setHouseNumber(_houseNumberPharmaInput.getText().toString());
                     pharma.setCep(_cepPharmaInput.getText().toString());
                     FirebaseController.editPharmacy(pharma);
+                    Toast.makeText(getContext(), "Atualização feita com sucesso!", Toast.LENGTH_SHORT).show();
                 }catch(Exception e){
                     Toast.makeText(getContext(), "A edição falhou!", Toast.LENGTH_SHORT).show();
                 }
+
+                LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
+                _pagerLayout.setVisibility(View.VISIBLE);
+                _frameLayout.setVisibility(View.GONE);
+
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getActivity().getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new PharmacyFragment());
+                fragmentTransaction.commit();
             }
         });
 
@@ -86,13 +108,17 @@ public class EditInfoPharmaFragment extends Fragment {
 
 
     public void initPharma(){
-        pharma = new Pharma();
 
         final int TIME = 4000; //Timeout
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         initDialog(dialog);
 
-        FirebaseController.retrieveCurrentPharma("dias@gmaildotcom", new OnCurrentPharmaGetDataListener() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String defaultState = "";
+        String email =  prefs.getString(FLAG_EMAIL, defaultState);
+        final String newEmail = email.replace(".", "dot");
+
+        FirebaseController.retrieveCurrentPharma(newEmail, new OnCurrentPharmaGetDataListener() {
             @Override
             public void onStart() {
 
@@ -100,13 +126,18 @@ public class EditInfoPharmaFragment extends Fragment {
 
             @Override
             public void onSuccess(Pharma currentPharma) {
-                pharma = new Pharma();
+                pharma = new Pharma(newEmail);
                 pharma = currentPharma;
-                _namePharmaInput.setText(pharma.getName());
-                _cnpjPharmaInput.setText(pharma.getCnpj());
-                _addressPharmaInput.setText(pharma.getAddress());
-                _houseNumberPharmaInput.setText(pharma.getHouseNumber());
-                _cepPharmaInput.setText(pharma.getCep());
+                _namePharmaInput.setText(pharma.getName().trim());
+                _cnpjPharmaInput.setText(pharma.getCnpj().trim());
+                _addressPharmaInput.setText(pharma.getAddress().trim());
+                _houseNumberPharmaInput.setText(pharma.getHouseNumber().trim());
+                _cepPharmaInput.setText(pharma.getCep().trim());
+
+                if (pharma.getName().equals("")){
+                    _backButton.setVisibility(View.GONE);
+                }
+
                 closeDialog(dialog);
             }
         });
@@ -124,6 +155,7 @@ public class EditInfoPharmaFragment extends Fragment {
         dialog.setCancelable(false);
         dialog.show();
     }
+
 
     private void closeDialog(ProgressDialog dialog){
         dialog.dismiss();

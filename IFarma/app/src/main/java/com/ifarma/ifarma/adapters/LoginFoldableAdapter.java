@@ -19,8 +19,10 @@ package com.ifarma.ifarma.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +39,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.activities.MainActivity;
 import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.libs.FoldableLayout;
 
@@ -54,6 +57,7 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
 
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_LOGGED = "isLogged";
+    public static final String FLAG_EMAIL = "currentEmail";
 
     private AuthenticationController authCtrl;
 
@@ -88,11 +92,7 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                 progressDialog.setMessage("Autenticando...");
                 progressDialog.show();
 
-                //TODO tirar os logs.
-                Log.e("InputEmail - ADAPTER", holder._loginEmailInput.getText().toString());
-                Log.e("InputSenha - ADAPTER", holder._loginPasswordInput.getText().toString());
-
-                String email = holder._loginEmailInput.getText().toString();
+                final String email = holder._loginEmailInput.getText().toString();
                 String senha = holder._loginPasswordInput.getText().toString();
                 Task<AuthResult> result = authCtrl.signIn(email, senha);
 
@@ -108,7 +108,6 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                 result.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e("sign IN - SERVICE", "signInWithEmail:onFailure:" + e.getMessage());
                         Toast.makeText(mContext, "Email ou senha inválidos",
                                 Toast.LENGTH_LONG).show();
                     }
@@ -120,7 +119,11 @@ public class LoginFoldableAdapter extends RecyclerView.Adapter<LoginFoldableAdap
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putBoolean(FLAG_LOGGED, true);
+                        editor.putString(FLAG_EMAIL, email);
                         editor.commit();
+
+                        Intent mIntent = new Intent(mContext, MainActivity.class);
+                        mContext.startActivity(mIntent);
                     }
                 });
             }

@@ -1,31 +1,28 @@
 package com.ifarma.ifarma.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.PharmViewPagerAdapter;
 import com.ifarma.ifarma.adapters.UserViewPagerAdapter;
-import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.controllers.FirebaseController;
-import com.ifarma.ifarma.controllers.OnMedGetDataListener;
-import com.ifarma.ifarma.exceptions.InvalidUserDataException;
-import com.ifarma.ifarma.fragments.user.SearchFragment;
+import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
+import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
+import com.ifarma.ifarma.fragments.user.EditInfoUserFragment;
+import com.ifarma.ifarma.model.OrderStatus;
 import com.ifarma.ifarma.model.Pharma;
-import com.ifarma.ifarma.model.Product;
-import com.ifarma.ifarma.services.AuthenticationState;
+import com.ifarma.ifarma.services.AdapterService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +31,13 @@ import devlight.io.library.ntb.NavigationTabBar;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_LOGGED = "isLogged";
+    public static final String FLAG_EMAIL = "currentEmail";
+    private boolean isPharmacy = false;
+    private boolean incompleteRegister = false;
     private MainActivity mainActivity;
-    private int oldPage = 0;
     private FragmentPagerAdapter adapter;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,60 +46,58 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mainActivity = this;
 
-////        try {
-//            //FirebaseController.savePharmacy("Dias", "dias@gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "00000000000000");
-//            Product product = new Product("Dipirona", 2.5, "A", "B", true);
-//            FirebaseController.newProduct("dias@gmaildotcom", product);
-//
-////        } catch (InvalidUserDataException e) {
-////            e.printStackTrace();
-////        }
+        isPharmacy = false;
 
-        try {
-            FirebaseController.saveCustomer("Mafra", "jvmafra.at.gmail.com", "88662443mg", "Santa Catarina", "1353", "58414470", "70175610401");
-            FirebaseController.saveProduct("Dipirona", 2.50, "BAYER", "10mg, para dor de cabeça", true);
-        } catch (InvalidUserDataException e) {
-            e.printStackTrace();
+        if (getIntent().hasExtra("isPharmacy")) {
+            isPharmacy = getIntent().getExtras().getBoolean("isPharmacy");
         }
 
+//        FirebaseController.saveOder("farmaciadias@gmaildotcom",
+//                                    "323123213",
+//                                    "gg", 25.30, "Pedrinho pira poca",
+//                                    "Nossa",
+//                                    "Rua das Flores",
+//                                    OrderStatus.WAITING_ORDER);
+
+        if (getIntent().hasExtra("incompleteRegister")) {
+            if (getIntent().getExtras().getBoolean("incompleteRegister")){
+                incompleteRegister = getIntent().getExtras().getBoolean("incompleteRegister");
+
+                Fragment fragment;
+
+                if (isPharmacy){
+                    fragment = new EditInfoPharmaFragment();
+                } else {
+                    fragment = new EditInfoUserFragment();
+                }
+
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+            }
+        }
+
+        if (!isPharmacy)
+            checkIsPharmacy();
+
         initUI();
-
-        FirebaseController.retrieveProducts(new OnMedGetDataListener() {
-
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onSuccess(final List<Product> lista) {
-                System.out.println(lista.size());
-                int i = 0;
-
-                for (Product p : lista){{
-                    System.out.println("PRODUTO #" + i);
-                    System.out.println(p.getNameProduct());
-                    System.out.println(p.getPrice());
-                    System.out.println("------------------------------------------------");
-                    i++;
-                }}
-            }
-        });
     }
 
 
     private boolean isAuthenticated(){
-        SharedPreferences sharedPref = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean defaultState = false;
-        return sharedPref.getBoolean(FLAG_LOGGED, defaultState);
+        return prefs.getBoolean(FLAG_LOGGED, defaultState);
     }
 
     private void initUI(){
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
-        final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
+        viewPager = (ViewPager) findViewById(R.id.vp_horizontal_ntb);
+        ArrayList<NavigationTabBar.Model> models;
 
         final NavigationTabBar navigationTabBar = (NavigationTabBar) findViewById(R.id.ntb_horizontal);
 
         if (isPharmacy()){
+            models = new ArrayList<>();
             models.add(
                     new NavigationTabBar.Model.Builder(
                             ContextCompat.getDrawable(this, R.drawable.ic_store_mall_directory_white_24dp),
@@ -130,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
             adapter = new PharmViewPagerAdapter(getSupportFragmentManager(), getApplicationContext(), models);
         } else {
+            models = new ArrayList<>();
             models.add(
                     new NavigationTabBar.Model.Builder(
                             ContextCompat.getDrawable(this, R.drawable.ic_search_white_24dp),
@@ -166,6 +164,11 @@ public class MainActivity extends AppCompatActivity {
 
         navigationTabBar.setModels(models);
         navigationTabBar.setViewPager(viewPager, 0);
+
+        AdapterService.setViewPager(viewPager);
+        AdapterService.setNavigationTabBar(navigationTabBar);
+        AdapterService.setPagerAdapter(adapter);
+
         navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -173,17 +176,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(final int position) {
-                Fragment fragment = adapter.getItem(position);
-                if(fragment instanceof SearchFragment){
-                    android.support.v4.app.FragmentTransaction fragmentTransaction = mainActivity.getSupportFragmentManager().beginTransaction();
-
-                    fragmentTransaction.replace(R.id.activity_main, fragment);
-                    fragmentTransaction.commit();
-
-                }
-
-                navigationTabBar.getModels().get(position).hideBadge();
+                viewPager.setAdapter(adapter);
+                navigationTabBar.setViewPager(viewPager, position);
             }
+
             @Override
             public void onPageScrollStateChanged(final int state) {}
         });
@@ -199,16 +195,8 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         NavigationTabBar.Model model;
                         if (!isAuthenticated() && !isPharmacy()) {
-                            model = navigationTabBar.getModels().get(2);
+                            model = navigationTabBar.getModels().get(navigationTabBar.getModels().size() - 1);
                             model.showBadge();
-                        } else {
-                            if (isPharmacy()) {
-                                model = navigationTabBar.getModels().get(1);
-                                if (getPharmRequestsCount() > 0) {
-                                    model.setBadgeTitle("+ " + getPharmRequestsCount());
-                                    model.showBadge();
-                                }
-                            }
                         }
                     }
                 }, 100);
@@ -217,12 +205,55 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private int getPharmRequestsCount(){
-        return 0;
+    private void checkIsPharmacy(){
+        final List<String> pharmList = new ArrayList<>();
+        final String email = currentEmail();
+
+        FirebaseController.retrievePharmacies(new OnPharmaGetDataListener() {
+
+            @Override
+            public void onStart() {}
+
+
+            @Override
+            public void onSuccess(List<Pharma> lista) {
+                for (Pharma p : lista){
+                    pharmList.add(p.getEmail());
+
+                    if (p.getEmail().equals(email)){
+                        isPharmacy = true;
+
+                        finish();
+                        Intent mIntent = new Intent(mainActivity, MainActivity.class);
+                        Bundle mBundle = new Bundle();
+                        mBundle.putBoolean("isPharmacy", true);
+                        mIntent.putExtras(mBundle);
+                        startActivity(mIntent);
+                    }
+                }
+            }
+
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment f = this.getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (f instanceof EditInfoPharmaFragment || f instanceof  EditInfoUserFragment){
+            Toast.makeText(this, "Você precisa terminar o cadastro", Toast.LENGTH_SHORT).show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private boolean isPharmacy(){
-        return false;
+        return this.isPharmacy;
+    }
+
+    private String currentEmail(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String defaultState = "";
+        return prefs.getString(FLAG_EMAIL, defaultState);
     }
 
 }
