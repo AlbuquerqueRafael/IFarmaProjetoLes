@@ -16,22 +16,22 @@ public class ProductDataValidateTests {
 	private final String invalidProductLabWarn = "The Product Lab is invalid.";
 	private final String invalidProductDescripWarn = "The Product Description is invalid.";
 	private final String onlyNumbers = "1561151651561";
-	private final String emptyString = "";
-	
+	private String invalidEmptyParam;
+	private String invalidNullParam;
+
 	@Before
 	public void setUpProducts() throws InvalidProductDataException{
-		description = "ninguem se importa com essa historia de mil meu comi o teu.";
+		description = "ninguem se importa com essa historia.";
 		labson = "Predador de Calcinhas";
-		
-		anador = new Product("Anador", price, labson, description, isGeneric, "gilekel");
-		
+		invalidEmptyParam = "              ";
+		invalidNullParam = null;
+		anador = new Product("Anador", price, labson, description, isGeneric, "1", "Gilekel pharma");
 	}
 		
 	@Test
-	public void testShouldNotSetProductNameToNumbers(){
-		String correctName = anador.getNameProduct();
+	public void testShouldNotSetProductNameToNull(){
 		try {
-			anador.setNameProduct(onlyNumbers);
+			anador.setNameProduct(invalidNullParam);
 		} catch (InvalidProductDataException e) {
 			Assert.assertEquals(invalidProductNameWarn, e.getMessage());
 		}
@@ -42,29 +42,38 @@ public class ProductDataValidateTests {
 	public void testShouldNotSetProductNameToEmpty(){
 		String correctName = anador.getNameProduct();
 		try {
-			anador.setNameProduct(emptyString);
+			anador.setNameProduct(invalidEmptyParam);
 		} catch (InvalidProductDataException e) {
 			Assert.assertEquals(invalidProductNameWarn, e.getMessage());
 		}
 		
 	}
+
+	public void testShouldNotSetProductNameToMoreThan30Chars(){
+		String name = "minha terra tem palmeiras onde canta o sabiar";
+		try {
+			anador.setNameProduct(name);
+		} catch (InvalidProductDataException e) {
+			Assert.assertEquals(invalidProductNameWarn, e.getMessage());
+		}
+
+	}
 	
 	@Test
-	public void testShouldNotSetProductLabToNumbers(){
+	public void testShouldNotSetProductLabToNull(){
 		String correctName = anador.getLab();
 		try {
-			anador.setLab(onlyNumbers);
+			anador.setLab(invalidNullParam);
 		} catch (InvalidProductDataException e) {
 			Assert.assertEquals(invalidProductLabWarn, e.getMessage());
 		}
-		
 	}
 	
 	@Test
 	public void testShouldNotSetProductLabToEmpty(){
 		String correctName = anador.getLab();
 		try {
-			anador.setLab(emptyString);
+			anador.setLab(invalidEmptyParam);
 		} catch (InvalidProductDataException e) {
 			Assert.assertEquals(invalidProductLabWarn, e.getMessage());
 		}
@@ -72,21 +81,30 @@ public class ProductDataValidateTests {
 	}
 	
 	@Test
-	public void testShouldNotSetProductDescripToNumbers(){
-		String correctName = anador.getDescription();
+	public void testShouldNotSetProductDescripToNull(){
 		try {
-			anador.setDescription(onlyNumbers);
+			anador.setDescription(invalidNullParam);
 		} catch (InvalidProductDataException e) {
 			Assert.assertEquals(invalidProductDescripWarn, e.getMessage());
 		}
 		
 	}
-	
+
+	public void testShouldNotSetProductDescripToMoreThan50Chars(){
+		String descrip = "minha terra tem palmeiras onde canta o sabiá as arvers que aqui ggggg";
+		try {
+			anador.setDescription(descrip);
+		} catch (InvalidProductDataException e) {
+			Assert.assertEquals(invalidProductDescripWarn, e.getMessage());
+		}
+
+	}
+
 	@Test
 	public void testShouldNotSetProductDescripToEmpty(){
 		String correctName = anador.getDescription();
 		try {
-			anador.setDescription(emptyString);
+			anador.setDescription(invalidEmptyParam);
 		} catch (InvalidProductDataException e) {
 			Assert.assertEquals(invalidProductDescripWarn, e.getMessage());
 		}

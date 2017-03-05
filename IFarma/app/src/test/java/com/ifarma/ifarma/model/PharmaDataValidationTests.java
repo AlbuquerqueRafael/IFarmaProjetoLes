@@ -4,33 +4,31 @@ import com.ifarma.ifarma.exceptions.*;
 
 import org.junit.*;
 
-import com.ifarma.ifarma.model.*;
-
 public class PharmaDataValidationTests {
-			
+
 	private String validCNPJ;
 	private String invalidCNPJ;
 
 	private Pharma pharma;
 	private Pharma pharmaCrt;
-			
+
 	@Before
-	public void setUp() throws InvalidUserDataException{				
+	public void setUp() throws InvalidUserDataException{
 		pharma = new Pharma();
 		validCNPJ = "46633676000113";
 		invalidCNPJ = "0000067000000300000000000";
-		
+
 	}
-		
+
 	@Test
 	public void testShouldNotSetCNPJOfPharma(){
 		try {
 			pharma.setCnpj(invalidCNPJ);
 		} catch (InvalidCNPJException e) {
 			Assert.assertEquals(new InvalidCNPJException().getMessage(), e.getMessage());
-		}	
+		}
 	}
-	
+
 	@Test
 	public void testShouldSetCNPJOfPharma(){
 		try {
@@ -40,12 +38,12 @@ public class PharmaDataValidationTests {
 		}
 		Assert.assertEquals(validCNPJ, pharma.getCnpj());
 	}
-	
+
 	@Test
 	public void testShouldFailCreatingInvalidName(){
 		try {
 			pharmaCrt = new Pharma("Gilo boy ph@rm@", "redepharma@hotmail.com",
-					"5151526w2a", "Rua das Cebolas que nao fazem chorar",
+					"Rua das Cebolas que nao fazem chorar",
 					"1500", "58410538");
 		} catch (InvalidUserDataException e) {
 			Assert.assertEquals(new InvalidNameException().getMessage(), e.getMessage());

@@ -8,13 +8,11 @@ public final class Validate {
 	private static final int CG_CEP_BEGIN = 58400000;
 	private static final String NAME_REGEX = "[a-z A-Z]+";
 	private static final String ONLY_NUM_REGEX = "[0-9]+";
-	private static final String HOUSE_NUM_REGEX = "[a-z0-9A-Z-]+";
-	private static final String VALID_CHARS_BEFORE_AT = "[0-9a-zA-Z-._]+";
 	private static final String ONLY_LETTERS = "[a-zA-Z]+";
-	private static final String ADDRESS_REGEX = "[a-z A-Z-.]+";
 	private static final String AT_SYMBOL = "@";
 	private static final String SPACE_STRING = " ";
-	
+	private static final int MAX_CHARS_DESCRIP = 50;
+	private static final int MAX_CHARS_PRODUCTNAME = 30;
 	private static final int[] PESOCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
 	private static final int[] PESOCNPJ = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
 	
@@ -23,10 +21,8 @@ public final class Validate {
 	/**Name is valid if not contains number or special chars,
 	 * except for space.*/
 	public static boolean isValidName(final String name) {
-		boolean isValid = true; // NOPMD by Lucas on 17/02/17 18:47
-		final String firstCharOfName = getFirstCharAsStringOf(name);
-		if(!firstCharOfName.matches(ONLY_LETTERS)  // NOPMD by Lucas on 17/02/17 18:48
-				|| !name.matches(NAME_REGEX)){
+		boolean isValid = true;
+		if(name == null || name.trim().isEmpty() ){
 			isValid = false;
 		}	
 		return isValid;
@@ -49,42 +45,25 @@ public final class Validate {
 
 	private static String getFirstCharAsStringOf(final String data){
 		String answer = "";
-		if(!data.isEmpty()){
+		if(data != null && !data.trim().isEmpty()){
 			answer = data.substring(0,1);
 		}
 		return answer;
 	}
-	
-	private static String getPartBeforeAtSymbol(final String email){
-		final String[] emailSplitted = email.split(AT_SYMBOL);
-		return emailSplitted[0];
-	}
-	
-	/** Email is valid if has at(@) symbol, 
-	 * start with a letter and has not special symbols,
-	 * except for underscore, dot and hyphen, because 
-	 * they are used as separator.*/
+
+	/** Email is valid if has at(@) symbol.*/
 	public static boolean isValidEmail(final String email) {
-		final String firstCharOfEmail = getFirstCharAsStringOf(email);
-		boolean isValid = email.contains(AT_SYMBOL) && firstCharOfEmail.matches(ONLY_LETTERS);
-		if(isValid){
-			final String firstPartOfEmail = getPartBeforeAtSymbol(email);
-			isValid = firstPartOfEmail.matches(VALID_CHARS_BEFORE_AT); // NOPMD by Lucas on 17/02/17 18:48
+		boolean isValid = false;
+		if(email != null && !email.trim().isEmpty()){
+			isValid = email.contains(AT_SYMBOL); // NOPMD by Lucas on 17/02/17 18:48
 		}
 		return isValid;
 	}
 
-	/** Address is valid if starts with a letter, 
-	 * has space because of street's name and 
-	 * has not special chars, except for hyphen and dot.
-	 * */
+	/** Address is valid if isn't empty or null.*/
 	public static boolean isValidAddress(final String address) {
 		boolean isValid = true; // NOPMD by Lucas on 17/02/17 18:47
-		final String addressFirstChar = getFirstCharAsStringOf(address);
-		if(address.matches(ONLY_NUM_REGEX) || 
-				!addressFirstChar.matches(ONLY_LETTERS) || // NOPMD by Lucas on 17/02/17 18:48
-				!address.contains(SPACE_STRING) ||
-				!address.matches(ADDRESS_REGEX)){
+		if(address == null || address.trim().isEmpty()){
 			isValid = false;
 		}
 		return isValid;
@@ -93,7 +72,7 @@ public final class Validate {
 	/** CEP is valid if it's from Campina Grande city. */
 	public static boolean isValidCEP(final String cep) {
 		boolean isValid = false; // NOPMD by Lucas on 17/02/17 18:47
-		if(cep.matches(ONLY_NUM_REGEX) && cep.length() == 8){
+		if(cep != null && !cep.trim().isEmpty() && cep.matches(ONLY_NUM_REGEX) && cep.length() == 8){
 			final int cepAsNumber = Integer.parseInt(cep);
 			if(cepAsNumber >= CG_CEP_BEGIN && cepAsNumber <= CG_CEP_END){
 				isValid = true;
@@ -102,13 +81,11 @@ public final class Validate {
 		return isValid;
 	}
 
-	/** A house number is valid if starts with a number. Nevertheless, the house number may have
-	 * letters and a hyphen to be used as separator. */
+	/** A house number is valid if starts with a number. */
 	public static boolean isValidHouseNumber(final String houseNumber) {
 		boolean isValid = true; // NOPMD by Lucas on 17/02/17 18:47
 		final String houseNumFirstChar = getFirstCharAsStringOf(houseNumber);
-		if(!houseNumFirstChar.matches(ONLY_NUM_REGEX) || // NOPMD by Lucas on 17/02/17 18:48
-				!houseNumber.matches(HOUSE_NUM_REGEX)){
+		if(!houseNumFirstChar.matches(ONLY_NUM_REGEX)){  // NOPMD by Lucas on 17/02/17 18:48
 			isValid = false;
 		}
 		return isValid;
@@ -194,43 +171,34 @@ public final class Validate {
 		return valid;
 	}
 
-    /**A product name is valid if starts with a letter and has no special symbols, except for
-     * dot, underscore, hyphen, space and bar.*/
+    /**A product name is valid if isn't empty or null and has no more than 30 chars.*/
 	public static boolean isValidProductName(final String productName){
 		boolean isValid = true;
-		String firstCharOfProductName = getFirstCharAsStringOf(productName);
-		if(productName.isEmpty() ||
-				!firstCharOfProductName.matches(ONLY_LETTERS) ||
-				!productName.matches("[a-z0-9A-Z-._/ ]+")){
+		if(productName == null ||
+				productName.trim().isEmpty() ||
+				productName.length() > MAX_CHARS_PRODUCTNAME){
 			isValid = false;
 		}
 		return isValid;
 	}
 
-    /**A description is valid if starts with a letter and has no special symbols, except for
-     * dot, underscore, comma, semicolon, hyphen, space and bar.*/
+    /**A description is valid if isn't empty or null and has no more than 50 chars.*/
 	public static boolean isValidProductDescription(final String newDescription) {
 		boolean isValid = true;
-		String firstCharOfProductDescription = getFirstCharAsStringOf(newDescription);
-		if(newDescription.isEmpty() ||
-				!firstCharOfProductDescription.matches(ONLY_LETTERS)||
-				!newDescription.matches("[a-z0-9A-Z-,;._/ ]+")){
+		if(newDescription == null ||
+				newDescription.trim().isEmpty() ||
+				newDescription.length() > MAX_CHARS_DESCRIP){
 			isValid = false;
 		}
 		return isValid;
 	}
 
-    /**A lab name is valid if starts with a letter and has no special symbols, except for
-     * dot, underscore, hyphen, space, & and bar.*/
+    /**A lab name is valid if isn't empty or null.*/
 	public static boolean isValidProductLab(final String newLab) {
 		boolean isValid = true;
-		String firstCharOfProductLab = getFirstCharAsStringOf(newLab);
-		if(newLab.isEmpty() ||
-				!firstCharOfProductLab.matches(ONLY_LETTERS) ||
-				!newLab.matches("[a-z0-9A-Z-._/& ]+")){
+		if(newLab == null || newLab.trim().isEmpty()){
 			isValid = false;
 		}
 		return isValid;
 	}
-
 }
