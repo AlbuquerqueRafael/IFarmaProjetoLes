@@ -7,13 +7,17 @@ import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.model.Customer;
 import com.ifarma.ifarma.model.Order;
+import com.ifarma.ifarma.model.OrderStatus;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.util.Utils;
 import com.ifarma.ifarma.model.Product;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +32,7 @@ public class FirebaseController {
     private final static String PRODUCTS = "products";
     private final static String ORDERS = "orders";
     public static final String FIREBASE_URL = "https://ifarma-5d2e6.firebaseio.com/";
+    private static SecureRandom random = new SecureRandom();
 
     private static Firebase firebase;
 
@@ -293,6 +298,110 @@ public class FirebaseController {
         Firebase firebaseRef = getFirebase();
         Firebase productsPharmacyReference = firebaseRef.child(PHARMACIES).child(pharmacyId).child(PRODUCTS);
         productsPharmacyReference.child(productID).removeValue();
+    }
+
+    public static void saveOder(String pharmacyId, String customerTelephone,
+                                String comment, double price, String custommerName, String description,
+                                String adressCustomer, OrderStatus orderStatus){
+
+        Firebase firebaseRef = getFirebase();
+        Firebase productsPharmacyReference = firebaseRef.child(PHARMACIES).child(pharmacyId).child(ORDERS);
+        String id = nextSessionId();
+        Firebase newOrder = productsPharmacyReference.child(id);
+
+
+        Utils.showSavingProductMsg();
+
+        Order order = new Order();
+        try {
+            order.setComment(comment);
+            order.setPharmacyId(pharmacyId);
+            order.setCustomerName(custommerName);
+            order.setOrderTotalPrice(price);
+            order.setCustomerTelephone(customerTelephone);
+            order.setDate(new Date());
+            order.setDescription(description);
+            order.setOrderStatus(orderStatus);
+            order.setDeliveryAddress(adressCustomer);
+            order.setId(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        newOrder.setValue(order);
+
+    }
+
+    public static void editOrder(Order order) {
+        Firebase firebaseRef = getFirebase();
+        Firebase ordersPharmacyReference = firebaseRef.child(PHARMACIES).child(order.getPharmacyId()).child(ORDERS);
+        ordersPharmacyReference.child(order.getId()).setValue(order);
+
+
+    }
+
+    public static void retrievePharmaOrders(final OnOrderGetDataListener listener, final OrderStatus orderStatus) {
+        final Firebase productsReference = getFirebase().child(PHARMACIES);
+        final List<Order> lista = new ArrayList<>();
+
+        productsReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                DataSnapshot orderSnapshot = dataSnapshot.child(ORDERS);
+                Iterable<DataSnapshot> orderChildren = orderSnapshot.getChildren();
+
+                for (DataSnapshot ord : orderChildren){
+                    Order order = ord.getValue(Order.class);
+
+                    if(orderStatus == order.getOrderStatus()){
+                        lista.add(order);
+                    }
+
+                }
+
+                listener.onSuccess(lista);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+                List<Order> list = new ArrayList<>();
+                DataSnapshot orderSnapshot = dataSnapshot.child(ORDERS);
+                Iterable<DataSnapshot> orderChildren = orderSnapshot.getChildren();
+
+                for (DataSnapshot ord : orderChildren){
+                    Order order = ord.getValue(Order.class);
+
+                    if(orderStatus == order.getOrderStatus()){
+                        list.add(order);
+                    }
+
+                }
+
+                listener.onUpdated(list);
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Utils.showChildRemovedMsg();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {
+                Utils.showChildMovedMsg();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Utils.showOnCancelledMsg();
+            }
+
+
+        });
+    }
+
+    private static String nextSessionId() {
+        return new BigInteger(130, random).toString(32);
     }
 
 }

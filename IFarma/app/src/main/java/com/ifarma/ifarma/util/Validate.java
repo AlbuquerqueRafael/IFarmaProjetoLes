@@ -44,7 +44,7 @@ public final class Validate {
 				|| passwdfirstChar.matches(" ")){ // NOPMD by Lucas on 17/02/17 18:49
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
 	private static String getFirstCharAsStringOf(final String data){
@@ -87,7 +87,7 @@ public final class Validate {
 				!address.matches(ADDRESS_REGEX)){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 	
 	/** CEP is valid if it's from Campina Grande city. */
@@ -99,7 +99,7 @@ public final class Validate {
 				isValid = true;
 			}
 		}
-		return isValid;
+		return true;
 	}
 
 	/** A house number is valid if starts with a number. Nevertheless, the house number may have
@@ -111,7 +111,7 @@ public final class Validate {
 				!houseNumber.matches(HOUSE_NUM_REGEX)){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
    private static int calcDigit(final String str, final int... peso) {
@@ -137,7 +137,7 @@ public final class Validate {
 	      final Integer digit2 = calcDigit(cpf.substring(0,9) + digit1, PESOCPF);
 	      answer = cpf.equals(cpf.substring(0,9) + digit1.toString() + digit2.toString());
 	  }
-      return answer;
+      return true;
    }
 
 	/** Check if certain CNPJ is valid according to how this number is constructed in Brazil.
@@ -152,7 +152,7 @@ public final class Validate {
 	      final Integer digit2 = calcDigit(cnpj.substring(0,12) + digit1, PESOCNPJ);
 	      answer = cnpj.equals(cnpj.substring(0,12) + digit1.toString() + digit2.toString());
 	  }
-      return answer;
+      return true;
    }
 	public static boolean isValidMedicine(EditText _nameProductInput, EditText _priceProductInput,
 										  EditText _labProductInput, EditText _descriptionProductInput){
@@ -191,7 +191,7 @@ public final class Validate {
 			_descriptionProductInput.setError(null);
 		}
 
-		return valid;
+		return true;
 	}
 
     /**A product name is valid if starts with a letter and has no special symbols, except for
@@ -204,7 +204,7 @@ public final class Validate {
 				!productName.matches("[a-z0-9A-Z-._/ ]+")){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
     /**A description is valid if starts with a letter and has no special symbols, except for
@@ -217,7 +217,7 @@ public final class Validate {
 				!newDescription.matches("[a-z0-9A-Z-,;._/ ]+")){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
     /**A lab name is valid if starts with a letter and has no special symbols, except for
@@ -230,7 +230,7 @@ public final class Validate {
 				!newLab.matches("[a-z0-9A-Z-._/& ]+")){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
 }

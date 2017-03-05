@@ -10,6 +10,7 @@ import java.util.Map;
 public class Pharma extends AbstractUser implements Serializable {
 
 	private Map<String, Product> products;
+
 	private String cnpj;
 
 	public Pharma(final String name, final String email,
