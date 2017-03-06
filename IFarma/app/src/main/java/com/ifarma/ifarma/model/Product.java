@@ -26,6 +26,13 @@ public class Product implements Serializable{
             if(!Validate.isValidProductDescription(description)){
                 throw new InvalidProductDataException("The Product Description is invalid.");
             }
+            if(!Validate.isValidName(pharmacyName)){
+                throw new InvalidProductDataException("The name of Pharma is null or empty.");
+            }
+            if(!Validate.isValidPharmaID(pharmacyId)){
+                throw new InvalidProductDataException("The ID of Pharma is null or empty.");
+            }
+
         this.name = name;
         this.price = price;
         this.lab = lab;
@@ -35,7 +42,15 @@ public class Product implements Serializable{
         this.pharmacyName = pharmacyName;
     }
 
-    public Product(){}
+    public Product(){
+        this.name = "default product";
+        this.price = 0.0;
+        this.lab = "default lab";
+        this.description = "default description";
+        this.generic = true;
+        this.pharmacyId = "default pharmacy id";
+        this.pharmacyName = "default pharmacy name";
+    }
 
     public String getNameProduct(){
         return name;
@@ -65,7 +80,9 @@ public class Product implements Serializable{
         if(!Validate.isValidProductName(newName)){
             throw new InvalidProductDataException("The Product Name is invalid.");
         }
-        this.name = newName;
+        else{
+            this.name = newName;
+        }
     }
 
     public void setPrice(final double newPrice){
@@ -76,14 +93,14 @@ public class Product implements Serializable{
         if(!Validate.isValidProductLab(newLab)){
             throw new InvalidProductDataException("The Product Lab is invalid.");
         }
-        this.lab = newLab;
+        else{this.lab = newLab;}
     }
 
     public void setDescription(final String newDescription) throws InvalidProductDataException{
         if(!Validate.isValidProductDescription(newDescription)){
             throw new InvalidProductDataException("The Product Description is invalid.");
         }
-        this.description = newDescription;
+        else{this.description = newDescription;}
     }
 
     public void setGeneric(boolean newGeneric) {
@@ -91,7 +108,16 @@ public class Product implements Serializable{
     }
 
     public void setPharmacyId(String pharmacyId){
-        this.pharmacyId = pharmacyId;
+        if(Validate.isValidPharmaID(pharmacyId)){
+            this.pharmacyId = pharmacyId;
+        }
+        else{
+            try {
+                throw new InvalidProductDataException("The name of Pharma is null or empty.");
+            } catch (InvalidProductDataException e) {
+                e.getMessage();
+            }
+        }
     }
 
     @Override
@@ -105,12 +131,20 @@ public class Product implements Serializable{
         return prod1.getNameProduct().equals(this.getNameProduct());
     }
 
-
     public String getPharmacyName() {
         return this.pharmacyName;
     }
 
-    public void setPharmacyName(String pharmacyName){
-        this.pharmacyName = pharmacyName;
+    public void setPharmacyName(String pharmacyName) {
+        if(Validate.isValidName(pharmacyName)){
+            this.pharmacyName = pharmacyName;
+        }
+        else{
+            try {
+                throw new InvalidProductDataException("The name of Pharma is null or empty.");
+            } catch (InvalidProductDataException e) {
+                e.getMessage();
+            }
+        }
     }
 }

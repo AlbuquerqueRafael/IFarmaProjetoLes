@@ -201,4 +201,12 @@ public final class Validate {
 		}
 		return isValid;
 	}
+
+	public static boolean isValidPharmaID(final String id) {
+		boolean isValid = true;
+		if(id == null || id.trim().isEmpty()){
+			isValid = false;
+		}
+		return isValid;
+	}
 }
