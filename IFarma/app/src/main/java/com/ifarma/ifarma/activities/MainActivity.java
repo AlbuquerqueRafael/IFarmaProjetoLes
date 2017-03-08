@@ -20,6 +20,7 @@ import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
 import com.ifarma.ifarma.fragments.user.EditInfoUserFragment;
+import com.ifarma.ifarma.model.OrderStatus;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.services.AdapterService;
 
@@ -50,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent().hasExtra("isPharmacy")) {
             isPharmacy = getIntent().getExtras().getBoolean("isPharmacy");
         }
+
+//        FirebaseController.saveOder("farmaciadias@gmaildotcom",
+//                                    "323123213",
+//                                    "gg", 25.30, "Pedrinho pira poca",
+//                                    "Nossa",
+//                                    "Rua das Flores",
+//                                    OrderStatus.WAITING_ORDER);
 
         if (getIntent().hasExtra("incompleteRegister")) {
             if (getIntent().getExtras().getBoolean("incompleteRegister")){

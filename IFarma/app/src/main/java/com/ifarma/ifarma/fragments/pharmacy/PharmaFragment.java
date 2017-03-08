@@ -61,11 +61,7 @@ public class PharmaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        if (container != null) {
-            container.removeAllViews();
-        }
-
+        
         savedInstanceState = getArguments();
         pharm = (Pharma) savedInstanceState.getSerializable("pharm");
 
@@ -87,6 +83,7 @@ public class PharmaFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
+
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Informações da Farmácia")
                         .setMessage("Contato: " + pharm.getEmail() + "\nEndereço: " + pharm.getAddress() + "\nCEP: " + pharm.getCep())

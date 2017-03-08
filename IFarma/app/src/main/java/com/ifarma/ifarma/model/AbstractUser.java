@@ -3,6 +3,11 @@ package com.ifarma.ifarma.model;
 import com.ifarma.ifarma.exceptions.*;
 import com.ifarma.ifarma.util.*;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
+
 abstract class AbstractUser{
 
 	private String name;
@@ -10,6 +15,8 @@ abstract class AbstractUser{
 	private String address; 
 	private String houseNumber; 
 	private String cep;
+	private Map<String, Order> orders;
+    private SecureRandom random = new SecureRandom();
 
     public AbstractUser() {}
 
@@ -23,27 +30,7 @@ abstract class AbstractUser{
 
     public AbstractUser(final String name, final String email,
 				 final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
-		
-		if(!Validate.isValidName(name)){
-			throw new InvalidNameException();
-		}
-				
-		if(!Validate.isValidEmail(email)){
-			throw new InvalidEmailException();
-		}
 
-		if(!Validate.isValidAddress(address)){
-			throw new InvalidAddressException();
-		}
-		
-		if(!Validate.isValidHouseNumber(houseNumber)){
-			throw new InvalidHouseNumberException();
-		}
-		
-		if(!Validate.isValidCEP(cep)){
-			throw new InvalidCEPException();
-		}
-		
 		this.name = name;
 		this.email = email;
 		this.address = address;
@@ -105,5 +92,28 @@ abstract class AbstractUser{
 		}
 		this.email = email;
 	}
-		
+
+	public void initOrders(){
+		this.orders = new HashMap<>();
+	}
+
+	public void addOrder(Order order){
+		if(order != null) {
+			orders.put(nextSessionId(), order);
+		}
+	}
+
+	public void removeProduct(String id){
+		if(id != null) {
+			orders.remove(id);
+		}
+	}
+
+	public Map<String, Order> getOrders(){
+		return orders;
+	}
+
+    public String nextSessionId() {
+        return new BigInteger(130, random).toString(32);
+    }
 }

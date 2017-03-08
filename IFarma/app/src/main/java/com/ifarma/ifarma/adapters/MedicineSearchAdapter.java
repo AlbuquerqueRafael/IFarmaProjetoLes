@@ -1,7 +1,12 @@
 package com.ifarma.ifarma.adapters;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,13 +16,20 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.activities.MainActivity;
+import com.ifarma.ifarma.controllers.AuthenticationController;
+import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.fragments.user.CartFragment;
 import com.ifarma.ifarma.fragments.user.UserFragment;
 import com.ifarma.ifarma.holders.ViewHolder;
+import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
 import com.ifarma.ifarma.services.AdapterService;
 import com.ifarma.ifarma.services.CartService;
+import com.ifarma.ifarma.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +62,9 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
     private View rootView;
     private final PublishSubject<Product> onClickSubject = PublishSubject.create();
 
+    private boolean isPharmacy = false;
+    public static final String FLAG_EMAIL = "currentEmail";
+
     public MedicineSearchAdapter(Context context, ArrayList<Product> mProductArrayList, View rootView) {
 
         this.mOriginalValues = mProductArrayList;
@@ -81,38 +96,67 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
 
         final Product product = mDisplayedValues.get(position);
 
-        addToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i < _selectedProducts.size(); i++) {
-                    CartService.addToCart(_selectedProducts.get(i));
+        isPharmacy = isPharmacy();
+
+        if (!isPharmacy) {
+            addToCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (int i = 0; i < _selectedProducts.size(); i++) {
+                        CartService.addToCart(_selectedProducts.get(i));
+                    }
+
+                    Toast.makeText(context, _selectedProducts.size() + " produtos adicionados ao carrinho! :)", Toast.LENGTH_SHORT).show();
+
+                    AdapterService.reloadAdapter(1);
+
                 }
+            });
 
-                Toast.makeText(context, _selectedProducts.size() + " produtos adicionados ao carrinho! :)", Toast.LENGTH_SHORT).show();
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                AdapterService.reloadAdapter(1);
+                    if (!_isSelecting){
+                        onClickSubject.onNext(product);
 
-            }
-        });
+                        new AlertDialog.Builder(context)
+                                .setTitle("Informações do Produto")
+                                .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab() + "\nDescrição: " + product.getDescription()
+                                        + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + String.format("%.2f", product.getPrice()))
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    } else {
+                        if (!_selectedProducts.contains(product)) {
+                            _selectedProducts.add(product);
+                            v.setBackgroundColor(Color.parseColor("#cbedde"));
+                        } else {
+                            _selectedProducts.remove(product);
+                            v.setBackgroundColor(Color.parseColor("#ffffff"));
+                        }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                        _isSelecting = !_selectedProducts.isEmpty();
 
-                if (!_isSelecting){
-                    onClickSubject.onNext(product);
+                        if (_isSelecting){
+                            addToCart.setVisibility(View.VISIBLE);
+                            addToCart.animate().scaleX(1f).scaleY(1f).start();
+                        } else {
+                            addToCart.setVisibility(View.GONE);
+                            addToCart.animate().scaleX(0f).scaleY(0f).start();
+                        }
 
-                new AlertDialog.Builder(context)
-                        .setTitle("Informações do Produto")
-                        .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab() + "\nDescrição: " + product.getDescription()
-                                + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + String.format("%.2f", product.getPrice()))
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
-                } else {
+                    }
+                }
+            });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
                     if (!_selectedProducts.contains(product)) {
                         _selectedProducts.add(product);
                         v.setBackgroundColor(Color.parseColor("#cbedde"));
@@ -131,35 +175,81 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                         addToCart.animate().scaleX(0f).scaleY(0f).start();
                     }
 
+                    return true;
                 }
-            }
-        });
+            });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+        }else {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                if (!_selectedProducts.contains(product)) {
-                    _selectedProducts.add(product);
-                    v.setBackgroundColor(Color.parseColor("#cbedde"));
-                } else {
-                    _selectedProducts.remove(product);
-                    v.setBackgroundColor(Color.parseColor("#ffffff"));
+                    if (!_isSelecting){
+                        onClickSubject.onNext(product);
+
+                        new AlertDialog.Builder(context)
+                                .setTitle("Informações do Produto")
+                                .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab() + "\nDescrição: " + product.getDescription()
+                                        + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + String.format("%.2f", product.getPrice()))
+                                .setNegativeButton("Excluir ", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        new AlertDialog.Builder(context)
+                                                .setTitle("Tem certeza que deseja excluir " + product.getNameProduct() + " ?")
+                                                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        FirebaseController.removeProduct(Utils.convertEmail(product.getPharmacyId()), product.getNameProduct());
+                                                        Toast.makeText(context, "Produto excluído!", Toast.LENGTH_SHORT).show();
+                                                        AdapterService.reloadAdapter(0);
+                                                    }
+                                                }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.dismiss();
+                                            }
+                                        }).show();
+
+                                    }
+                                })
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
                 }
+            });
 
-                _isSelecting = !_selectedProducts.isEmpty();
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (!_selectedProducts.contains(product)) {
+                        _selectedProducts.add(product);
+                       v.setBackgroundColor(Color.parseColor("#cbedde"));
+                   } else {
+                       _selectedProducts.remove(product);
+                        v.setBackgroundColor(Color.parseColor("#ffffff"));
+                    }
 
-                if (_isSelecting){
-                    addToCart.setVisibility(View.VISIBLE);
-                    addToCart.animate().scaleX(1f).scaleY(1f).start();
-                } else {
-                    addToCart.setVisibility(View.GONE);
-                    addToCart.animate().scaleX(0f).scaleY(0f).start();
+                    _isSelecting = !_selectedProducts.isEmpty();
+
+                   if (_isSelecting){
+                        addToCart.setVisibility(View.VISIBLE);
+                       addToCart.animate().scaleX(1f).scaleY(1f).start();
+                    } else {
+                        addToCart.setVisibility(View.GONE);
+                       addToCart.animate().scaleX(0f).scaleY(0f).start();
+                    }
+
+                    return true;
                 }
+            });
+        }
 
-                return true;
-            }
-        });
+
+
     }
 
     public Observable<Product> getPositionClicks(){
@@ -224,6 +314,17 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
             }
         };
         return filter;
+    }
+
+    private boolean isPharmacy(){
+        Intent intent = ((Activity) context).getIntent();
+        boolean isPharma = false;
+
+        if (intent.hasExtra("isPharmacy")) {
+            isPharma = intent.getExtras().getBoolean("isPharmacy");
+        }
+
+        return isPharma;
     }
 
 }

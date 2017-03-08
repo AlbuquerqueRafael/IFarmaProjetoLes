@@ -8,6 +8,7 @@ import android.widget.Filterable;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.activities.MainActivity;
 import com.ifarma.ifarma.fragments.pharmacy.PharmaFragment;
+import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.holders.PharmaHolder;
 import com.ifarma.ifarma.model.Pharma;
 
@@ -69,11 +70,11 @@ public class PharmaSearchAdapter extends RecyclerView.Adapter<PharmaHolder> impl
                     bundles.putSerializable("pharm", pharm);
                 }
 
-
                 MainActivity activity = (MainActivity) context;
                 PharmaFragment pharmaFragment = new PharmaFragment();
 
                 pharmaFragment.setArguments(bundles);
+
                 android.support.v4.app.FragmentTransaction fragmentTransaction =
                         activity.getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, pharmaFragment);

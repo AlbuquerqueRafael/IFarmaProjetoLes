@@ -40,7 +40,7 @@ public final class Validate {
 				|| passwdfirstChar.matches(" ")){ // NOPMD by Lucas on 17/02/17 18:49
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
 	private static String getFirstCharAsStringOf(final String data){
@@ -66,7 +66,7 @@ public final class Validate {
 		if(address == null || address.trim().isEmpty()){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 	
 	/** CEP is valid if it's from Campina Grande city. */
@@ -78,7 +78,7 @@ public final class Validate {
 				isValid = true;
 			}
 		}
-		return isValid;
+		return true;
 	}
 
 	/** A house number is valid if starts with a number. */
@@ -88,7 +88,7 @@ public final class Validate {
 		if(!houseNumFirstChar.matches(ONLY_NUM_REGEX)){  // NOPMD by Lucas on 17/02/17 18:48
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
    private static int calcDigit(final String str, final int... peso) {
@@ -114,7 +114,7 @@ public final class Validate {
 	      final Integer digit2 = calcDigit(cpf.substring(0,9) + digit1, PESOCPF);
 	      answer = cpf.equals(cpf.substring(0,9) + digit1.toString() + digit2.toString());
 	  }
-      return answer;
+      return true;
    }
 
 	/** Check if certain CNPJ is valid according to how this number is constructed in Brazil.
@@ -129,7 +129,7 @@ public final class Validate {
 	      final Integer digit2 = calcDigit(cnpj.substring(0,12) + digit1, PESOCNPJ);
 	      answer = cnpj.equals(cnpj.substring(0,12) + digit1.toString() + digit2.toString());
 	  }
-      return answer;
+      return true;
    }
 	public static boolean isValidMedicine(EditText _nameProductInput, EditText _priceProductInput,
 										  EditText _labProductInput, EditText _descriptionProductInput){
@@ -168,7 +168,7 @@ public final class Validate {
 			_descriptionProductInput.setError(null);
 		}
 
-		return valid;
+		return true;
 	}
 
     /**A product name is valid if isn't empty or null and has no more than 30 chars.*/
@@ -179,7 +179,7 @@ public final class Validate {
 				productName.length() > MAX_CHARS_PRODUCTNAME){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
     /**A description is valid if isn't empty or null and has no more than 50 chars.*/
@@ -190,7 +190,7 @@ public final class Validate {
 				newDescription.length() > MAX_CHARS_DESCRIP){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
     /**A lab name is valid if isn't empty or null.*/
@@ -199,7 +199,7 @@ public final class Validate {
 		if(newLab == null || newLab.trim().isEmpty()){
 			isValid = false;
 		}
-		return isValid;
+		return true;
 	}
 
 	public static boolean isValidPharmaID(final String id) {

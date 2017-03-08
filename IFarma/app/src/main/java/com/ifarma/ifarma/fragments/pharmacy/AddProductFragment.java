@@ -35,6 +35,7 @@ import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.services.AdapterService;
 import com.ifarma.ifarma.util.Validate;
 
 import java.util.ArrayList;
@@ -128,6 +129,7 @@ public class AddProductFragment extends Fragment {
                     _frameLayout.setVisibility(View.GONE);
 
                     Toast.makeText(getContext(), "Produto criado com sucesso!", Toast.LENGTH_SHORT).show();
+                    AdapterService.reloadAdapter(0);
 
                     android.support.v4.app.FragmentTransaction fragmentTransaction =
                             getActivity().getSupportFragmentManager().beginTransaction();
