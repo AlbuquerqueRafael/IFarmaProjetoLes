@@ -115,7 +115,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                 } else {
                     if (!_selectedProducts.contains(product)) {
                         _selectedProducts.add(product);
-                        v.setBackgroundColor(Color.parseColor("#436455"));
+                        v.setBackgroundColor(Color.parseColor("#cbedde"));
                     } else {
                         _selectedProducts.remove(product);
                         v.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -141,7 +141,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
 
                 if (!_selectedProducts.contains(product)) {
                     _selectedProducts.add(product);
-                    v.setBackgroundColor(Color.parseColor("#436455"));
+                    v.setBackgroundColor(Color.parseColor("#cbedde"));
                 } else {
                     _selectedProducts.remove(product);
                     v.setBackgroundColor(Color.parseColor("#ffffff"));

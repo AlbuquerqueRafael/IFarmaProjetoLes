@@ -130,14 +130,25 @@
             android:layout_marginRight="71dp"
             android:layout_marginEnd="71dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text=""
+            android:textSize="18sp"
+            android:id="@+id/tv_address"
+            android:layout_below="@+id/rs_change"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="10dp"/>
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/address_delivery"
             android:background="@drawable/rounded_button"
             android:backgroundTint="@android:color/holo_orange_dark"
-            android:layout_below="@id/tv_change"
+            android:layout_below="@id/tv_address"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
             android:text="Endereço de Entrega" />
 
