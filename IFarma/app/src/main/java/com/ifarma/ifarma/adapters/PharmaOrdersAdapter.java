@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnOrderGetDataListener;
@@ -28,10 +30,17 @@ import com.ifarma.ifarma.model.Product;
 import com.ifarma.ifarma.services.AdapterService;
 import com.ifarma.ifarma.util.Utils;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
@@ -56,7 +65,8 @@ public class PharmaOrdersAdapter extends RecyclerView.Adapter<OrderHolder> {
     private boolean cancelPressed = false;
     private boolean isPharmacy = false;
     public static final String FLAG_EMAIL = "currentEmail";
-    private String email;
+    private String email = "";
+
     public PharmaOrdersAdapter(Context context, ArrayList<Order> orderArrayList, OrderStatus order, String email) {
 
         this.email = email;
@@ -65,7 +75,9 @@ public class PharmaOrdersAdapter extends RecyclerView.Adapter<OrderHolder> {
         this.context = context;
         this.orderStatus = order;
 
-        inflater = LayoutInflater.from(context);
+        if(context != null){
+            inflater = LayoutInflater.from(context);
+        }
     }
 
     @Override
@@ -108,6 +120,7 @@ public class PharmaOrdersAdapter extends RecyclerView.Adapter<OrderHolder> {
                                 public void onClick(DialogInterface dialog, int which) {
                                     order.setOrderStatus(OrderStatus.ACCEPTED_ORDER);
                                     FirebaseController.editOrder(order);
+                                    sendNotification(order.getUserToken(), order.getPharmacyName(), "O seu pedido foi aceito!");
                                     initList();
                                     dialog.dismiss();
                                 }
@@ -202,6 +215,7 @@ public class PharmaOrdersAdapter extends RecyclerView.Adapter<OrderHolder> {
                 m_text = input.getText().toString();
                 order.setComment(m_text);
                 FirebaseController.editOrder(order);
+                sendNotification(order.getUserToken(), order.getPharmacyName() + "-Negou Pedido", order.getComment());
                 initList();
                 dialog.dismiss();
             }
@@ -216,5 +230,38 @@ public class PharmaOrdersAdapter extends RecyclerView.Adapter<OrderHolder> {
         builder.show();
 
         return m_text;
+    }
+
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+    private void sendNotification(final String reg_token,  final String title, final String body) {
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    JSONObject json=new JSONObject();
+                    JSONObject dataJson=new JSONObject();
+                    dataJson.put("body",body);
+                    dataJson.put("title",title);
+                    json.put("notification",dataJson);
+                    json.put("to", reg_token);
+                    RequestBody body = RequestBody.create(JSON, json.toString());
+                    Request request = new Request.Builder()
+                            .header("Authorization","key="+
+                                    "AAAA9VfseiU:APA91bHT5sLApI9dk5vXACzRCyNP7IiaT_8dyJzgKVdN1tjkdfBMslbvOEm02I0bJDLwIuxcc2mepHDP1D7mO9DYvWD3Ck3lDrDy85pZ3vXKMaTevvMmeC4gmSslRucpBfgdXaO1AhTd")
+                            .url("https://fcm.googleapis.com/fcm/send")
+                            .post(body)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String finalResponse = response.body().string();
+                }catch (Exception e){
+                    System.out.println("error");
+                    //Log.d(TAG,e+"");
+                }
+                return null;
+            }
+        }.execute();
+
     }
 }

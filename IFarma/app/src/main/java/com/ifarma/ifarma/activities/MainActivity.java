@@ -3,6 +3,7 @@ package com.ifarma.ifarma.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,6 +14,8 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.authentication.Constants;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.PharmViewPagerAdapter;
 import com.ifarma.ifarma.adapters.UserViewPagerAdapter;
@@ -24,10 +27,18 @@ import com.ifarma.ifarma.model.OrderStatus;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.services.AdapterService;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import devlight.io.library.ntb.NavigationTabBar;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +50,37 @@ public class MainActivity extends AppCompatActivity {
     private FragmentPagerAdapter adapter;
     private ViewPager viewPager;
 
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+    private void sendNotification(final String reg_token) {
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    JSONObject json=new JSONObject();
+                    JSONObject dataJson=new JSONObject();
+                    dataJson.put("body","Hi this is sent from device to device");
+                    dataJson.put("title","dummy title");
+                    json.put("notification",dataJson);
+                    json.put("to", FirebaseInstanceId.getInstance().getToken());
+                    RequestBody body = RequestBody.create(JSON, json.toString());
+                    Request request = new Request.Builder()
+                            .header("Authorization","key="+
+                                    "AIzaSyAJvUnPVadEbnyqRolgLNQueL6oSy6QUFQ")
+                            .url("https://fcm.googleapis.com/fcm/send")
+                            .post(body)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String finalResponse = response.body().string();
+                }catch (Exception e){
+                    //Log.d(TAG,e+"");
+                }
+                return null;
+            }
+        }.execute();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

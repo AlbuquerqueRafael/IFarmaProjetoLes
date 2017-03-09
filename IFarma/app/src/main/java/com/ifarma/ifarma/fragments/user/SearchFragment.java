@@ -153,7 +153,7 @@ public class SearchFragment extends Fragment {
                     listItems.add(p);
                 }}
 
-                adapterMed = new MedicineSearchAdapter(getActivity(), listItems, rootView);
+                adapterMed = new MedicineSearchAdapter(getActivity(), listItems, rootView, true);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 _listView.setHasFixedSize(true);
                 _listView.setLayoutManager(mLayoutManager);

@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ifarma.ifarma.Manifest;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.controllers.FirebaseController;
@@ -213,12 +214,14 @@ public class FinishBuyFragment extends Fragment {
         double totalPrice = Double.parseDouble(_totalPrice.getText().toString().split(" ")[1].replace(",", "."));
 
         for (Map.Entry<String, String> entry : pharmacysOrder.entrySet()) {
-            FirebaseController.saveOder(entry.getKey(),
+            System.out.println(entry);
+            FirebaseController.saveOrder(entry.getKey(),
                     telephone,
                     comment, totalPrice, _customerName,
                     entry.getValue() + "Troco para: " + _changeInput.getText().toString(),
                     _userAddress.getText().toString(),
-                    OrderStatus.WAITING_ORDER);
+                    OrderStatus.WAITING_ORDER,
+                    FirebaseInstanceId.getInstance().getToken());
         }
 
         Toast.makeText(getContext(), "Compra finalizada! Aguarde a aprovação.", Toast.LENGTH_SHORT).show();

@@ -65,12 +65,13 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
     private boolean isPharmacy = false;
     public static final String FLAG_EMAIL = "currentEmail";
 
-    public MedicineSearchAdapter(Context context, ArrayList<Product> mProductArrayList, View rootView) {
+    public MedicineSearchAdapter(Context context, ArrayList<Product> mProductArrayList, View rootView, boolean isPharmacy) {
 
         this.mOriginalValues = mProductArrayList;
         this.mDisplayedValues = mProductArrayList;
         this.context = context;
         this.rootView = rootView;
+        this.isPharmacy = isPharmacy;
         this.addToCart = (FloatingActionButton) rootView.findViewById(R.id.add_to_cart);
 
         inflater = LayoutInflater.from(context);
@@ -96,9 +97,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
 
         final Product product = mDisplayedValues.get(position);
 
-        isPharmacy = isPharmacy();
-
-        if (!isPharmacy) {
+        if (isPharmacy) {
             addToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -235,8 +234,11 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                     _isSelecting = !_selectedProducts.isEmpty();
 
                    if (_isSelecting){
-                        addToCart.setVisibility(View.VISIBLE);
-                       addToCart.animate().scaleX(1f).scaleY(1f).start();
+                       if(addToCart != null){
+                           addToCart.setVisibility(View.VISIBLE);
+                           addToCart.animate().scaleX(1f).scaleY(1f).start();
+                       }
+
                     } else {
                         addToCart.setVisibility(View.GONE);
                        addToCart.animate().scaleX(0f).scaleY(0f).start();
@@ -318,7 +320,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
     private boolean isPharmacy(){
         Intent intent = ((Activity) context).getIntent();
         boolean isPharma = false;
-
+        System.out.println(intent.hasExtra("isPharmacy"));
         if (intent.hasExtra("isPharmacy")) {
             isPharma = intent.getExtras().getBoolean("isPharmacy");
         }

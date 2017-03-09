@@ -32,7 +32,7 @@ public class DemandFragment extends Fragment {
     private PharmaOrdersAdapter ordersAdapter;
     private RecyclerView _listView;
     public static final String FLAG_EMAIL = "currentEmail";
-    private String email;
+    private String email = "";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

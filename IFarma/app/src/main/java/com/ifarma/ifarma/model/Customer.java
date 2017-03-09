@@ -5,7 +5,7 @@ import com.ifarma.ifarma.util.*;
 public class Customer extends AbstractUser {
 	
 	private String cpf;
-
+	
 	public Customer() {
 		super();
 	}

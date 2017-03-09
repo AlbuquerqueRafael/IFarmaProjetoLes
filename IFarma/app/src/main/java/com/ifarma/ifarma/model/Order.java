@@ -20,13 +20,15 @@ public class Order {
     private String comment;
     private String pharmacyId;
     private String customerTelephone;
+    private String userToken;
+    private String pharmacyName;
 
     public Order(){
 
     }
 
     public Order(String _deliveryAddress, String _customerName, double _orderTotalPrice, String id,
-                 String description, String customerTelephone, String comment, String pharmacyId, Date date) {
+                 String description, String customerTelephone, String comment, String pharmacyId, Date date, String userToken) {
         this._deliveryAddress = _deliveryAddress;
         this._customerName = _customerName;
         this._orderStatus = OrderStatus.WAITING_ORDER;
@@ -37,6 +39,7 @@ public class Order {
         this.pharmacyId = pharmacyId;
         this.comment = comment;
         this.date = date;
+        this.userToken = userToken;
     }
 
     public String getDeliveryAddress() {
@@ -118,4 +121,19 @@ public class Order {
         this.date = date;
     }
 
+    public void setUserToken(String userToken){
+        this.userToken = userToken;
+    }
+
+    public String getUserToken(){
+        return this.userToken;
+    }
+
+    public void setPharmacyName(String pharmacyName){
+        this.pharmacyName = pharmacyName;
+    }
+
+    public String getPharmacyName(){
+        return this.pharmacyName;
+    }
 }
