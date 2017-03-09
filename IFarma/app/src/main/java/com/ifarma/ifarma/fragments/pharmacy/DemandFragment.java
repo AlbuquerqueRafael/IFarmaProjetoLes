@@ -1,6 +1,8 @@
 package com.ifarma.ifarma.fragments.pharmacy;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,8 +31,8 @@ public class DemandFragment extends Fragment {
     private OrderStatus orderStatus = OrderStatus.WAITING_ORDER;
     private PharmaOrdersAdapter ordersAdapter;
     private RecyclerView _listView;
-
-
+    public static final String FLAG_EMAIL = "currentEmail";
+    private String email;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,7 +75,10 @@ public class DemandFragment extends Fragment {
     public void initList(){
         listOrderItens = new ArrayList<Order>();
 
-        FirebaseController.retrievePharmaOrders(new OnOrderGetDataListener() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String defaultState = "";
+        email =  prefs.getString(FLAG_EMAIL, defaultState);
+        FirebaseController.retrievePharmaOrders(email, new OnOrderGetDataListener() {
 
             @Override
             public void onStart() {
@@ -88,7 +93,7 @@ public class DemandFragment extends Fragment {
                     listOrderItens.add(o);
                 }}
 
-                ordersAdapter = new PharmaOrdersAdapter(getActivity(), listOrderItens, orderStatus);
+                ordersAdapter = new PharmaOrdersAdapter(getActivity(), listOrderItens, orderStatus, email);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 _listView.setHasFixedSize(true);
                 _listView.setLayoutManager(mLayoutManager);
@@ -103,7 +108,7 @@ public class DemandFragment extends Fragment {
                     listOrderItens.add(o);
                 }}
 
-                ordersAdapter = new PharmaOrdersAdapter(getActivity(), listOrderItens, orderStatus);
+                ordersAdapter = new PharmaOrdersAdapter(getActivity(), listOrderItens, orderStatus, email);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 _listView.setHasFixedSize(true);
                 _listView.setLayoutManager(mLayoutManager);

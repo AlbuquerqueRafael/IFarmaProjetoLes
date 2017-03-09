@@ -56,9 +56,10 @@ public class PharmaOrdersAdapter extends RecyclerView.Adapter<OrderHolder> {
     private boolean cancelPressed = false;
     private boolean isPharmacy = false;
     public static final String FLAG_EMAIL = "currentEmail";
+    private String email;
+    public PharmaOrdersAdapter(Context context, ArrayList<Order> orderArrayList, OrderStatus order, String email) {
 
-    public PharmaOrdersAdapter(Context context, ArrayList<Order> orderArrayList, OrderStatus order) {
-
+        this.email = email;
         this.orderOrignalValues = orderArrayList;
         this.orderDisplayedValues = orderArrayList;
         this.context = context;
@@ -155,7 +156,7 @@ public class PharmaOrdersAdapter extends RecyclerView.Adapter<OrderHolder> {
     private void initList(){
         orderDisplayedValues = new ArrayList<Order>();
 
-        FirebaseController.retrievePharmaOrders(new OnOrderGetDataListener() {
+        FirebaseController.retrievePharmaOrders(email, new OnOrderGetDataListener() {
 
             @Override
             public void onStart() {

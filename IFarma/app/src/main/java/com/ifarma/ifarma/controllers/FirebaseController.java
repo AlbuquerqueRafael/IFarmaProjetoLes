@@ -340,44 +340,50 @@ public class FirebaseController {
 
     }
 
-    public static void retrievePharmaOrders(final OnOrderGetDataListener listener, final OrderStatus orderStatus) {
-        final Firebase productsReference = getFirebase().child(PHARMACIES);
+    public static void retrievePharmaOrders(final String email, final OnOrderGetDataListener listener, final OrderStatus orderStatus) {
+        final Firebase productsReference = getFirebase().child(PHARMACIES).child(Utils.convertEmail(email));
         final List<Order> lista = new ArrayList<>();
 
         productsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                DataSnapshot orderSnapshot = dataSnapshot.child(ORDERS);
-                Iterable<DataSnapshot> orderChildren = orderSnapshot.getChildren();
+                if(dataSnapshot.getKey().equals("orders")){
+                    Iterable<DataSnapshot> orderChildren = dataSnapshot.getChildren();
 
-                for (DataSnapshot ord : orderChildren){
-                    Order order = ord.getValue(Order.class);
+                    for (DataSnapshot ord : orderChildren){
+                        System.out.println(ord);
+                        Order order = ord.getValue(Order.class);
 
-                    if(orderStatus == order.getOrderStatus()){
-                        lista.add(order);
+                        if(orderStatus == order.getOrderStatus()){
+                            lista.add(order);
+                        }
+
                     }
 
+                    listener.onSuccess(lista);
                 }
 
-                listener.onSuccess(lista);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
-                List<Order> list = new ArrayList<>();
-                DataSnapshot orderSnapshot = dataSnapshot.child(ORDERS);
-                Iterable<DataSnapshot> orderChildren = orderSnapshot.getChildren();
+                if(dataSnapshot.getKey().equals("orders")){
+                    List<Order> list = new ArrayList<>();
+                    Iterable<DataSnapshot> orderChildren = dataSnapshot.getChildren();
 
-                for (DataSnapshot ord : orderChildren){
-                    Order order = ord.getValue(Order.class);
+                    for (DataSnapshot ord : orderChildren){
+                        Order order = ord.getValue(Order.class);
 
-                    if(orderStatus == order.getOrderStatus()){
-                        list.add(order);
+                        if(orderStatus == order.getOrderStatus() && order.getPharmacyId().equals(Utils.convertEmail(email))){
+                            list.add(order);
+                        }
+
                     }
 
+                    listener.onUpdated(list);
                 }
 
-                listener.onUpdated(list);
+
 
             }
 
