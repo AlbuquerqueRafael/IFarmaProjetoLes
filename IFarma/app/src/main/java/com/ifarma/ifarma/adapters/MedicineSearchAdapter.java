@@ -99,19 +99,18 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
         isPharmacy = isPharmacy();
 
         if (!isPharmacy) {
-//            addToCart.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    for (int i = 0; i < _selectedProducts.size(); i++) {
-//                        CartService.addToCart(_selectedProducts.get(i));
-//                    }
-//
-//                    Toast.makeText(context, _selectedProducts.size() + " produtos adicionados ao carrinho! :)", Toast.LENGTH_SHORT).show();
-//
-//                    AdapterService.reloadAdapter(1);
-//
-//                }
-//            });
+            addToCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                for (int i = 0; i < _selectedProducts.size(); i++) {
+                    if (CartService.addToCart(_selectedProducts.get(i))){
+                        AdapterService.reloadAdapter(1);
+                    } else {
+                        Toast.makeText(context, "Você já possui este item no seu carrinho! :)", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                }
+            });
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -133,7 +132,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                     } else {
                         if (!_selectedProducts.contains(product)) {
                             _selectedProducts.add(product);
-                            v.setBackgroundColor(Color.parseColor("#436455"));
+                            v.setBackgroundColor(Color.parseColor("#cbedde"));
                         } else {
                             _selectedProducts.remove(product);
                             v.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -159,7 +158,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
 
                     if (!_selectedProducts.contains(product)) {
                         _selectedProducts.add(product);
-                        v.setBackgroundColor(Color.parseColor("#436455"));
+                        v.setBackgroundColor(Color.parseColor("#cbedde"));
                     } else {
                         _selectedProducts.remove(product);
                         v.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -225,8 +224,23 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    if (!_selectedProducts.contains(product)) {
+                        _selectedProducts.add(product);
+                       v.setBackgroundColor(Color.parseColor("#cbedde"));
+                   } else {
+                       _selectedProducts.remove(product);
+                        v.setBackgroundColor(Color.parseColor("#ffffff"));
+                    }
 
-                    Toast.makeText(context, product.getNameProduct(), Toast.LENGTH_SHORT).show();
+                    _isSelecting = !_selectedProducts.isEmpty();
+
+                   if (_isSelecting){
+                        addToCart.setVisibility(View.VISIBLE);
+                       addToCart.animate().scaleX(1f).scaleY(1f).start();
+                    } else {
+                        addToCart.setVisibility(View.GONE);
+                       addToCart.animate().scaleX(0f).scaleY(0f).start();
+                    }
 
                     return true;
                 }

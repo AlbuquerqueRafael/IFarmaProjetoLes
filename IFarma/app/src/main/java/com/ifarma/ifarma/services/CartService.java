@@ -13,13 +13,29 @@ import java.util.Map;
 
 public class CartService {
 
-    private static Map<Product, Integer> cartList = new HashMap<>();
+    private static HashMap<Product, Integer> cartList = new HashMap<Product, Integer>();
 
-    public static void addToCart(Product product){
-        cartList.put(product, 1);
+    public static boolean addToCart(Product product){
+        boolean contains = false;
+        if (cartList.isEmpty()){
+            cartList.put(product, 1);
+            return true;
+        } else {
+            for (Map.Entry<Product, Integer> entry : cartList.entrySet()) {
+                if (entry.getKey().getNameProduct().equals(product.getNameProduct())) {
+                    contains = true;
+                    break;
+                }
+            }
+
+            if (!contains)
+                cartList.put(product, 1);
+
+            return !contains;
+        }
     }
 
-    public static Map<Product, Integer>  getCartList(){
+    public static HashMap<Product, Integer>  getCartList(){
         return cartList;
     }
 
@@ -35,13 +51,13 @@ public class CartService {
         cartList = new HashMap<>();
     }
 
-    public static String getTotalPrice() {
+    public static String getTotalPrice(Double change) {
         double soma = 0;
-        for (Product product : cartList.keySet()) {
-            soma += product.getPrice();
+        for (HashMap.Entry<Product, Integer> entry : cartList.entrySet()) {
+            soma += entry.getKey().getPrice() * entry.getValue();
         }
 
-        String somaFormatada = "R$ " + String.format("%.2f", soma);
+        String somaFormatada = "R$ " + String.format("%.2f", soma + change);
 
         return somaFormatada;
     }

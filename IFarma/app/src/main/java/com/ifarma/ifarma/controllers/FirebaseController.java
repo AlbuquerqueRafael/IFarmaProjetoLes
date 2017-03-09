@@ -304,6 +304,7 @@ public class FirebaseController {
                                 String comment, double price, String custommerName, String description,
                                 String adressCustomer, OrderStatus orderStatus){
 
+        pharmacyId = Utils.convertEmail(pharmacyId);
         Firebase firebaseRef = getFirebase();
         Firebase productsPharmacyReference = firebaseRef.child(PHARMACIES).child(pharmacyId).child(ORDERS);
         String id = nextSessionId();

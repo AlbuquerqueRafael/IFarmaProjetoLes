@@ -87,18 +87,20 @@ public class EditInfoPharmaFragment extends Fragment {
                     pharma.setCep(_cepPharmaInput.getText().toString());
                     FirebaseController.editPharmacy(pharma);
                     Toast.makeText(getContext(), "Atualização feita com sucesso!", Toast.LENGTH_SHORT).show();
+
+                    LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
+                    _pagerLayout.setVisibility(View.VISIBLE);
+                    _frameLayout.setVisibility(View.GONE);
+
+                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                            getActivity().getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, new PharmacyFragment());
+                    fragmentTransaction.commit();
+
                 }catch(Exception e){
                     Toast.makeText(getContext(), "A edição falhou!", Toast.LENGTH_SHORT).show();
                 }
 
-                LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
-                _pagerLayout.setVisibility(View.VISIBLE);
-                _frameLayout.setVisibility(View.GONE);
-
-                android.support.v4.app.FragmentTransaction fragmentTransaction =
-                        getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new PharmacyFragment());
-                fragmentTransaction.commit();
             }
         });
 

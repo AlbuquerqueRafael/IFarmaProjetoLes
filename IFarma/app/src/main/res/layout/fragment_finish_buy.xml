@@ -64,9 +64,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:text="Valor a pagar: "
+            android:text="Valor da compra: "
             android:textSize="18sp"
             android:layout_below="@id/tv_delivery"
+            android:id="@+id/tv_medicines"
+            android:layout_marginTop="25dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="{{ Price }}"
+            android:textSize="18sp"
+            android:id="@+id/medicines_price"
+            android:layout_alignBaseline="@+id/tv_medicines"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="Valor a pagar: "
+            android:textSize="18sp"
+            android:layout_below="@id/tv_medicines"
             android:id="@+id/tv_total"
             android:layout_marginTop="25dp"/>
 
@@ -130,14 +153,25 @@
             android:layout_marginRight="71dp"
             android:layout_marginEnd="71dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text=""
+            android:textSize="18sp"
+            android:id="@+id/tv_address"
+            android:layout_below="@+id/rs_change"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="10dp"/>
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/address_delivery"
             android:background="@drawable/rounded_button"
             android:backgroundTint="@android:color/holo_orange_dark"
-            android:layout_below="@id/tv_change"
+            android:layout_below="@id/tv_address"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
             android:text="Endereço de Entrega" />
 

@@ -52,13 +52,6 @@ public class MainActivity extends AppCompatActivity {
             isPharmacy = getIntent().getExtras().getBoolean("isPharmacy");
         }
 
-//        FirebaseController.saveOder("farmaciadias@gmaildotcom",
-//                                    "323123213",
-//                                    "gg", 25.30, "Pedrinho pira poca",
-//                                    "Nossa",
-//                                    "Rua das Flores",
-//                                    OrderStatus.WAITING_ORDER);
-
         if (getIntent().hasExtra("incompleteRegister")) {
             if (getIntent().getExtras().getBoolean("incompleteRegister")){
                 incompleteRegister = getIntent().getExtras().getBoolean("incompleteRegister");
