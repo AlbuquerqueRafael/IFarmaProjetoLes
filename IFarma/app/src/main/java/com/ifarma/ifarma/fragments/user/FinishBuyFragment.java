@@ -37,11 +37,14 @@ import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnCurrentCustomerGetDataListener;
 import com.ifarma.ifarma.model.Customer;
 import com.ifarma.ifarma.model.Order;
+import com.ifarma.ifarma.model.OrderStatus;
 import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.services.AdapterService;
 import com.ifarma.ifarma.services.CartService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -66,11 +69,13 @@ public class FinishBuyFragment extends Fragment {
     private TextView _totalPrice;
     private TextView _userAddress;
     private EditText _changeInput;
+    private TextView _medicinesPrice;
     private Button _finishBuyButton;
     private Button _deliveryAddress;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private Dialog dialog;
+    private String _customerName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,9 +90,16 @@ public class FinishBuyFragment extends Fragment {
         _finishBuyButton = (Button) rootView.findViewById(R.id.finish_buy);
         _deliveryAddress = (Button) rootView.findViewById(R.id.address_delivery);
         _userAddress = (TextView) rootView.findViewById(R.id.tv_address);
+        _medicinesPrice = (TextView) rootView.findViewById(R.id.medicines_price);
 
-        _totalPrice.setText(CartService.getTotalPrice());
         _deliveryPrice.setText("R$ 3,00");
+        _medicinesPrice.setText(CartService.getTotalPrice(0.00));
+        _totalPrice.setText(CartService.getTotalPrice(3.00));
+
+        if (isAuthenticated())
+            getCustomerName();
+        else
+            _customerName = "Usuário anônimo";
 
         _deliveryAddress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,15 +150,39 @@ public class FinishBuyFragment extends Fragment {
         _finishBuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<Product, Integer> cartList = CartService.getCartList();
+                HashMap<Product, Integer> cartList = CartService.getCartList();
+                final HashMap<String, String> pharmacysOrder = new HashMap<String, String>();
 
                 for (Map.Entry<Product, Integer> entry : cartList.entrySet()) {
-                    Order order = null; // TODO: criar o objeto de ORDER.
-                    FirebaseController.sendOrder(entry.getKey().getPharmacyId(), order);
+                    String previousData = "";
+                    if (pharmacysOrder.get(entry.getKey().getPharmacyId()) != null){
+                        previousData = pharmacysOrder.get(entry.getKey().getPharmacyId());
+                    }
+
+                    pharmacysOrder.put(entry.getKey().getPharmacyId(), previousData + entry.getValue() + " - " + entry.getKey().getNameProduct() + "\n");
                 }
 
-                Toast.makeText(getContext(), "Compra finalizada! Aguarde a aprovação.", Toast.LENGTH_SHORT).show();
-                CartService.closeCart();
+                if (pharmacysOrder.size() > 1){
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Alerta")
+                            .setMessage("Você está fazendo pedidos para mais de uma farmácia.\n\nLeve isto em consideração ao preencher o troco.")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    saveOrder(pharmacysOrder);
+
+                                    dialog.dismiss();
+                                }
+                            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+                } else {
+                    saveOrder(pharmacysOrder);
+                }
+
             }
         });
 
@@ -169,6 +205,39 @@ public class FinishBuyFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void saveOrder(HashMap<String, String> pharmacysOrder){
+        String telephone = "";
+        String comment = "";
+        double totalPrice = Double.parseDouble(_totalPrice.getText().toString().split(" ")[1].replace(",", "."));
+
+        for (Map.Entry<String, String> entry : pharmacysOrder.entrySet()) {
+            FirebaseController.saveOder(entry.getKey(),
+                    telephone,
+                    comment, totalPrice, _customerName,
+                    entry.getValue() + "Troco para: " + _changeInput.getText().toString(),
+                    _userAddress.getText().toString(),
+                    OrderStatus.WAITING_ORDER);
+        }
+
+        Toast.makeText(getContext(), "Compra finalizada! Aguarde a aprovação.", Toast.LENGTH_SHORT).show();
+        CartService.closeCart();
+
+        final FrameLayout _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
+        _frameLayout.setVisibility(View.VISIBLE);
+
+        LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
+        _pagerLayout.setVisibility(View.VISIBLE);
+        _frameLayout.setVisibility(View.GONE);
+
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new SearchFragment());
+        fragmentTransaction.commit();
+
+        AdapterService.reloadAdapter(0);
+
     }
 
     private boolean checkGPSEnable(){
@@ -228,7 +297,6 @@ public class FinishBuyFragment extends Fragment {
         final Dialog inputDialog = new Dialog(getContext());
         inputDialog.setTitle("Inserir Endereço");
         inputDialog.setContentView(R.layout.address_input_dialog);
-        inputDialog.setCanceledOnTouchOutside(false);
 
         final EditText addressInput = (EditText) inputDialog.findViewById(R.id.address_input);
         final EditText cepInput = (EditText) inputDialog.findViewById(R.id.cep_input);
@@ -308,6 +376,23 @@ public class FinishBuyFragment extends Fragment {
 
         changeLocation();
 
+    }
+
+    private void getCustomerName(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String defaultState = "";
+        String email = prefs.getString(FLAG_EMAIL, defaultState);
+        email = email.replace(".", "dot");
+
+        FirebaseController.retrieveCurrentCustomer(email, new OnCurrentCustomerGetDataListener() {
+            @Override
+            public void onStart() {}
+
+            @Override
+            public void onSuccess(Customer currentCustomer) {
+                _customerName = currentCustomer.getName();
+            }
+        });
     }
 
     private void setUserAddress(){

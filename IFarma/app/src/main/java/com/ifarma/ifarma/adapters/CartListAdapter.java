@@ -170,7 +170,7 @@ public class CartListAdapter extends BaseAdapter{
                     int amount = Integer.parseInt(holder._medicineAmount.getText().toString());
                     holder._medicineAmount.setText(String.valueOf(amount - 1));
 
-                    CartService.editCart(currentProduct, amount);
+                    CartService.editCart(currentProduct, amount - 1);
 
                     double currentPrice = Double.parseDouble(_totalPrice.getText().toString().split(" ")[1].replace(",", "."));
                     double medicinePrice = Double.parseDouble(holder._medicinePrice.getText().toString().split(" ")[1].replace(",", "."));
@@ -187,7 +187,7 @@ public class CartListAdapter extends BaseAdapter{
                 int amount = Integer.parseInt(holder._medicineAmount.getText().toString());
                 holder._medicineAmount.setText(String.valueOf(amount + 1));
 
-                CartService.editCart(currentProduct, amount);
+                CartService.editCart(currentProduct, amount + 1);
 
                 double currentPrice = Double.parseDouble(_totalPrice.getText().toString().split(" ")[1].replace(",", "."));
                 double medicinePrice = Double.parseDouble(holder._medicinePrice.getText().toString().split(" ")[1].replace(",", "."));

@@ -102,14 +102,13 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
             addToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    for (int i = 0; i < _selectedProducts.size(); i++) {
-                        CartService.addToCart(_selectedProducts.get(i));
+                for (int i = 0; i < _selectedProducts.size(); i++) {
+                    if (CartService.addToCart(_selectedProducts.get(i))){
+                        AdapterService.reloadAdapter(1);
+                    } else {
+                        Toast.makeText(context, "Você já possui este item no seu carrinho! :)", Toast.LENGTH_SHORT).show();
                     }
-
-                    Toast.makeText(context, _selectedProducts.size() + " produtos adicionados ao carrinho! :)", Toast.LENGTH_SHORT).show();
-
-                    AdapterService.reloadAdapter(1);
-
+                }
                 }
             });
 

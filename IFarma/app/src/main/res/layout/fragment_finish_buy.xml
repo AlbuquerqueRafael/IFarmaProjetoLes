@@ -64,9 +64,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:text="Valor a pagar: "
+            android:text="Valor da compra: "
             android:textSize="18sp"
             android:layout_below="@id/tv_delivery"
+            android:id="@+id/tv_medicines"
+            android:layout_marginTop="25dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="{{ Price }}"
+            android:textSize="18sp"
+            android:id="@+id/medicines_price"
+            android:layout_alignBaseline="@+id/tv_medicines"
+            android:layout_marginBottom="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="Valor a pagar: "
+            android:textSize="18sp"
+            android:layout_below="@id/tv_medicines"
             android:id="@+id/tv_total"
             android:layout_marginTop="25dp"/>
 

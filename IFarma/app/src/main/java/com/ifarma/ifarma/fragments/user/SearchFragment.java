@@ -138,7 +138,6 @@ public class SearchFragment extends Fragment {
 
     public void initMedList(){
         listItems = new ArrayList<Product>();
-        final ProgressDialog dialog = new ProgressDialog(getActivity());
 
         FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
