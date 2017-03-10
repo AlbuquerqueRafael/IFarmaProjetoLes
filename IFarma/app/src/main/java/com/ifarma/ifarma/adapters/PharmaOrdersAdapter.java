@@ -137,9 +137,6 @@ public class PharmaOrdersAdapter extends RecyclerView.Adapter<OrderHolder> {
                             .setMessage(order.getComment())
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    order.setOrderStatus(OrderStatus.ACCEPTED_ORDER);
-                                    FirebaseController.editOrder(order);
-                                    initList();
                                     dialog.dismiss();
                                 }
                             })
