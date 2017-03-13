@@ -178,75 +178,69 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
             });
 
         }else {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            if (isPharmacy()) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!_isSelecting) {
+                            onClickSubject.onNext(product);
 
-                    if (!_isSelecting){
-                        onClickSubject.onNext(product);
+                            new AlertDialog.Builder(context)
+                                    .setTitle("Informações do Produto")
+                                    .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab() + "\nDescrição: " + product.getDescription()
+                                            + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + String.format("%.2f", product.getPrice()))
+                                    .setNegativeButton("Excluir ", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            new AlertDialog.Builder(context)
+                                                    .setTitle("Tem certeza que deseja excluir " + product.getNameProduct() + " ?")
+                                                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            FirebaseController.removeProduct(Utils.convertEmail(product.getPharmacyId()), product.getNameProduct());
+                                                            Toast.makeText(context, "Produto excluído!", Toast.LENGTH_SHORT).show();
+                                                            AdapterService.reloadAdapter(0);
+                                                        }
+                                                    }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    dialogInterface.dismiss();
+                                                }
+                                            }).show();
 
-                        new AlertDialog.Builder(context)
-                                .setTitle("Informações do Produto")
-                                .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab() + "\nDescrição: " + product.getDescription()
-                                        + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + String.format("%.2f", product.getPrice()))
-                                .setNegativeButton("Excluir ", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        new AlertDialog.Builder(context)
-                                                .setTitle("Tem certeza que deseja excluir " + product.getNameProduct() + " ?")
-                                                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        FirebaseController.removeProduct(Utils.convertEmail(product.getPharmacyId()), product.getNameProduct());
-                                                        Toast.makeText(context, "Produto excluído!", Toast.LENGTH_SHORT).show();
-                                                        AdapterService.reloadAdapter(0);
-                                                    }
-                                                }).setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                dialogInterface.dismiss();
-                                            }
-                                        }).show();
-
-                                    }
-                                })
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .show();
+                                        }
+                                    })
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .show();
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (!_selectedProducts.contains(product)) {
-                        _selectedProducts.add(product);
-                       v.setBackgroundColor(Color.parseColor("#cbedde"));
-                   } else {
-                       _selectedProducts.remove(product);
-                        v.setBackgroundColor(Color.parseColor("#ffffff"));
+                        if (!_isSelecting) {
+                            onClickSubject.onNext(product);
+
+                            new AlertDialog.Builder(context)
+                                    .setTitle("Informações do Produto")
+                                    .setMessage("Nome: " + product.getNameProduct() + "\nLaboratório: " + product.getLab() + "\nDescrição: " + product.getDescription()
+                                            + "\nFarmácia: " + product.getPharmacyName() + "\nPreço: R$ " + String.format("%.2f", product.getPrice()))
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .show();
+                        }
                     }
-
-                    _isSelecting = !_selectedProducts.isEmpty();
-
-                   if (_isSelecting){
-                       if(addToCart != null){
-                           addToCart.setVisibility(View.VISIBLE);
-                           addToCart.animate().scaleX(1f).scaleY(1f).start();
-                       }
-
-                    } else {
-                        addToCart.setVisibility(View.GONE);
-                       addToCart.animate().scaleX(0f).scaleY(0f).start();
-                    }
-
-                    return true;
-                }
-            });
+                });
+            }
         }
 
 
