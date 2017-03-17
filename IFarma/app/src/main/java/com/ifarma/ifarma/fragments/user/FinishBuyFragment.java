@@ -163,15 +163,12 @@ public class FinishBuyFragment extends Fragment {
                     pharmacysOrder.put(entry.getKey().getPharmacyId(), previousData + entry.getValue() + " - " + entry.getKey().getNameProduct() + "\n");
                 }
 
-                if (pharmacysOrder.size() > 1){
+                if (_userAddress.getText().toString().isEmpty()){
                     new AlertDialog.Builder(getContext())
                             .setTitle("Alerta")
-                            .setMessage("Você está fazendo pedidos para mais de uma farmácia.\n\nLeve isto em consideração ao preencher o troco.")
+                            .setMessage("Por favor, selecione um endereço.")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-
-                                    saveOrder(pharmacysOrder);
-
                                     dialog.dismiss();
                                 }
                             }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -180,8 +177,31 @@ public class FinishBuyFragment extends Fragment {
                             dialog.dismiss();
                         }
                     }).show();
-                } else {
-                    saveOrder(pharmacysOrder);
+                }
+
+                else {
+
+                    if (pharmacysOrder.size() > 1) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("Alerta")
+                                .setMessage("Você está fazendo pedidos para mais de uma farmácia.\n\nLeve isto em consideração ao preencher o troco.")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        saveOrder(pharmacysOrder);
+
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                    } else {
+                        saveOrder(pharmacysOrder);
+                    }
+
                 }
 
             }
