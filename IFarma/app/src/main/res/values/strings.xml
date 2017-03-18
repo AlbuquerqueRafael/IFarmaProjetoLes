@@ -24,4 +24,6 @@
     <string name="total_text">Total:</string>
     <string name="buy_finish">Finalizar Compra</string>
 
+    <string name="info_product_toolbar">Editar Produto</string>
+
 </resources>

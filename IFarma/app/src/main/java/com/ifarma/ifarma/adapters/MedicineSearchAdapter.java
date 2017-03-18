@@ -22,6 +22,9 @@ import com.ifarma.ifarma.activities.MainActivity;
 import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
+import com.ifarma.ifarma.fragments.pharmacy.AddProductFragment;
+import com.ifarma.ifarma.fragments.pharmacy.EditProductFragment;
+import com.ifarma.ifarma.fragments.pharmacy.PharmaFragment;
 import com.ifarma.ifarma.fragments.user.CartFragment;
 import com.ifarma.ifarma.fragments.user.UserFragment;
 import com.ifarma.ifarma.holders.ViewHolder;
@@ -213,6 +216,17 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
+                                        }
+                                    })
+                                    .setNeutralButton("Editar", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            MainActivity activity = (MainActivity) context;
+                                            EditProductFragment editProduct = new EditProductFragment();
+                                            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                                    activity.getSupportFragmentManager().beginTransaction();
+                                            fragmentTransaction.replace(R.id.fragment_container, editProduct);
+                                            fragmentTransaction.commit();
                                         }
                                     })
                                     .show();
