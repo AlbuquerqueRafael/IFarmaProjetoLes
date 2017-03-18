@@ -37,6 +37,8 @@ public class EditProductFragment extends Fragment {
     private Pharma pharma;
     private ImageView _backButton;
 
+    private String nameProductActual;
+
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_EMAIL = "currentEmail";
 
@@ -51,6 +53,12 @@ public class EditProductFragment extends Fragment {
         _labProductInput = (EditText) rootView.findViewById(R.id.input_edit_lab_product);
         _descriptionProductInput = (EditText) rootView.findViewById(R.id.input_edit_description_product);
         _genericoCheckbox = (CheckBox) rootView.findViewById(R.id.checkbox_edit_generico);
+
+        Bundle b = getArguments();
+        nameProductActual = b.getString("nameProduct");
+        System.out.println(nameProductActual);
+
+        _nameProductInput.setText(nameProductActual.trim());
 
         _salvar = (AppCompatButton) rootView.findViewById(R.id.btn_edit);
 

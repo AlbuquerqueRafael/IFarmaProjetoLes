@@ -221,8 +221,11 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                                     .setNeutralButton("Editar", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
+                                            Bundle data = new Bundle();
+                                            data.putString("nameProduct", product.getNameProduct());
                                             MainActivity activity = (MainActivity) context;
                                             EditProductFragment editProduct = new EditProductFragment();
+                                            editProduct.setArguments(data);
                                             android.support.v4.app.FragmentTransaction fragmentTransaction =
                                                     activity.getSupportFragmentManager().beginTransaction();
                                             fragmentTransaction.replace(R.id.fragment_container, editProduct);
