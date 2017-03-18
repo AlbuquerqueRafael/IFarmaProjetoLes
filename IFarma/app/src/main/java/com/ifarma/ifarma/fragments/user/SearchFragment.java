@@ -2,9 +2,11 @@ package com.ifarma.ifarma.fragments.user;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.content.Context;
@@ -25,8 +28,11 @@ import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.decoration.DividerItemDecoration;
 import com.ifarma.ifarma.decoration.RecyclerItemClickListener;
+import com.ifarma.ifarma.model.OrdenationType;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.util.Utils;
+
 import android.support.design.widget.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -52,6 +58,8 @@ public class SearchFragment extends Fragment {
     private RadioGroup _radioGroup;
     private int searchTextSize;
     private String option;
+    private Button _filterButton;
+    private OrdenationType ordernType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,9 +70,11 @@ public class SearchFragment extends Fragment {
         _listView = (RecyclerView) rootView.findViewById(R.id.listview);
         _listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         _radioGroup = (RadioGroup) rootView.findViewById(R.id.radiogroup);
+        _filterButton = (Button) rootView.findViewById(R.id.filter_btn);
 
         RadioButton initButton = (RadioButton) rootView.findViewById(R.id.medicineButton);
         initButton.setChecked(true);
+        ordernType = OrdenationType.UNDEFIN;
 
         _searchInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +85,38 @@ public class SearchFragment extends Fragment {
                 imm.showSoftInput(_searchInput, InputMethodManager.SHOW_IMPLICIT);
             }
         });
+
+//        _filterButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//                CharSequence[] array = {"Ordenação por preço", "Sem ordenação"};
+//
+//                builder.setTitle("Escolha o tipo de ordenação: ");
+//
+//                builder.setItems(array,
+//                        new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                if(which == 0){
+//                                    ordernType = OrdenationType.PRICE;
+//                                }else if(which == 1){
+//                                    ordernType = OrdenationType.UNDEFIN;
+//                                }
+//
+//                                dialog.dismiss();
+//                                initList();
+//                                searchAdapter(_searchInput.getText().toString());
+//                                //rest of your implementation
+//                            }
+//                        });
+//
+//                builder.show();
+//
+//            }
+//
+//        });
 
         option = "Medicine";
         radioGroupListener();
@@ -152,6 +194,10 @@ public class SearchFragment extends Fragment {
                 for (Product p : lista){{
                     listItems.add(p);
                 }}
+
+                if(ordernType == OrdenationType.PRICE){
+                    Utils.orderByPrice(listItems);
+                }
 
                 adapterMed = new MedicineSearchAdapter(getActivity(), listItems, rootView, true);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
