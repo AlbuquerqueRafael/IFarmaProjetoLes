@@ -223,6 +223,11 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             Bundle data = new Bundle();
                                             data.putString("nameProduct", product.getNameProduct());
+                                            data.putDouble("priceProduct", product.getPrice());
+                                            data.putString("labProduct", product.getLab());
+                                            data.putString("descriptionProduct", product.getDescription());
+                                            data.putBoolean("genericProduct", product.isGeneric());
+                                            data.putString("pharmacyID", product.getPharmacyId());
                                             MainActivity activity = (MainActivity) context;
                                             EditProductFragment editProduct = new EditProductFragment();
                                             editProduct.setArguments(data);

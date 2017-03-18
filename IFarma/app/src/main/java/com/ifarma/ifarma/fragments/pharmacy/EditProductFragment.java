@@ -38,6 +38,7 @@ public class EditProductFragment extends Fragment {
     private ImageView _backButton;
 
     private String nameProductActual;
+    private String pharmaActual;
 
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_EMAIL = "currentEmail";
@@ -54,11 +55,8 @@ public class EditProductFragment extends Fragment {
         _descriptionProductInput = (EditText) rootView.findViewById(R.id.input_edit_description_product);
         _genericoCheckbox = (CheckBox) rootView.findViewById(R.id.checkbox_edit_generico);
 
-        Bundle b = getArguments();
-        nameProductActual = b.getString("nameProduct");
-        System.out.println(nameProductActual);
-
-        _nameProductInput.setText(nameProductActual.trim());
+        Bundle bundle = getArguments();
+        initProduct(bundle);
 
         _salvar = (AppCompatButton) rootView.findViewById(R.id.btn_edit);
 
@@ -84,5 +82,16 @@ public class EditProductFragment extends Fragment {
 
         return rootView;
     }
-    
+
+    private void initProduct(Bundle b) {
+        nameProductActual = b.getString("nameProduct");
+        pharmaActual = b.getString("pharmacyID");
+
+        _nameProductInput.setText(nameProductActual.trim());
+        _priceProductInput.setText(Double.toString(b.getDouble("priceProduct")));
+        _labProductInput.setText(b.getString("labProduct"));
+        _descriptionProductInput.setText(b.getString("descriptionProduct"));
+        _genericoCheckbox.setChecked(b.getBoolean("genericProduct"));
+
+    }
 }
