@@ -33,8 +33,10 @@ import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.decoration.DividerItemDecoration;
 import com.ifarma.ifarma.fragments.user.SearchFragment;
+import com.ifarma.ifarma.model.OrdenationType;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,8 @@ public class PharmaFragment extends Fragment {
     private Pharma pharm;
     private FrameLayout _frameLayout;
     private ImageView _infoButton;
+    private FloatingActionButton _filterButton;
+    private OrdenationType ordernType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,12 +77,12 @@ public class PharmaFragment extends Fragment {
         _listView = (RecyclerView) rootView.findViewById(R.id.listpharmaview);
         _infoButton = (ImageView) rootView.findViewById(R.id.filter_btn_pharma);
         _listView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-
+        _filterButton = (FloatingActionButton) rootView.findViewById(R.id.filter_pharma_btn);
         ImageView _backButton = (ImageView) rootView.findViewById(R.id.back_btn);
 
         _frameLayout = (FrameLayout) getActivity().findViewById(R.id.fragment_container);
         _frameLayout.setVisibility(View.VISIBLE);
-
+        ordernType = OrdenationType.UNDEFIN;
         _infoButton.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -122,6 +126,38 @@ public class PharmaFragment extends Fragment {
             }
         });
 
+        _filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                CharSequence[] array = {"Ordenação por preço", "Sem ordenação"};
+
+                builder.setTitle("Escolha o tipo de ordenação: ");
+
+                builder.setItems(array,
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(which == 0){
+                                    ordernType = OrdenationType.PRICE;
+                                }else if(which == 1){
+                                    ordernType = OrdenationType.UNDEFIN;
+                                }
+
+
+                                dialog.dismiss();
+                                initMedList();
+
+                                //rest of your implementation
+                            }
+                        });
+
+                builder.show();
+
+            }
+
+        });
         initMedList();
 
         _searchInput.addTextChangedListener(new TextWatcher() {
@@ -178,6 +214,10 @@ public class PharmaFragment extends Fragment {
             }
         }
 
+        if(ordernType == OrdenationType.PRICE){
+            Utils.orderByPrice(listItems);
+        }
+
         adapterMed = new MedicineSearchAdapter(getActivity(), listItems, rootView, false);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         _listView.setHasFixedSize(true);
@@ -185,7 +225,7 @@ public class PharmaFragment extends Fragment {
 
 
         _listView.setAdapter(adapterMed);
-
+        searchAdapter(_searchInput.getText().toString());
     }
 
 
