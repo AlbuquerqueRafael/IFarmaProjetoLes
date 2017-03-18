@@ -22,7 +22,10 @@ import android.widget.Toast;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnCurrentPharmaGetDataListener;
+import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.model.Pharma;
+import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.services.AdapterService;
 
 
 public class EditProductFragment extends Fragment {
@@ -38,7 +41,8 @@ public class EditProductFragment extends Fragment {
     private ImageView _backButton;
 
     private String nameProductActual;
-    private String pharmaActual;
+    private String pharmaActualId;
+    private String pharmaActualName;
 
     public static final String PREFS_NAME = "Preferences";
     public static final String FLAG_EMAIL = "currentEmail";
@@ -55,7 +59,7 @@ public class EditProductFragment extends Fragment {
         _descriptionProductInput = (EditText) rootView.findViewById(R.id.input_edit_description_product);
         _genericoCheckbox = (CheckBox) rootView.findViewById(R.id.checkbox_edit_generico);
 
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         initProduct(bundle);
 
         _salvar = (AppCompatButton) rootView.findViewById(R.id.btn_edit);
@@ -80,17 +84,40 @@ public class EditProductFragment extends Fragment {
             }
         });
 
+        _salvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Product newProduct = new Product();
+                try {
+                    newProduct.setGeneric(_genericoCheckbox.isChecked());
+                    newProduct.setLab(_labProductInput.getText().toString());
+                    newProduct.setPrice(Double.parseDouble(_priceProductInput.getText().toString()));
+                    newProduct.setDescription(_descriptionProductInput.getText().toString());
+                    newProduct.setNameProduct(_nameProductInput.getText().toString());
+                    newProduct.setPharmacyId(pharmaActualId);
+                    newProduct.setPharmacyName(pharmaActualName);
+                    FirebaseController.editProduct(pharmaActualId, newProduct, nameProductActual);
+                    Toast.makeText(getContext(), "Produto editado com sucesso!", Toast.LENGTH_SHORT).show();
+                    AdapterService.reloadAdapter(0);
+
+                } catch (InvalidProductDataException e) {
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         return rootView;
     }
 
     private void initProduct(Bundle b) {
         nameProductActual = b.getString("nameProduct");
-        pharmaActual = b.getString("pharmacyID");
+        pharmaActualId = b.getString("pharmacyID");
+        pharmaActualName = b.getString("pharmacyName");
 
         _nameProductInput.setText(nameProductActual.trim());
-        _priceProductInput.setText(Double.toString(b.getDouble("priceProduct")));
-        _labProductInput.setText(b.getString("labProduct"));
-        _descriptionProductInput.setText(b.getString("descriptionProduct"));
+        _priceProductInput.setText(Double.toString(b.getDouble("priceProduct")).trim());
+        _labProductInput.setText(b.getString("labProduct").trim());
+        _descriptionProductInput.setText(b.getString("descriptionProduct").trim());
         _genericoCheckbox.setChecked(b.getBoolean("genericProduct"));
 
     }

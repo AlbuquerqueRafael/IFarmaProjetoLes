@@ -104,6 +104,17 @@ public class FirebaseController {
 
     }
 
+    public static void editProduct(String pharmacyId, Product product, String lastName) {
+
+        Firebase firebaseRef = getFirebase();
+        Firebase productsReference = firebaseRef.child(PHARMACIES).child(Utils.convertEmail(pharmacyId)).child(PRODUCTS);
+
+        if (!product.getNameProduct().equals(lastName)){
+            productsReference.child(lastName).removeValue();
+        }
+        productsReference.child(product.getNameProduct()).setValue(product);
+    }
+
     public static void retrievePharmacies(final OnPharmaGetDataListener listener){
         final Firebase pharmasReference = getFirebase().child(PHARMACIES);
         final List<Pharma> lista = new ArrayList<>();

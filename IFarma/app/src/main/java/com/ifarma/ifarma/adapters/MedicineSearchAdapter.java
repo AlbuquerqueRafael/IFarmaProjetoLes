@@ -228,6 +228,7 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                                             data.putString("descriptionProduct", product.getDescription());
                                             data.putBoolean("genericProduct", product.isGeneric());
                                             data.putString("pharmacyID", product.getPharmacyId());
+                                            data.putString("pharmacyName", product.getPharmacyName());
                                             MainActivity activity = (MainActivity) context;
                                             EditProductFragment editProduct = new EditProductFragment();
                                             editProduct.setArguments(data);

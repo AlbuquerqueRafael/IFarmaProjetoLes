@@ -179,7 +179,7 @@ public final class Validate {
 				productName.length() > MAX_CHARS_PRODUCTNAME){
 			isValid = false;
 		}
-		return true;
+		return isValid;
 	}
 
     /**A description is valid if isn't empty or null and has no more than 50 chars.*/
