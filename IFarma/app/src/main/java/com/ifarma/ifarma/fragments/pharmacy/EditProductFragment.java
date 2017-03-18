@@ -99,6 +99,14 @@ public class EditProductFragment extends Fragment {
                     FirebaseController.editProduct(pharmaActualId, newProduct, nameProductActual);
                     Toast.makeText(getContext(), "Produto editado com sucesso!", Toast.LENGTH_SHORT).show();
                     AdapterService.reloadAdapter(0);
+                    LinearLayout _pagerLayout = (LinearLayout) getActivity().findViewById(R.id.layout_pager);
+                    _pagerLayout.setVisibility(View.VISIBLE);
+                    _frameLayout.setVisibility(View.GONE);
+
+                    android.support.v4.app.FragmentTransaction fragmentTransaction =
+                            getActivity().getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, new MedicinesFragment());
+                    fragmentTransaction.commit();
 
                 } catch (InvalidProductDataException e) {
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
