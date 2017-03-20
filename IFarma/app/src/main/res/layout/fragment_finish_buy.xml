@@ -106,52 +106,88 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
+        <RadioGroup
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:layout_below="@id/total_price"
+            android:orientation="horizontal"
+            android:layout_below="@id/tv_total"
+            android:id="@+id/radiogroup_option"
             android:layout_marginTop="15dp"
-            android:layout_alignLeft="@+id/total_price"
-            android:layout_alignStart="@+id/total_price"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/textInputLayout">
-            <EditText android:id="@+id/input_change"
-                android:layout_marginLeft="10dp"
-                android:layout_width="match_parent"
+            android:layout_centerHorizontal="true">
+
+            <RadioButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:hint=" "
-                android:textColor="#000"
-                android:textSize="18sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:text="Cartão de Crédito/Débito"
+                android:id="@+id/radio_cartao"
+                android:textColor="@android:color/black"
+                android:checked="true"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dinheiro"
+                android:id="@+id/radio_dinheiro"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/black"/>
+
+        </RadioGroup>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:id="@+id/cartao_mensagem"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/radiogroup_option"
+            android:text="O nosso entregador levará a maquineta para você efetuar o pagamento da compra."
             android:textColor="@android:color/black"
-            android:text="Troco para: "
-            android:textSize="18sp"
-            android:id="@+id/tv_change"
-            android:layout_alignBottom="@+id/textInputLayout"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="11dp" />
+            android:textAlignment="center"/>
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="R$"
-            android:textSize="18sp"
-            android:id="@+id/rs_change"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_alignBaseline="@+id/tv_change"
-            android:layout_alignBottom="@+id/tv_change"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="71dp"
-            android:layout_marginEnd="71dp" />
+            android:id="@+id/dinheiro_layout"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp"
+            android:layout_below="@id/radiogroup_option"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="Troco para: "
+                android:textSize="18sp"
+                android:id="@+id/tv_change"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="R$"
+                android:textSize="18sp"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginLeft="50dp"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:id="@+id/textInputLayout">
+                <EditText android:id="@+id/input_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:hint=" "
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -160,8 +196,8 @@
             android:text=""
             android:textSize="18sp"
             android:id="@+id/tv_address"
-            android:layout_below="@+id/rs_change"
-            android:layout_marginTop="40dp"
+            android:layout_below="@+id/radiogroup_option"
+            android:layout_marginTop="70dp"
             android:layout_marginBottom="10dp"/>
 
         <android.support.v7.widget.AppCompatButton
@@ -171,7 +207,7 @@
             android:layout_below="@id/tv_address"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
             android:text="Endereço de Entrega" />
 

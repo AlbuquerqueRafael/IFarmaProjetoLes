@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,8 +76,12 @@ public class FinishBuyFragment extends Fragment {
     private Button _deliveryAddress;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private RadioButton radioDinheiro;
+    private RadioButton radioCartao;
     private Dialog dialog;
     private String _customerName;
+    private LinearLayout moneyLayout;
+    private TextView creditCardMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +97,28 @@ public class FinishBuyFragment extends Fragment {
         _deliveryAddress = (Button) rootView.findViewById(R.id.address_delivery);
         _userAddress = (TextView) rootView.findViewById(R.id.tv_address);
         _medicinesPrice = (TextView) rootView.findViewById(R.id.medicines_price);
+
+        radioDinheiro = (RadioButton) rootView.findViewById(R.id.radio_dinheiro);
+        radioCartao = (RadioButton) rootView.findViewById(R.id.radio_cartao);
+
+        creditCardMessage = (TextView) rootView.findViewById(R.id.cartao_mensagem);
+        moneyLayout = (LinearLayout) rootView.findViewById(R.id.dinheiro_layout);
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (radioCartao.isChecked()){
+                    creditCardMessage.setVisibility(View.VISIBLE);
+                    moneyLayout.setVisibility(View.GONE);
+                } else {
+                    moneyLayout.setVisibility(View.VISIBLE);
+                    creditCardMessage.setVisibility(View.GONE);
+                }
+            }
+        };
+
+        radioCartao.setOnClickListener(listener);
+        radioDinheiro.setOnClickListener(listener);
 
         _deliveryPrice.setText("R$ 3,00");
         _medicinesPrice.setText(CartService.getTotalPrice(0.00));
@@ -160,7 +187,8 @@ public class FinishBuyFragment extends Fragment {
                         previousData = pharmacysOrder.get(entry.getKey().getPharmacyId());
                     }
 
-                    pharmacysOrder.put(entry.getKey().getPharmacyId(), previousData + entry.getValue() + " - " + entry.getKey().getNameProduct() + "\n");
+                    pharmacysOrder.put(entry.getKey().getPharmacyId(), previousData + entry.getValue() + " - " + entry.getKey().getNameProduct() +
+                            " - " + "Valor: R$ " + (entry.getKey().getPrice() * entry.getValue()) + "\n");
                 }
 
                 if (_userAddress.getText().toString().isEmpty()){
@@ -228,17 +256,34 @@ public class FinishBuyFragment extends Fragment {
         return rootView;
     }
 
+    private double getTotalPrice(HashMap<String, String> pharmacysOrder, String pharmacyId) {
+        double soma = 3;
+
+        String totalPriceText = pharmacysOrder.get(pharmacyId);
+
+        for (String compra: totalPriceText.split("\n")) {
+            soma += Double.parseDouble(compra.split("-")[2].split(" ")[2]);
+        }
+
+        return soma;
+    }
+
     private void saveOrder(HashMap<String, String> pharmacysOrder){
         String telephone = "";
         String comment = "";
-        double totalPrice = Double.parseDouble(_totalPrice.getText().toString().split(" ")[1].replace(",", "."));
+
+        String formaDePagamento = "Cartão de Crédito/Débito";
+        if (radioDinheiro.isChecked()) {
+            formaDePagamento = "Troco para: " + _changeInput.getText().toString();
+        }
 
         for (Map.Entry<String, String> entry : pharmacysOrder.entrySet()) {
-            System.out.println(entry);
+            double totalPrice = getTotalPrice(pharmacysOrder, entry.getKey());
+
             FirebaseController.saveOrder(entry.getKey(),
                     telephone,
                     comment, totalPrice, _customerName,
-                    entry.getValue() + "Troco para: " + _changeInput.getText().toString(),
+                    entry.getValue() + formaDePagamento,
                     _userAddress.getText().toString(),
                     OrderStatus.WAITING_ORDER,
                     FirebaseInstanceId.getInstance().getToken());
