@@ -187,7 +187,7 @@ public class AddProductFragment extends Fragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                     String email = product.getPharmacyId().replace(".", "dot");
                                     FirebaseController.newProduct(email, product);
-                                    Toast.makeText(getContext(), "Produto criado com sucesso!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Produto editado com sucesso!", Toast.LENGTH_SHORT).show();
                                     productAddedTransiction();
                                 }
                             })
