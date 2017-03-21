@@ -1,5 +1,12 @@
 package com.ifarma.ifarma.util;
 
+import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.model.ProductPriceComparator;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * Created by Mafra on 18/02/2017.
  */
@@ -33,4 +40,8 @@ public class Utils {
         System.out.println("onCancelled");
     }
 
+    public static void orderByPrice(List<Product> products){
+        Collections.sort(products, new ProductPriceComparator());
+    }
 }
+

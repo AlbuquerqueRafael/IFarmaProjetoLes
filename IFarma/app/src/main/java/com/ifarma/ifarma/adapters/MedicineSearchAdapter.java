@@ -22,6 +22,9 @@ import com.ifarma.ifarma.activities.MainActivity;
 import com.ifarma.ifarma.controllers.AuthenticationController;
 import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
+import com.ifarma.ifarma.fragments.pharmacy.AddProductFragment;
+import com.ifarma.ifarma.fragments.pharmacy.EditProductFragment;
+import com.ifarma.ifarma.fragments.pharmacy.PharmaFragment;
 import com.ifarma.ifarma.fragments.user.CartFragment;
 import com.ifarma.ifarma.fragments.user.UserFragment;
 import com.ifarma.ifarma.holders.ViewHolder;
@@ -213,6 +216,26 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
                                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
+                                        }
+                                    })
+                                    .setNeutralButton("Editar", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Bundle data = new Bundle();
+                                            data.putString("nameProduct", product.getNameProduct());
+                                            data.putDouble("priceProduct", product.getPrice());
+                                            data.putString("labProduct", product.getLab());
+                                            data.putString("descriptionProduct", product.getDescription());
+                                            data.putBoolean("genericProduct", product.isGeneric());
+                                            data.putString("pharmacyID", product.getPharmacyId());
+                                            data.putString("pharmacyName", product.getPharmacyName());
+                                            MainActivity activity = (MainActivity) context;
+                                            EditProductFragment editProduct = new EditProductFragment();
+                                            editProduct.setArguments(data);
+                                            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                                                    activity.getSupportFragmentManager().beginTransaction();
+                                            fragmentTransaction.replace(R.id.fragment_container, editProduct);
+                                            fragmentTransaction.commit();
                                         }
                                     })
                                     .show();
