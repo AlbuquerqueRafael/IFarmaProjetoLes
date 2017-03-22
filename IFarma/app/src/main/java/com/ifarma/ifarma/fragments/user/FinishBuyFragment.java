@@ -260,11 +260,11 @@ public class FinishBuyFragment extends Fragment {
         double soma = 3;
 
         String totalPriceText = pharmacysOrder.get(pharmacyId);
-
+        
         for (String compra: totalPriceText.split("\n")) {
-            soma += Double.parseDouble(compra.split("-")[2].split(" ")[2]);
+            soma += Double.parseDouble(compra.split("-")[2].split(" ")[3]);
         }
-
+        
         return soma;
     }
 
