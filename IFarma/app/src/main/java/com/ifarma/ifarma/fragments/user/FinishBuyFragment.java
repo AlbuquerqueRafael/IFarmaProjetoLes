@@ -21,12 +21,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -65,11 +67,14 @@ public class FinishBuyFragment extends Fragment {
     public static final String FLAG_LOGGED = "isLogged";
     public static final String FLAG_EMAIL = "currentEmail";
 
+    private final int TAMANHO_CEP_PADRAO = 8;
+
     private View rootView;
     private FloatingActionButton _backButton;
     private TextView _deliveryPrice;
     private TextView _totalPrice;
     private TextView _userAddress;
+    private ImageButton _editAddress;
     private EditText _changeInput;
     private TextView _medicinesPrice;
     private Button _finishBuyButton;
@@ -82,6 +87,8 @@ public class FinishBuyFragment extends Fragment {
     private String _customerName;
     private LinearLayout moneyLayout;
     private TextView creditCardMessage;
+    private String numero, rua, cep;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,6 +103,7 @@ public class FinishBuyFragment extends Fragment {
         _finishBuyButton = (Button) rootView.findViewById(R.id.finish_buy);
         _deliveryAddress = (Button) rootView.findViewById(R.id.address_delivery);
         _userAddress = (TextView) rootView.findViewById(R.id.tv_address);
+        _editAddress = (ImageButton) rootView.findViewById(R.id.edit_address_button);
         _medicinesPrice = (TextView) rootView.findViewById(R.id.medicines_price);
 
         radioDinheiro = (RadioButton) rootView.findViewById(R.id.radio_dinheiro);
@@ -123,6 +131,11 @@ public class FinishBuyFragment extends Fragment {
         _deliveryPrice.setText("R$ 3,00");
         _medicinesPrice.setText(CartService.getTotalPrice(0.00));
         _totalPrice.setText(CartService.getTotalPrice(3.00));
+
+        numero = "";
+        rua = "";
+        cep = "";
+
 
         if (isAuthenticated())
             getCustomerName();
@@ -253,6 +266,13 @@ public class FinishBuyFragment extends Fragment {
             }
         });
 
+        _editAddress.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                showInputDialog();
+            }
+        });
+
         return rootView;
     }
 
@@ -367,21 +387,35 @@ public class FinishBuyFragment extends Fragment {
         inputDialog.setContentView(R.layout.address_input_dialog);
 
         final EditText addressInput = (EditText) inputDialog.findViewById(R.id.address_input);
+        addressInput.setText(this.rua);
         final EditText cepInput = (EditText) inputDialog.findViewById(R.id.cep_input);
+        cepInput.setText(this.cep);
         final EditText numberInput = (EditText) inputDialog.findViewById(R.id.number_input);
+        numberInput.setText(this.numero);
         final Button okButton = (Button) inputDialog.findViewById(R.id.ok_button);
         final Button cancelButton = (Button) inputDialog.findViewById(R.id.cancel_button);
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String address = "Rua: " + addressInput.getText().toString() + ", " + numberInput.getText().toString() +
-                        "\nCEP: " + cepInput.getText().toString();
+                String rua = addressInput.getText().toString();
+                String numero = numberInput.getText().toString();
+                String cep = cepInput.getText().toString();
 
-                _userAddress.setText(address);
+                boolean enderecoValido = validaAddress(addressInput, numberInput, cepInput);
 
-                inputDialog.dismiss();
-                dialog.dismiss();
+                if(enderecoValido){
+                    setAddress(rua, numero, cep);
+
+                    String address = "Rua/Av: " + rua  +
+                                    "\nNúmero: " + numero +
+                                    "\nCEP: " + cep;
+
+                    _userAddress.setText(address);
+                    _editAddress.setVisibility(View.VISIBLE);
+                    inputDialog.dismiss();
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -394,6 +428,43 @@ public class FinishBuyFragment extends Fragment {
         });
 
         inputDialog.show();
+    }
+
+    private boolean validaAddress(EditText addressInput, EditText numberInput, EditText cepInput) {
+        boolean valido = true;
+
+        boolean isRuaVazio = addressInput.getText().toString().trim().isEmpty();
+        boolean isNumeroVazio = numberInput.getText().toString().trim().isEmpty();
+        boolean isCEPVazio = cepInput.getText().toString().trim().isEmpty();
+        int CEPtamanho = cepInput.getText().toString().trim().length();
+        boolean hasCEPTamanhoSeis = CEPtamanho == TAMANHO_CEP_PADRAO;
+
+        Log.e("ENDERECO", ">>>>>>>>> cep tamanho : " + CEPtamanho);
+
+        if(isRuaVazio){
+            addressInput.setError("O Logradouro é obrigatório");
+            valido = false;
+        }
+        else if(isNumeroVazio){
+            numberInput.setError("O número é obrigatório");
+            valido = false;
+        }
+        else if(isCEPVazio ){
+            cepInput.setError("O CEP é obrigatório");
+            valido = false;
+        } else if(!hasCEPTamanhoSeis) {
+            cepInput.setError("O CEP é inválido");
+            valido = false;
+        }
+
+        return valido;
+    }
+
+    private void setAddress(String rua, String numero,String cep) {
+
+        this.rua = rua;
+        this.numero = numero;
+        this.cep = cep;
     }
 
     private void getCurrentLocation() {
@@ -412,12 +483,20 @@ public class FinishBuyFragment extends Fragment {
                     }
                     else {
                         if (addresses.size() > 0) {
+                            String rua = addresses.get(0).getAddressLine(0).split(",")[0];
+                            Log.e("GPS-LOCATION", ">>>>>> rua: " + rua);
+                            String cep = addresses.get(0).getPostalCode();
+                            cep = cep.replace("-", "" );
+                            Log.e("GPS-LOCATION", ">>>>>> cep: " + cep);
 
-                            String address = "Rua: " + addresses.get(0).getAddressLine(0).split(",")[0] +
-                                             "\nCEP: " + addresses.get(0).getPostalCode();
+                            setAddress(rua, "", cep);
+
+                            String address = "Rua/Av: " + rua +
+                                            "\nNúmero: " +
+                                             "\nCEP: " + cep;
 
                             _userAddress.setText(address);
-
+                            _editAddress.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -479,7 +558,6 @@ public class FinishBuyFragment extends Fragment {
                         "\nCEP: " + currentCustomer.getCep();
 
                 _userAddress.setText(address);
-
                 dialog.dismiss();
             }
         });

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapWords"
-            android:hint="Endereço"
+            android:hint="Rua/Avenida"
             android:textColor="#000"
             android:textSize="16sp" />
     </android.support.design.widget.TextInputLayout>
