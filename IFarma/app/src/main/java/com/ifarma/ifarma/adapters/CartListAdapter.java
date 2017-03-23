@@ -56,9 +56,11 @@ public class CartListAdapter extends BaseAdapter{
     }
 
     private double getTotalPrice(){
+
         double soma = 0;
-        for (Product product : cartList.keySet()) {
-            soma += product.getPrice();
+
+        for (Map.Entry<Product, Integer> entry : cartList.entrySet()) {
+            soma += entry.getKey().getPrice() * entry.getValue();
         }
 
         return soma;
@@ -127,6 +129,7 @@ public class CartListAdapter extends BaseAdapter{
                             public void onClick(DialogInterface dialog, int which) {
                                 CartService.removeFromCart(currentProduct);
                                 AdapterService.reloadAdapter(1);
+
                             }
                         })
                         .setNegativeButton("Não", new DialogInterface.OnClickListener() {
