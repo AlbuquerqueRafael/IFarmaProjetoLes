@@ -16,8 +16,7 @@ public class Customer extends AbstractUser {
 	}
 
 	public Customer(final String name, final String email,
-					final String address, final String houseNumber, final String cep)
-			throws InvalidUserDataException {
+					final String address, final String houseNumber, final String cep){
 
 		super(name, email, address, houseNumber, cep);
 	}

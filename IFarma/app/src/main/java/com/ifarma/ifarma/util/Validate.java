@@ -114,7 +114,7 @@ public final class Validate {
 	      final Integer digit2 = calcDigit(cpf.substring(0,9) + digit1, PESOCPF);
 	      answer = cpf.equals(cpf.substring(0,9) + digit1.toString() + digit2.toString());
 	  }
-      return true;
+      return answer;
    }
 
 	/** Check if certain CNPJ is valid according to how this number is constructed in Brazil.
@@ -129,7 +129,7 @@ public final class Validate {
 	      final Integer digit2 = calcDigit(cnpj.substring(0,12) + digit1, PESOCNPJ);
 	      answer = cnpj.equals(cnpj.substring(0,12) + digit1.toString() + digit2.toString());
 	  }
-      return true;
+      return answer;
    }
 	public static boolean isValidMedicine(EditText _nameProductInput, EditText _priceProductInput,
 										  EditText _labProductInput, EditText _descriptionProductInput){

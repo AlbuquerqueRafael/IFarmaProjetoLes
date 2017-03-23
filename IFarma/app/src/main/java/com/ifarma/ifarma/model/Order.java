@@ -1,19 +1,13 @@
 package com.ifarma.ifarma.model;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.Date;
-
-/**
- * Created by Gabriel on 03/03/2017.
- */
 
 public class Order {
 
-    private String _deliveryAddress;
-    private String _customerName;
-    private OrderStatus _orderStatus;
-    private double _orderTotalPrice;
+    private String deliveryAddress;
+    private String customerName;
+    private OrderStatus orderStatus;
+    private double orderTotalPrice;
     private String id;
     private Date date;
     private String description;
@@ -24,54 +18,55 @@ public class Order {
     private String pharmacyName;
 
     public Order(){
-
+        // construtor padrão
     }
-
-    public Order(String _deliveryAddress, String _customerName, double _orderTotalPrice, String id,
+    // talvez criar um objeto para encapsular deliveryAddress, costumerName, costumerTelephone
+    // talvez criar um objeto para os dados da compra: encapsular orderTotalPrice, comment, date, description
+    public Order(String deliveryAddress, String customerName, double orderTotalPrice, String id,
                  String description, String customerTelephone, String comment, String pharmacyId, Date date, String userToken) {
-        this._deliveryAddress = _deliveryAddress;
-        this._customerName = _customerName;
-        this._orderStatus = OrderStatus.WAITING_ORDER;
-        this._orderTotalPrice = _orderTotalPrice;
+        this.deliveryAddress = deliveryAddress;
+        this.customerName = customerName;
+        this.orderStatus = OrderStatus.WAITING_ORDER;
+        this.orderTotalPrice = orderTotalPrice;
         this.description = description;
         this.id = id;
         this.customerTelephone = customerTelephone;
         this.pharmacyId = pharmacyId;
         this.comment = comment;
-        this.date = date;
+        this.date = new Date(date.getTime());
         this.userToken = userToken;
     }
 
     public String getDeliveryAddress() {
-        return _deliveryAddress;
+        return deliveryAddress;
     }
 
-    public void setDeliveryAddress(String _deliveryAddress) {
-        this._deliveryAddress = _deliveryAddress;
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
     public String getCustomerName() {
-        return _customerName;
+        return customerName;
     }
 
-    public void setCustomerName(String _customerName) {
-        this._customerName = _customerName;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public OrderStatus getOrderStatus() {
-        return _orderStatus;
+        return orderStatus;
     }
 
-    public void setOrderStatus(OrderStatus _orderStatus) {
-        this._orderStatus = _orderStatus;
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public double getOrderTotalPrice() {
-        return _orderTotalPrice;
+        return orderTotalPrice;
     }
 
-    public void setOrderTotalPrice(double _orderTotalPrice) {
-        this._orderTotalPrice = _orderTotalPrice;
+    public void setOrderTotalPrice(double orderTotalPrice) {
+        this.orderTotalPrice = orderTotalPrice;
     }
 
     public String getId(){
@@ -114,11 +109,11 @@ public class Order {
     }
 
     public Date getDate(){
-        return this.date;
+        return new Date(this.date.getTime());
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     public void setUserToken(String userToken){

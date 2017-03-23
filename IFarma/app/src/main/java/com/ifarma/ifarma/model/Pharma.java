@@ -1,6 +1,5 @@
 package com.ifarma.ifarma.model;
 import com.ifarma.ifarma.exceptions.InvalidCNPJException;
-import com.ifarma.ifarma.exceptions.InvalidUserDataException;
 import com.ifarma.ifarma.util.Validate;
 
 import java.io.Serializable;
@@ -14,8 +13,7 @@ public class Pharma extends AbstractUser implements Serializable {
 	private String cnpj;
 
 	public Pharma(final String name, final String email,
-				  final String address, final String houseNumber, final String cep)
-			throws InvalidUserDataException {
+				  final String address, final String houseNumber, final String cep){
 		super(name, email, address, houseNumber, cep);
 	}
 

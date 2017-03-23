@@ -16,11 +16,11 @@ abstract class AbstractUser{
 	private String houseNumber; 
 	private String cep;
 	private Map<String, Order> orders;
-    private SecureRandom random = new SecureRandom();
+    private final SecureRandom random = new SecureRandom();
 
-    public AbstractUser() {}
+    AbstractUser() {}
 
-    public AbstractUser(String email){
+   	AbstractUser(String email){
 		this.email = email;
 		this.name = "";
 		this.address = "";
@@ -28,8 +28,8 @@ abstract class AbstractUser{
 		this.cep = "";
 	}
 
-    public AbstractUser(final String name, final String email,
-				 final String address, final String houseNumber, final String cep) throws InvalidUserDataException {
+    AbstractUser(final String name, final String email,
+				 final String address, final String houseNumber, final String cep) {
 
 		this.name = name;
 		this.email = email;
@@ -113,7 +113,7 @@ abstract class AbstractUser{
 		return orders;
 	}
 
-    public String nextSessionId() {
+    private String nextSessionId() {
         return new BigInteger(130, random).toString(32);
     }
 }
