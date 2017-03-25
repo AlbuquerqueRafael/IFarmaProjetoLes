@@ -3,6 +3,8 @@ package com.ifarma.ifarma.fragments.user;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +38,7 @@ import com.ifarma.ifarma.util.Utils;
 
 import android.support.design.widget.FloatingActionButton;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -171,10 +175,14 @@ public class SearchFragment extends Fragment {
     }
 
     public void searchAdapter(String s){
-        if(option.equals("Medicine")){
-            adapterMed.getFilter().filter(s);
-        }else{
-            adapterPharma.getFilter().filter(s);
+       try{
+            if(option.equals("Medicine")){
+                adapterMed.getFilter().filter(s);
+            }else{
+                adapterPharma.getFilter().filter(s);
+            }
+        }catch(NullPointerException e){
+
         }
     }
 
@@ -214,6 +222,18 @@ public class SearchFragment extends Fragment {
     }
 
     public void initPharmaList(){
+        Geocoder geocoder = new Geocoder(getContext());
+        try {
+            List<Address> enderecos = geocoder.getFromLocationName("Rua Taváres Cavalcante Campina Grande", 1);
+            if (enderecos.size() > 0) {
+                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+            } else {
+                Log.v("tag", "erROOOOO");
+            }
+        }catch (IOException e){
+            Log.v("tag", "erROOOssssssssssssssssssOO");
+        }
+
         listPharmaItems = new ArrayList<Pharma>();
 
         FirebaseController.retrievePharmacies(new OnPharmaGetDataListener() {
