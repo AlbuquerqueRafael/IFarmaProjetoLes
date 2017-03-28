@@ -1,5 +1,6 @@
 package com.ifarma.ifarma.fragments.pharmacy;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -78,6 +79,12 @@ public class DemandFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String defaultState = "";
         email =  prefs.getString(FLAG_EMAIL, defaultState);
+
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando pedidos...");
+        dialog.setCancelable(false);
+        dialog.show();
+
         FirebaseController.retrievePharmaOrders(email, new OnOrderGetDataListener() {
 
             @Override
@@ -87,6 +94,7 @@ public class DemandFragment extends Fragment {
 
             @Override
             public void onSuccess(List<Order> lista) {
+                dialog.dismiss();
                 listOrderItens = new ArrayList<Order>();
 
                 for (Order o : lista){{

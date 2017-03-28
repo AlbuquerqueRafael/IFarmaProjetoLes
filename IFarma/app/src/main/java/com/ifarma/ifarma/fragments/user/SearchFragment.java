@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -181,6 +182,11 @@ public class SearchFragment extends Fragment {
     public void initMedList(){
         listItems = new ArrayList<Product>();
 
+        final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando produtos...");
+        dialog.setCancelable(false);
+        dialog.show();
+
         FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
             @Override
@@ -189,6 +195,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onSuccess(List<Product> lista) {
+                dialog.dismiss();
                 listItems = new ArrayList<Product>();
 
                 for (Product p : lista){{
