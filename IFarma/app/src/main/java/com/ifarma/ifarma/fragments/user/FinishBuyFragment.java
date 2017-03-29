@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -41,7 +40,9 @@ import com.ifarma.ifarma.model.OrderStatus;
 import com.ifarma.ifarma.model.Product;
 import com.ifarma.ifarma.services.AdapterService;
 import com.ifarma.ifarma.services.CartService;
+import com.ifarma.ifarma.util.BrPhoneNumberFormatter;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -71,7 +72,7 @@ public class FinishBuyFragment extends Fragment {
     private TextView _userAddress1;
     private TextView _userAddressNumber;
     private TextView _userAddressPostalCode;
-    private ImageButton _editAddress;
+    private EditText _userCelphone;
     private EditText _changeInput;
     private TextView _medicinesPrice;
     private Button _finishBuyButton;
@@ -84,7 +85,7 @@ public class FinishBuyFragment extends Fragment {
     private String _customerName;
     private LinearLayout moneyLayout;
     private TextView creditCardMessage;
-    private String numero, rua, cep;
+    private String numero, rua, cep, telefone;
 
 
     @Override
@@ -103,6 +104,11 @@ public class FinishBuyFragment extends Fragment {
         _userAddressNumber = (TextView) rootView.findViewById(R.id.tv_number);
         _userAddressPostalCode = (TextView) rootView.findViewById(R.id.tv_cep);
         _medicinesPrice = (TextView) rootView.findViewById(R.id.medicines_price);
+        _userCelphone = (EditText) rootView.findViewById(R.id.cel_input);
+
+        // MASKING NUMBER FORMAT
+        BrPhoneNumberFormatter addLineNumberFormatter = new BrPhoneNumberFormatter(new WeakReference<EditText>(_userCelphone));
+        _userCelphone.addTextChangedListener(addLineNumberFormatter);
 
         radioDinheiro = (RadioButton) rootView.findViewById(R.id.radio_dinheiro);
         radioCartao = (RadioButton) rootView.findViewById(R.id.radio_cartao);
@@ -202,7 +208,7 @@ public class FinishBuyFragment extends Fragment {
                             " - " + "Valor: R$ " + (entry.getKey().getPrice() * entry.getValue()) + "\n");
                 }
 
-                if (isEnderecoInvalido()){
+                if (isEnderecoInvalido() ){
                     new AlertDialog.Builder(getContext())
                             .setTitle("Alerta")
                             .setMessage("Preencher todos os campos de endereço, você deve!")
@@ -217,9 +223,23 @@ public class FinishBuyFragment extends Fragment {
                         }
                     }).show();
                 }
-
+                else if (isPhoneValido(_userCelphone)) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Alerta")
+                            .setMessage("Informar o telefone, você deve!")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+                }
                 else {
-
+                    telefone = _userCelphone.getText().toString();
                     if (pharmacysOrder.size() > 1) {
                         new AlertDialog.Builder(getContext())
                                 .setTitle("Alerta")
@@ -287,7 +307,7 @@ public class FinishBuyFragment extends Fragment {
     }
 
     private void saveOrder(HashMap<String, String> pharmacysOrder){
-        String telephone = "";
+        String telephone = this.telefone;
         String comment = "";
 
         String formaDePagamento = "Cartão de Crédito/Débito";
@@ -464,6 +484,23 @@ public class FinishBuyFragment extends Fragment {
         }
 
         return valido;
+    }
+
+    /**
+     * Verifica se o campo de telefone é valido, ou seja se é vazio ou não.
+     *
+     * @param phone
+     *          Campo de edição do telefone
+     * @return True caso seja inválido.
+     */
+    private boolean isPhoneValido(EditText phone) {
+        boolean isRuaVazio = phone.getText().toString().trim().isEmpty();
+
+        if(isRuaVazio){
+            phone.setError("O Telefone é obrigatório");
+        }
+
+        return isRuaVazio;
     }
 
     private void setAddress(String rua, String numero,String cep) {
