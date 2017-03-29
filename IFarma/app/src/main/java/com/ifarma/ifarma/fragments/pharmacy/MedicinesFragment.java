@@ -117,6 +117,9 @@ public class MedicinesFragment extends Fragment {
     public void initMedList(){
         listItems = new ArrayList<Product>();
         final ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Carregando produtos...");
+        dialog.setCancelable(false);
+        dialog.show();
 
         FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
@@ -126,6 +129,7 @@ public class MedicinesFragment extends Fragment {
 
             @Override
             public void onSuccess(List<Product> lista) {
+                dialog.dismiss();
                 listItems = new ArrayList<Product>();
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
