@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -39,12 +40,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
         android:id="@+id/relative_layout"
+        android:orientation="vertical"
         android:layout_margin="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimaryDark"
             android:text="@string/delivery_text"
             android:textSize="18sp"
             android:id="@+id/tv_delivery"/>
@@ -63,7 +65,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimaryDark"
             android:text="Valor da compra: "
             android:textSize="18sp"
             android:layout_below="@id/tv_delivery"
@@ -86,7 +88,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimaryDark"
             android:text="Valor a pagar: "
             android:textSize="18sp"
             android:layout_below="@id/tv_medicines"
@@ -141,7 +143,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/radiogroup_option"
             android:text="O nosso entregador levará a maquineta para você efetuar o pagamento da compra."
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimaryDark"
             android:textAlignment="center"/>
 
         <LinearLayout
@@ -157,7 +159,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorPrimaryDark"
                 android:text="Troco para: "
                 android:textSize="18sp"
                 android:id="@+id/tv_change"
@@ -170,7 +172,7 @@
                 android:textSize="18sp"
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@android:color/background_dark"
                 android:layout_marginLeft="50dp"/>
 
             <android.support.design.widget.TextInputLayout
@@ -189,41 +191,98 @@
 
         </LinearLayout>
 
+        <EditText android:id="@+id/cel_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radiogroup_option"
+            android:inputType="phone"
+            android:hint="Telefone Ex:(83)98888-7777"
+            android:textColor="@android:color/background_dark"
+            android:layout_marginTop="70dp"
+            android:textSize="16sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:text=""
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Rua/Av: "
             android:textSize="18sp"
-            android:id="@+id/tv_address"
-            android:layout_below="@+id/radiogroup_option"
-            android:layout_marginTop="70dp"
-            android:layout_marginBottom="10dp"/>
+            android:id="@+id/tv_address_title"
+            android:layout_below="@+id/cel_input"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"/>
 
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:id="@+id/edit_address_button"
-                android:background="@drawable/ic_edit_location_black_24dp"
-                android:layout_below="@+id/rs_change"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="10dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:visibility="invisible"
-                />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/background_dark"
+            android:text=""
+            android:textSize="14sp"
+            android:id="@+id/tv_address"
+            android:layout_alignBaseline="@+id/tv_address_title"
+            android:layout_alignBottom="@+id/tv_address_title"
+            android:layout_toRightOf="@+id/tv_address_title"
+            android:layout_toEndOf="@+id/tv_address_title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Numero: "
+            android:textSize="18sp"
+            android:id="@+id/tv_number_title"
+            android:layout_below="@+id/tv_address"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/background_dark"
+            android:text=""
+            android:textSize="14sp"
+            android:id="@+id/tv_number"
+            android:layout_alignBaseline="@+id/tv_number_title"
+            android:layout_alignBottom="@+id/tv_number_title"
+            android:layout_toRightOf="@+id/tv_number_title"
+            android:layout_toEndOf="@+id/tv_number_title"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="CEP: "
+            android:textSize="18sp"
+            android:id="@+id/tv_cep_title"
+            android:layout_below="@+id/tv_number"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/background_dark"
+            android:text=""
+            android:textSize="14sp"
+            android:id="@+id/tv_cep"
+            android:layout_alignBaseline="@+id/tv_cep_title"
+            android:layout_alignBottom="@+id/tv_cep_title"
+            android:layout_toRightOf="@+id/tv_cep_title"
+            android:layout_toEndOf="@+id/tv_cep_title"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/address_delivery"
-            android:background="@drawable/rounded_button"
+            android:background="@drawable/ic_edit_location_black_24dp"
             android:backgroundTint="@android:color/holo_orange_dark"
-            android:layout_below="@id/tv_address"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/tv_number"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
-            android:text="Endereço de Entrega" />
-
+             />
     </RelativeLayout>
 
     <android.support.v7.widget.AppCompatButton
