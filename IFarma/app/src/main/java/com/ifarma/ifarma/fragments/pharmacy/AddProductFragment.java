@@ -180,6 +180,7 @@ public class AddProductFragment extends Fragment {
                 }}
                 if (!listItems.isEmpty()) {
                     System.out.println("O produto está na lista da farmácia!");
+                    closeDialog(dialog);
                     new AlertDialog.Builder(getContext())
                             .setTitle("Já existe um produto com esse nome!")
                             .setMessage("Você deseja atualizar as informações do produto?")
@@ -194,7 +195,6 @@ public class AddProductFragment extends Fragment {
                             .setNegativeButton("Alterar nome", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialog.dismiss();
                                 }
                             })
                             .show();
