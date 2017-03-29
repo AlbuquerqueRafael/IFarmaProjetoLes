@@ -3,9 +3,17 @@ package com.ifarma.ifarma.fragments.user;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +31,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.content.Context;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
 import com.ifarma.ifarma.adapters.PharmaSearchAdapter;
@@ -34,6 +45,7 @@ import com.ifarma.ifarma.decoration.RecyclerItemClickListener;
 import com.ifarma.ifarma.model.OrdenationType;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
+import com.ifarma.ifarma.services.SingleShotLocationProvider;
 import com.ifarma.ifarma.util.Utils;
 
 import android.support.design.widget.FloatingActionButton;
@@ -41,11 +53,15 @@ import android.support.design.widget.FloatingActionButton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import devlight.io.library.ntb.NavigationTabBar;
 
@@ -64,6 +80,8 @@ public class SearchFragment extends Fragment {
     private String option;
     private FloatingActionButton _filterButton;
     private OrdenationType ordernType;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,11 +107,20 @@ public class SearchFragment extends Fragment {
             }
         });
 
+
+
+
         _filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                CharSequence[] array = {"Ordenação por preço", "Sem ordenação"};
+                CharSequence[] array;
+                if(option == "Medicine"){
+                    array = new CharSequence[]{"Ordenação por preço", "Sem ordenação"};
+                }else{
+                    array = new CharSequence[]{"Ordenação por distancia", "Sem ordenação"};
+                }
+
 
                 builder.setTitle("Escolha o tipo de ordenação: ");
 
@@ -222,17 +249,6 @@ public class SearchFragment extends Fragment {
     }
 
     public void initPharmaList(){
-        Geocoder geocoder = new Geocoder(getContext());
-        try {
-            List<Address> enderecos = geocoder.getFromLocationName("Rua Taváres Cavalcante Campina Grande", 1);
-            if (enderecos.size() > 0) {
-                Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
-            } else {
-                Log.v("tag", "erROOOOO");
-            }
-        }catch (IOException e){
-            Log.v("tag", "erROOOssssssssssssssssssOO");
-        }
 
         listPharmaItems = new ArrayList<Pharma>();
 
@@ -246,16 +262,39 @@ public class SearchFragment extends Fragment {
             @Override
             public void onSuccess(List<Pharma> lista) {
                 listPharmaItems = new ArrayList<Pharma>();
+                final ProgressDialog dialog = ProgressDialog.show(getContext(), "",
+                        "Carregando. Espere, por favor...", true);
+                dialog.show();
 
                 for (Pharma p : lista){{
                     listPharmaItems.add(p);
                 }}
 
-                adapterPharma = new PharmaSearchAdapter(getActivity(), listPharmaItems);
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                _listView.setHasFixedSize(true);
-                _listView.setLayoutManager(mLayoutManager);
-                _listView.setAdapter(adapterPharma);
+                if(ordernType == OrdenationType.PRICE){
+                    SingleShotLocationProvider.requestSingleUpdate(getContext(),
+                            new SingleShotLocationProvider.LocationCallback() {
+                                @Override
+                                public void onNewLocationAvailable(Location location) {
+                                    Log.v("tag", "erROOOOO");
+                                    orderByLocalization(listPharmaItems, location);
+                                    adapterPharma = new PharmaSearchAdapter(getActivity(), listPharmaItems);
+                                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                                    _listView.setHasFixedSize(true);
+                                    _listView.setLayoutManager(mLayoutManager);
+                                    _listView.setAdapter(adapterPharma);
+                                    dialog.dismiss();
+                                }
+                            });
+                }else{
+                    adapterPharma = new PharmaSearchAdapter(getActivity(), listPharmaItems);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                    _listView.setHasFixedSize(true);
+                    _listView.setLayoutManager(mLayoutManager);
+                    _listView.setAdapter(adapterPharma);
+                    dialog.dismiss();
+                }
+
+
             }
 
         });
@@ -273,6 +312,7 @@ public class SearchFragment extends Fragment {
                     option = "Pharma";
                 }
 
+                ordernType = OrdenationType.UNDEFIN;
                 _searchInput.setText("");
                 initList();
             }
@@ -280,4 +320,47 @@ public class SearchFragment extends Fragment {
         });
     }
 
+    private void orderByLocalization(List<Pharma> pharma, Location location){
+        List<Double> distancia = new ArrayList<Double>();
+        calculaDistancia(distancia, pharma, location);
+
+        for(int i = 0; i < distancia.size(); i++){
+            for(int j = 0; j < distancia.size()-1; j++){
+                if(distancia.get(j) > distancia.get(j+1)){
+                    Collections.swap(pharma, j, j+1);
+                    Collections.swap(distancia, j, j+1);
+                }
+            }
+        }
+
+    }
+
+    private void calculaDistancia(List<Double> distancia, List<Pharma> pharma, Location location){
+        for(int i = 0; i < pharma.size(); i++){
+            Geocoder geocoder = new Geocoder(getContext());
+            try {
+                List<Address> enderecos = geocoder.getFromLocationName(pharma.get(i).getAddress() + " Campina grande" , 1);
+                if (enderecos.size() > 0) {
+                    Double longitude = enderecos.get(0).getLongitude();
+                    Double latitude = enderecos.get(0).getLatitude();
+                    Log.v("tag", "coordenadas " + enderecos.get(0).getLatitude() + ", " + enderecos.get(0).getLongitude());
+                    Double dist = Math.sqrt(Math.pow(longitude - location.getLongitude(), 2) +
+                                  Math.pow(latitude - location.getLatitude(), 2));
+                    Log.v("tag", pharma.get(i).getName() + " " + dist + "");
+                    distancia.add(dist);
+                } else {
+                    Log.v("tag", "erROOOOO");
+                    distancia.add(Double.MAX_VALUE);
+                }
+            }catch (IOException e){
+                Log.v("tag", "erROOOssssssssssssssssssOO");
+            }
+        }
+
+
+    }
+
+
 }
+
+
