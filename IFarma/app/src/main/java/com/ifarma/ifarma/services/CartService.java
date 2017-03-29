@@ -14,6 +14,16 @@ import java.util.Map;
 public class CartService {
 
     private static HashMap<Product, Integer> cartList = new HashMap<Product, Integer>();
+    private static List<Product> selectedItems = new ArrayList<>();
+
+    public static boolean addToSelectedItem(Product product) {
+        if (!selectedItems.contains(product)) {
+            selectedItems.add(product);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static boolean addToCart(Product product){
         boolean contains = false;
@@ -49,6 +59,7 @@ public class CartService {
 
     public static void closeCart(){
         cartList = new HashMap<>();
+        selectedItems = new ArrayList<>();
     }
 
     public static String getTotalPrice(Double change) {
@@ -62,4 +73,7 @@ public class CartService {
         return somaFormatada;
     }
 
+    public static List<Product> getSelectedItems() {
+        return selectedItems;
+    }
 }

@@ -60,7 +60,6 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
     private Context context;
     private ViewHolder holder;
     private boolean _isSelecting;
-    private List<Product> _selectedProducts;
     private FloatingActionButton addToCart;
     private View rootView;
     private final PublishSubject<Product> onClickSubject = PublishSubject.create();
@@ -91,7 +90,6 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        _selectedProducts = new ArrayList<Product>();
 
         holder.medName.setText(mDisplayedValues.get(position).getNameProduct());
         holder.medPrice.setText("R$ " + String.format("%.2f", mDisplayedValues.get(position).getPrice()));
@@ -101,9 +99,12 @@ public class MedicineSearchAdapter extends RecyclerView.Adapter<ViewHolder> impl
         final Product product = mDisplayedValues.get(position);
 
         if (isPharmacy) {
+            final List<Product> _selectedProducts = CartService.getSelectedItems();
+
             addToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                 for (int i = 0; i < _selectedProducts.size(); i++) {
                     if (CartService.addToCart(_selectedProducts.get(i))){
                         AdapterService.reloadAdapter(1);
