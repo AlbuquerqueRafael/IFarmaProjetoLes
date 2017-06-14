@@ -3,6 +3,10 @@ package com.ifarma.ifarma.util;
 import com.ifarma.ifarma.model.Product;
 import com.ifarma.ifarma.model.ProductPriceComparator;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +46,12 @@ public class Utils {
 
     public static void orderByPrice(List<Product> products){
         Collections.sort(products, new ProductPriceComparator());
+    }
+
+    public static String formatDate(Calendar data){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSS");
+
+        return sdf.format(data.getTime());
     }
 }
 

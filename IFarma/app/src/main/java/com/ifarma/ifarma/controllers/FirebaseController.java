@@ -19,7 +19,9 @@ import com.firebase.client.DataSnapshot;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -164,12 +166,18 @@ public class FirebaseController {
     }
 
     public static void retrieveProducts( final OnMedGetDataListener listener) {
+        final long tempo1 = System.currentTimeMillis();
+        System.out.println("Tempo inicio retrieve em ms - Controller: " + tempo1);
         final Firebase productsReference = getFirebase().child(PHARMACIES);
         final List<Product> lista = new ArrayList<>();
 
         productsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                long tempo2 = System.currentTimeMillis();
+                System.out.println("Tempo onChildAdd em ms - Controller: " + tempo2);
+                System.out.println("Diferenca em ms (Controller): " + (tempo2 - tempo1));
+                System.out.println("Diferenca em s (Controller): " + (tempo2 - tempo1)/1000);
                 DataSnapshot productSnapshot = dataSnapshot.child(PRODUCTS);
                 Iterable<DataSnapshot> productChildren = productSnapshot.getChildren();
 
@@ -184,6 +192,7 @@ public class FirebaseController {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
                 Utils.showChildModifiedMsg();
+                System.out.println("Tempo adicionar filho = " + System.currentTimeMillis());
 
             }
 
@@ -204,6 +213,10 @@ public class FirebaseController {
 
 
         });
+        long tempo3 = System.currentTimeMillis();
+        System.out.println("Tempo fim retrieve em ms - Controller: " + tempo3);
+        System.out.println("Diferenca em ms inicio e fim retrieve (Controller): " + (tempo3 - tempo1));
+        System.out.println("Diferenca em s inicio e fim retrieve (Controller): " + (tempo3 - tempo1)/1000);
     }
 
     private void collectPhoneNumbers(Map<String,Object> users) {
@@ -220,7 +233,6 @@ public class FirebaseController {
     }
 
     public static void newProduct(String pharmacyId, Product product){
-
         Firebase firebaseRef = getFirebase();
         Firebase productsPharmacyReference = firebaseRef.child(PHARMACIES).child(pharmacyId).child(PRODUCTS);
         Firebase newProduct = productsPharmacyReference.child(product.getNameProduct());

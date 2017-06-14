@@ -1,24 +1,16 @@
 package com.ifarma.ifarma.fragments.user;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -27,14 +19,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.content.Context;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.ifarma.ifarma.R;
 import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
 import com.ifarma.ifarma.adapters.PharmaSearchAdapter;
@@ -42,29 +31,21 @@ import com.ifarma.ifarma.controllers.FirebaseController;
 import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
 import com.ifarma.ifarma.decoration.DividerItemDecoration;
-import com.ifarma.ifarma.decoration.RecyclerItemClickListener;
 import com.ifarma.ifarma.model.OrdenationType;
 import com.ifarma.ifarma.model.Pharma;
 import com.ifarma.ifarma.model.Product;
 import com.ifarma.ifarma.services.SingleShotLocationProvider;
 import com.ifarma.ifarma.util.Utils;
 
-import android.support.design.widget.FloatingActionButton;
-
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
-
-import android.view.inputmethod.InputMethodManager;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
-
-import devlight.io.library.ntb.NavigationTabBar;
 
 public class SearchFragment extends Fragment {
 
@@ -222,6 +203,8 @@ public class SearchFragment extends Fragment {
         dialog.setCancelable(false);
         dialog.show();
 
+        final long tempo1 = System.currentTimeMillis();
+        System.out.println("Tempo inicio em ms - Fragment: " + tempo1);
         FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
             @Override
@@ -230,6 +213,10 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onSuccess(List<Product> lista) {
+                long tempo2 = System.currentTimeMillis();
+                System.out.println("Tempo onSuccess em ms - Fragment: " + tempo2);
+                System.out.println("Diferenca em ms (Fragment): " + (tempo2 - tempo1));
+                System.out.println("Diferenca em s (Fragment): " + (tempo2 - tempo1)/1000);
                 dialog.dismiss();
                 listItems = new ArrayList<Product>();
 
@@ -253,6 +240,10 @@ public class SearchFragment extends Fragment {
             }
 
         });
+        long tempo3 = System.currentTimeMillis();
+        System.out.println("Tempo fim retrieve em ms - Fragment: " + tempo3);
+        System.out.println("Diferenca em ms inicio e fim retrieve (Fragment): " + (tempo3 - tempo1));
+        System.out.println("Diferenca em s inicio e fim retrieve (Fragment): " + (tempo3 - tempo1)/1000);
     }
 
     public void initPharmaList(){

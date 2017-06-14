@@ -125,5 +125,7 @@ public class DemandFragment extends Fragment {
 
         }, orderStatus);
 
+        dialog.dismiss();
+
     }
 }

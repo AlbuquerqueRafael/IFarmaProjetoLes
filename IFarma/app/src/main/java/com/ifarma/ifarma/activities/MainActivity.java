@@ -11,21 +11,29 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.authentication.Constants;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.ifarma.ifarma.R;
+import com.ifarma.ifarma.adapters.MedicineSearchAdapter;
 import com.ifarma.ifarma.adapters.PharmViewPagerAdapter;
 import com.ifarma.ifarma.adapters.UserViewPagerAdapter;
 import com.ifarma.ifarma.controllers.FirebaseController;
+import com.ifarma.ifarma.controllers.OnMedGetDataListener;
 import com.ifarma.ifarma.controllers.OnPharmaGetDataListener;
+import com.ifarma.ifarma.exceptions.InvalidProductDataException;
 import com.ifarma.ifarma.fragments.pharmacy.EditInfoPharmaFragment;
 import com.ifarma.ifarma.fragments.user.EditInfoUserFragment;
+import com.ifarma.ifarma.model.OrdenationType;
 import com.ifarma.ifarma.model.OrderStatus;
 import com.ifarma.ifarma.model.Pharma;
+import com.ifarma.ifarma.model.Product;
 import com.ifarma.ifarma.services.AdapterService;
+import com.ifarma.ifarma.util.Utils;
 
 import org.json.JSONObject;
 
@@ -56,6 +64,35 @@ public class MainActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
         mainActivity = this;
+
+//        Product p = null;
+//        for (int i = 0; i < 150; i++){
+//            try {
+//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Dias");
+//            } catch (InvalidProductDataException e) {
+//                e.printStackTrace();
+//            }
+//
+//            FirebaseController.newProduct("farmaciadias@gmaildotcom", p);
+//        }
+
+
+//        for (int i = 0; i < 1000; i++){
+//            System.out.println(i);
+//            FirebaseController.retrieveProducts(new OnMedGetDataListener() {
+//
+//                @Override
+//                public void onStart() {
+//                }
+//
+//                @Override
+//                public void onSuccess(List<Product> lista) {
+//                    System.out.println("OnSuccessActivity");
+//
+//                }
+//
+//            });
+//        }
 
         isPharmacy = false;
 

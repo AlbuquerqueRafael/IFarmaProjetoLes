@@ -158,7 +158,11 @@ public class AddProductFragment extends Fragment {
         return isValid;
     }
 
+
+
     private void validateAddProduct(final Product product){
+        long time1 = System.currentTimeMillis();
+        System.out.println("Tempo inicio add produto " + time1);
         final int TIME = 4000; //Timeout
         final ProgressDialog dialog = new ProgressDialog(getActivity());
         initDialog(dialog);
