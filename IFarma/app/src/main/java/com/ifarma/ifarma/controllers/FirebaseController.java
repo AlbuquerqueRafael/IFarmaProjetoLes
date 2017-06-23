@@ -37,6 +37,8 @@ public class FirebaseController {
     private final static String ORDERS = "orders";
     public static final String FIREBASE_URL = "https://ifarma-5d2e6.firebaseio.com/";
     private static SecureRandom random = new SecureRandom();
+    private static final int NUM_FARMACIAS = 1;
+    public static int NUM_FARMACIAS_VISITADAS = 0;
 
     private static Firebase firebase;
 
@@ -186,10 +188,17 @@ public class FirebaseController {
                     lista.add(product);
                 }
 
-                long tempo2 = System.currentTimeMillis();
-                System.out.println("Tempo onChildAdd em ms - Controller: " + tempo2);
-                System.out.println("Diferenca em ms (Controller): " + (tempo2 - tempo1));
-                System.out.println("Diferenca em s (Controller): " + (tempo2 - tempo1)/1000);
+                NUM_FARMACIAS_VISITADAS+=1;
+
+                if (NUM_FARMACIAS_VISITADAS == NUM_FARMACIAS){
+                    System.out.println("Todas as farmacias visitadas");
+                    NUM_FARMACIAS_VISITADAS = 0;
+                    long tempo2 = System.currentTimeMillis();
+                    System.out.println("Tempo onChildAdd em ms - Controller: " + tempo2);
+                    System.out.println("Diferenca em ms (Controller): " + (tempo2 - tempo1));
+                    System.out.println("Diferenca em s (Controller): " + (tempo2 - tempo1)/1000);
+                }
+
                 listener.onSuccess(lista);
             }
 

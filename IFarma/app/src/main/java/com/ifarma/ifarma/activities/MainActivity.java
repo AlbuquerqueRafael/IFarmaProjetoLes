@@ -111,16 +111,41 @@ public class MainActivity extends AppCompatActivity {
 
 
         Product p = null;
+        for (int i = 0; i < 10; i++){
+            try {
+                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Dias");
+            } catch (InvalidProductDataException e) {
+                e.printStackTrace();
+            }
+
+            FirebaseController.newProduct("farmaciadias@gmaildotcom", p);
+        }
+
+
+
+//        criaFarmacia("farmaciax");
 //        for (int i = 0; i < 150; i++){
 //            try {
-//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Dias");
+//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia X");
 //            } catch (InvalidProductDataException e) {
 //                e.printStackTrace();
 //            }
 //
-//            FirebaseController.newProduct("farmaciadias@gmaildotcom", p);
+//            FirebaseController.newProduct("farmaciax@gmaildotcom", p);
 //        }
 //
+//        criaFarmacia("farmaciay");
+//        for (int i = 0; i < 150; i++){
+//            try {
+//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Y");
+//            } catch (InvalidProductDataException e) {
+//                e.printStackTrace();
+//            }
+//
+//            FirebaseController.newProduct("farmaciay@gmaildotcom", p);
+//        }
+//
+//        criaFarmacia("farmaciaoi");
 //        for (int i = 0; i < 150; i++){
 //            try {
 //                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Oi");
@@ -130,26 +155,38 @@ public class MainActivity extends AppCompatActivity {
 //
 //            FirebaseController.newProduct("farmaciaoi@gmaildotcom", p);
 //        }
-
-        criaFarmacia("farmaciax");
-        for (int i = 0; i < 150; i++){
-            try {
-                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia X");
-            } catch (InvalidProductDataException e) {
-                e.printStackTrace();
-            }
-
-            FirebaseController.newProduct("farmaciax@gmaildotcom", p);
-        }
 //
+//        criaFarmacia("farmaciaa");
 //        for (int i = 0; i < 150; i++){
 //            try {
-//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Y");
+//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia A");
 //            } catch (InvalidProductDataException e) {
 //                e.printStackTrace();
 //            }
 //
-//            FirebaseController.newProduct("farmaciayx@gmaildotcom", p);
+//            FirebaseController.newProduct("farmaciaa@gmaildotcom", p);
+//        }
+//
+//        criaFarmacia("farmaciab");
+//        for (int i = 0; i < 150; i++){
+//            try {
+//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia B");
+//            } catch (InvalidProductDataException e) {
+//                e.printStackTrace();
+//            }
+//
+//            FirebaseController.newProduct("farmaciab@gmaildotcom", p);
+//        }
+//
+//        criaFarmacia("farmaciaz");
+//        for (int i = 0; i < 150; i++){
+//            try {
+//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Z");
+//            } catch (InvalidProductDataException e) {
+//                e.printStackTrace();
+//            }
+//
+//            FirebaseController.newProduct("farmaciaz@gmaildotcom", p);
 //        }
 
 
