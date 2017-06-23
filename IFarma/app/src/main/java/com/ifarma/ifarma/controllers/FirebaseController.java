@@ -174,18 +174,22 @@ public class FirebaseController {
         productsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                DataSnapshot productSnapshot = dataSnapshot.child(PRODUCTS);
+                Iterable<DataSnapshot> productChildren = productSnapshot.getChildren();
+
+                int i = 0;
+                for (DataSnapshot prod : productChildren){
+                    Product product = prod.getValue(Product.class);
+                    if (i == 0)
+                        System.out.println("Retrieving product #" + i + " - " + product.getPharmacyName());
+                    i++;
+                    lista.add(product);
+                }
+
                 long tempo2 = System.currentTimeMillis();
                 System.out.println("Tempo onChildAdd em ms - Controller: " + tempo2);
                 System.out.println("Diferenca em ms (Controller): " + (tempo2 - tempo1));
                 System.out.println("Diferenca em s (Controller): " + (tempo2 - tempo1)/1000);
-                DataSnapshot productSnapshot = dataSnapshot.child(PRODUCTS);
-                Iterable<DataSnapshot> productChildren = productSnapshot.getChildren();
-
-                for (DataSnapshot prod : productChildren){
-                    Product product = prod.getValue(Product.class);
-                    lista.add(product);
-                }
-
                 listener.onSuccess(lista);
             }
 

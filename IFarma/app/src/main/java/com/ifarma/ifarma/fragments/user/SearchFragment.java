@@ -205,6 +205,7 @@ public class SearchFragment extends Fragment {
 
         final long tempo1 = System.currentTimeMillis();
         System.out.println("Tempo inicio em ms - Fragment: " + tempo1);
+        System.out.println("Tempo inicial: Fragment + " + tempo1);
         FirebaseController.retrieveProducts(new OnMedGetDataListener() {
 
             @Override
@@ -213,10 +214,7 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onSuccess(List<Product> lista) {
-                long tempo2 = System.currentTimeMillis();
-                System.out.println("Tempo onSuccess em ms - Fragment: " + tempo2);
-                System.out.println("Diferenca em ms (Fragment): " + (tempo2 - tempo1));
-                System.out.println("Diferenca em s (Fragment): " + (tempo2 - tempo1)/1000);
+
                 dialog.dismiss();
                 listItems = new ArrayList<Product>();
 
@@ -237,13 +235,14 @@ public class SearchFragment extends Fragment {
                 _listView.setAdapter(adapterMed);
                 searchAdapter(_searchInput.getText().toString());
 
+                long tempo2 = System.currentTimeMillis();
+                System.out.println("Tempo onSuccess em ms - Fragment: " + tempo2);
+                System.out.println("Diferenca em ms (Fragment): " + (tempo2 - tempo1));
+                System.out.println("Diferenca em s (Fragment): " + (tempo2 - tempo1)/1000);
+
             }
 
         });
-        long tempo3 = System.currentTimeMillis();
-        System.out.println("Tempo fim retrieve em ms - Fragment: " + tempo3);
-        System.out.println("Diferenca em ms inicio e fim retrieve (Fragment): " + (tempo3 - tempo1));
-        System.out.println("Diferenca em s inicio e fim retrieve (Fragment): " + (tempo3 - tempo1)/1000);
     }
 
     public void initPharmaList(){

@@ -37,6 +37,7 @@ import com.ifarma.ifarma.util.Utils;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,46 @@ public class MainActivity extends AppCompatActivity {
     private FragmentPagerAdapter adapter;
     private ViewPager viewPager;
 
+    public void clearApplicationData() {
+        File cacheDirectory = getCacheDir();
+        File applicationDirectory = new File(cacheDirectory.getParent());
+        if (applicationDirectory.exists()) {
+            String[] fileNames = applicationDirectory.list();
+            for (String fileName : fileNames) {
+                if (!fileName.equals("lib")) {
+                    deleteFile(new File(applicationDirectory, fileName));
+                }
+            }
+        }
+    }
+
+    public static boolean deleteFile(File file) {
+        boolean deletedAll = true;
+        if (file != null) {
+            if (file.isDirectory()) {
+                String[] children = file.list();
+                for (int i = 0; i < children.length; i++) {
+                    deletedAll = deleteFile(new File(file, children[i])) && deletedAll;
+                }
+            } else {
+                deletedAll = file.delete();
+            }
+        }
+
+        return deletedAll;
+    }
+
+    public void criaFarmacia(String nome){
+        Firebase firebaseRef = FirebaseController.getFirebase();
+        Firebase pharmarciesReference = firebaseRef.child("pharmacies");
+
+        Pharma pharma = new Pharma(nome, nome+"@gmail.com", "Rua", "12", "5815");
+
+        String emailNode = Utils.convertEmail(pharma.getEmail());
+
+        pharmarciesReference.child(emailNode).setValue(pharma);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +106,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mainActivity = this;
 
-//        Product p = null;
+        clearApplicationData();
+
+
+
+        Product p = null;
 //        for (int i = 0; i < 150; i++){
 //            try {
 //                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Dias");
@@ -74,6 +119,37 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //
 //            FirebaseController.newProduct("farmaciadias@gmaildotcom", p);
+//        }
+//
+//        for (int i = 0; i < 150; i++){
+//            try {
+//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Oi");
+//            } catch (InvalidProductDataException e) {
+//                e.printStackTrace();
+//            }
+//
+//            FirebaseController.newProduct("farmaciaoi@gmaildotcom", p);
+//        }
+
+        criaFarmacia("farmaciax");
+        for (int i = 0; i < 150; i++){
+            try {
+                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia X");
+            } catch (InvalidProductDataException e) {
+                e.printStackTrace();
+            }
+
+            FirebaseController.newProduct("farmaciax@gmaildotcom", p);
+        }
+//
+//        for (int i = 0; i < 150; i++){
+//            try {
+//                p = new Product("Nome" + i, 2.9, "LSD", "Descricao", true, "farmaciadias@gmaildotcom", "Farmacia Y");
+//            } catch (InvalidProductDataException e) {
+//                e.printStackTrace();
+//            }
+//
+//            FirebaseController.newProduct("farmaciayx@gmaildotcom", p);
 //        }
 
 
